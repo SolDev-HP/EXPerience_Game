@@ -12,7 +12,7 @@ contract EXPToken is ERC20, Ownable {
     // ================= State Vars ==================
     // Token admins 
     mapping(address => bool) internal _TokenAdmins;
-    // Per user experience point capping 
+    // Per user experience point capping = 100 * 10 ** 18
     uint256 internal constant MAXEXP = 100000000000000000000;
 
 
