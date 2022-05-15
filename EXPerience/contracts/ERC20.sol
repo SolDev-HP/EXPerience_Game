@@ -9,11 +9,6 @@ import "./utils/Context.sol";
 /// @dev Taken from : OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/ERC20.sol)
 /// @dev Update ERC20 contract to support Soul-bounding, once assigned - cannot be transferred 
 
-// Revert error OperationNotAllowed when user tries to perform restricted actions, transfer - transferFrom - approve etc.
-// error OperationNotAllowed();
-// Revert error for unsupported actions
-// error UnsupportedAction();
-
 /**
  * @dev Implementation of the {IERC20} interface.
  *
@@ -54,6 +49,11 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     string private _name;
     string private _symbol;
 
+    // Revert error OperationNotAllowed when user tries to perform restricted actions, transfer - transferFrom - approve etc.
+    // Using custom error is much cheaper than revert with a string description.
+    error OperationNotAllowed();
+    // Revert error for unsupported actions
+    error UnsupportedAction();
     /**
      * @dev Sets the values for {name} and {symbol}.
      *
@@ -130,8 +130,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Restricted
      */
     function transfer(address, uint256) public virtual override returns (bool) {
-        //revert OperationNotAllowed();
-        revert();
+        revert OperationNotAllowed();
     }
 
     /**
@@ -140,8 +139,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Unsupported
      */
     function allowance(address, address) public view virtual override returns (uint256) {
-        //revert UnsupportedAction();
-        revert();
+        revert UnsupportedAction();
     }
 
     /**
@@ -150,8 +148,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Restricted 
      */
     function approve(address, uint256) public virtual override returns (bool) {
-        //revert OperationNotAllowed();
-        revert();
+        revert OperationNotAllowed();
     }
 
     /**
@@ -160,8 +157,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Restricted
      */
     function transferFrom(address, address, uint256) public virtual override returns (bool) {
-        //revert OperationNotAllowed();
-        revert();
+        revert OperationNotAllowed();
     }
 
     /**
@@ -170,8 +166,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Unsupported
      */
     function increaseAllowance(address, uint256) public virtual returns (bool) {
-        //revert UnsupportedAction();
-        revert();
+        revert UnsupportedAction();
     }
 
     /**
@@ -180,8 +175,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * Unsupported
      */
     function decreaseAllowance(address, uint256) public virtual returns (bool) {
-        //revert UnsupportedAction();
-        revert();
+        revert UnsupportedAction();
     }
 
     /** @dev Creates `amount` tokens and assigns them to `account`, increasing
@@ -215,6 +209,10 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      *
      * - `account` cannot be the zero address.
      * - `account` must have at least `amount` tokens.
+     * 
+     * Changes:
+     *
+     * - Remove require, instead revert with custom error to save gas
      */
     function _burn(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: burn from the zero address");
