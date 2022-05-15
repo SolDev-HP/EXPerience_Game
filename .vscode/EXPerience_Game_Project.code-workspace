@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"solidity-va.tools.surya.option.negModifiers": true,
+		"solidity-va.uml.actors.enable": true,
+		"files.autoSave": "afterDelay",
+		"terminal.integrated.scrollback": 6000,
+		"workbench.iconTheme": "material-icon-theme"
+	}
+}

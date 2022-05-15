@@ -1,0 +1,13 @@
+{
+    "python.defaultInterpreterPath": "../.venv/Scripts/python",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.formatting.blackPath": "autopep8",
+    "python.formatting.provider": "autopep8",
+    "tabnine.experimentalAutoImports": true,
+    "solidity-va.tools.surya.option.negModifiers": true,
+    "solidity-va.uml.actors.enable": true,
+    "files.autoSave": "afterDelay",
+    "terminal.integrated.scrollback": 6000,
+    "workbench.iconTheme": "material-icon-theme"   
+}
