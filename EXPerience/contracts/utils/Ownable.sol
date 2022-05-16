@@ -19,7 +19,7 @@ abstract contract Ownable {
 
     /// @dev owner checking modifier 
     modifier OnlyOwner() {
-        require(owner() == msg.sender, "AccessControl: Unauthorized access not allowed");
+        require(owner() == msg.sender, "EXPToken (AccessControl): Not authorized.");
         _;
     }
 }

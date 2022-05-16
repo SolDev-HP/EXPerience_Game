@@ -44,9 +44,9 @@ contract EXPToken is ERC20, Ownable {
         // In this case, balanceOf will access user's balance state var 
         uint256 _balance = balanceOf(gainer_);
         // Make sure user doesn't already have max exprience points 
-        require(_balance < MAXEXP, "EXPToken: User already at max experience points possible.");
+        require(_balance < MAXEXP, "EXPToken (Balance): Already at Max(100).");
         // Make sure it doesn't go above capped possible points after _minting 
-        require(_balance + gainAmount_ <= MAXEXP, "EXPToken: This mint will send user above capped exprience point. Not allowed.");
+        require(_balance + gainAmount_ <= MAXEXP, "EXPToken (Balance): Will go above Max(100).");
         // Mint tokens to the address
         _mint(gainer_, gainAmount_);
     }
@@ -60,9 +60,9 @@ contract EXPToken is ERC20, Ownable {
         // In this case, balanceOf will access user's balance state var 
         uint256 _balance = balanceOf(looser_);
         // Make sure user's balance isn't already zero 
-        require(_balance > 0, "EXPToken: User doen't have enough experience points");
+        require(_balance > 0, "EXPToken (Balance): Insufficient balance");
         // Make sure our calculation doesn't bring it below zero 
-        require(_balance - lostAmount_ > 0, "EXPToken: This action will bring user experience below zero. Not allowed.");
+        require(_balance - lostAmount_ > 0, "EXPToken (Balance): Can't go below Min(0).");
         // Burn given amount from user's balance 
         _burn(looser_, lostAmount_);
     }

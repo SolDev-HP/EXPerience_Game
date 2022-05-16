@@ -188,7 +188,7 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * - `account` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
+        require(account != address(0), "EXPToken (Mint): Mint to Add(0) - X");
 
         _beforeTokenTransfer(address(0), account, amount);
 
@@ -215,12 +215,12 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
      * - Remove require, instead revert with custom error to save gas
      */
     function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
+        require(account != address(0), "EXPToken (Burn): Burn from Add(0) - X.");
 
         _beforeTokenTransfer(account, address(0), amount);
 
         uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        require(accountBalance >= amount, "EXPToken (Burn): Insufficient balance.");
         unchecked {
             _balances[account] = accountBalance - amount;
         }
