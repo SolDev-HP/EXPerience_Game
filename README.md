@@ -107,3 +107,6 @@ Ex:
 |                         | Dino, or more     | Ascii art show | Leaders in        |
 |                         | games             | EXP amount     | EXPerience        |
 ```
+
+## UML for current implementation (ERC20 - [EXP]erience Token)
+![EXPerience_UML](https://github.com/SolDev-HP/EXPerience_Game/blob/master/EXPerience/EXPerience_UML.svg)
