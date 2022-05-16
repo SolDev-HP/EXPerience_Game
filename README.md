@@ -1,3 +1,11 @@
+#### Current Status 
+- [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
+- [ ] Create Angular frontend to interact with EXPerience Idea (In Progress)
+- [ ] Create SoulBound ERC721 and Integrate (Bounty 2)
+- [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance 
+- [ ] Ability to view leaderboard (Bounty 3)
+- [ ] Additional page to generate hackable levels and playground (Bounty 4)
+
 #### EXPerience Game project. This will allow users to play a game (Yet to be decided upon, Dino game could be interesting too) and submit their score. In return they get EXP tokens that signify their experience. Later we will include EXPerience NFT. These are soulbound tokens and NFTs. Once minted to an address, can not be transferred to anyone else. This is for EthernautDAO bounty submission.
 #### Author: 0micronat_. (SolDev-HP)
 
@@ -89,11 +97,11 @@ ng serve --open
 - Open browser (If it doesn't already) and goto localhost:4200, it will serve you starting page of Angular 
 
 Todos:
-- Still need to work on frontend
--- Web3 wallet interaction 
--- Load contract 
--- Read values and represent data in meaningful, tabular format 
--- EX:
+- [ ] Still need to work on frontend
+- [ ] Web3 wallet interaction 
+- [ ] Load contract 
+- [ ] Read values and represent data in meaningful, tabular format 
+Ex:
 ```
 | Tab1: Wallet Connection | Tab2: Actual game | Tab3: NFT View | Tab4: Leaderboard |
 |                         | Dino, or more     | Ascii art show | Leaders in        |
