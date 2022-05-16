@@ -21,10 +21,24 @@ def main():
 
     # Need to test more functions like transfer/approve/fallback/receive
     # Hodler1 tries to gain/loose experience 
-    EXPerience.gainExperience(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
-    EXPerience.reduceExperience(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    try:
+        EXPerience.gainExperience(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    except:
+        print(f'AccessControl failure')
+
+    try:
+        EXPerience.reduceExperience(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    except:
+        print(f'AccessControl failure')
 
     # Hodler1 tries to tranfer/approve 
-    EXPerience.transfer(os.getenv("DEV_HODLER2_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
-    # Same as hodler2 
-    EXPerience.approve(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    try:
+        EXPerience.transfer(os.getenv("DEV_HODLER2_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    except:
+        print(f'Unsupported action')
+
+    # Same as hodler2
+    try: 
+        EXPerience.approve(os.getenv("DEV_HODLER1_PUB"), 1 * 10 ** 18, {"from": dev_hodler1}) #should fail
+    except:
+        print(f'Unsupported action')

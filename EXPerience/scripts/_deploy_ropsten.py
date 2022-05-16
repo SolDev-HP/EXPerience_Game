@@ -21,6 +21,8 @@ def main():
 
 
 """
+// Keeping this for future reference, further implementation requires some reference and this is a 
+// good starting point.
 def main():
     # requires brownie account to have been created
     if network.show_active()=='development':
