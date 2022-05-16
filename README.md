@@ -94,6 +94,8 @@ Todos:
 -- Load contract 
 -- Read values and represent data in meaningful, tabular format 
 -- EX:
---- | Tab1: Wallet Connection | Tab2: Actual game | Tab3: NFT View | Tab4: Leaderboard |
---- |                         | Dino, or more     | Ascii art show | Leaders in        |
---- |                         | games             | EXP amount     | EXPerience        |
+```
+| Tab1: Wallet Connection | Tab2: Actual game | Tab3: NFT View | Tab4: Leaderboard |
+|                         | Dino, or more     | Ascii art show | Leaders in        |
+|                         | games             | EXP amount     | EXPerience        |
+```
