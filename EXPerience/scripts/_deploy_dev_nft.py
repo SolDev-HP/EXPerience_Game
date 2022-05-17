@@ -26,7 +26,10 @@ def main():
     # This requires further logic of whether to assign these NFTs to addresses 
     # holding EXP tokens already or not. Though at current point, it wouldn't 
     # make much sense to allow minting NFTs to addresses that do not hold EXP tokens 
-    # expNFT.genExperience(os.getenv("PUBLIC_KEY_HODLER2"), {"from": dev_admin1})   # Should fail, user doesn't have EXP
+    try:
+        expNFT.genExperience(os.getenv("PUBLIC_KEY_HODLER2"), {"from": dev_admin1})   # Should fail, user doesn't have EXP
+    except:
+        print("Expected error. Continue...")
 
     # Mint NFT again for User1 
     try:

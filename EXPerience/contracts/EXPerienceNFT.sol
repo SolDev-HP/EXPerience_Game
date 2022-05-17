@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
+import "../interfaces/IERC20.sol";
 import "./ERC721.sol";
 import "./utils/Ownable.sol";
 import "./utils/Counters.sol";
@@ -10,7 +11,10 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Total supply - Should be exposed via getter
     Counters.Counter private _totalSupply;
     // EXPToken contract address - To refer to EXP balance of the user 
-    address private _EXPContract;
+    address private _EXPContractAddress;
+    // EXPToken Interface to get balanceOf
+    // Though we imported original IERC20 for this, we can potentially limit it to just balanceOf function
+    IERC20 private _expContract;
     // Generator admins 
     mapping(address => bool) private _tokenAdmins;
 
@@ -23,7 +27,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     constructor(string memory _name, string memory _symbol, address _expcontract) 
         ERC721(_name, _symbol) {
         // Set EXP Contract address 
-        _EXPContract = _expcontract;
+        _EXPContractAddress = _expcontract;
         // Set msg sender the first admin 
         _tokenAdmins[msg.sender] = true;
     }
@@ -39,7 +43,14 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Make sure the message sender is one of the admins 
         require(_tokenAdmins[msg.sender] == true, "EXPerience: You're not an admin");
         // We need to make sure _to actually holds some EXP 
-        // Implement a logic to handle that case here 
+        // Implement a logic to handle that case here --------- 
+
+        // Get the exp token contract  
+        _expContract = IERC20(_EXPContractAddress);
+        // Get _to's EXP token holdings 
+        uint256 _expBalanceofTo = _expContract.balanceOf(_to);
+        // For Testing Only: Let's limit minting to address only if they any amount of exp token
+        require(_expBalanceofTo > 0, "EXPerience: Insufficient EXP balance");
         
         // Increase supply 
         _totalSupply.increment();
