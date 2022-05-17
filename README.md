@@ -1,7 +1,7 @@
 #### Current Status 
 - [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
-- [ ] Create Angular frontend to interact with EXPerience Idea (In Progress)
-- [ ] Create SoulBound ERC721 and Integrate (Bounty 2)
+- [ ] Create Angular frontend to interact with EXPerience Idea **In Progress**
+- [ ] Create SoulBound ERC721 and Integrate (Bounty 2) **In Progress** 
 - [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance 
 - [ ] Ability to view leaderboard (Bounty 3)
 - [ ] Additional page to generate hackable levels and playground (Bounty 4)
