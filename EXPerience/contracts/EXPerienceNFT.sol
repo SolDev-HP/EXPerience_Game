@@ -38,6 +38,9 @@ contract EXPerienceNFT is ERC721, Ownable {
     function genExperience(address _to) public {
         // Make sure the message sender is one of the admins 
         require(_tokenAdmins[msg.sender] == true, "EXPerience: You're not an admin");
+        // We need to make sure _to actually holds some EXP 
+        // Implement a logic to handle that case here 
+        
         // Increase supply 
         _totalSupply.increment();
         // Get TokenID 
