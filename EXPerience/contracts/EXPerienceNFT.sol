@@ -6,10 +6,9 @@ import "./utils/Ownable.sol";
 import "./utils/Counters.sol";
 
 contract EXPerienceNFT is ERC721, Ownable {
-    // Counters to keep track of no. of EXPerienceNFTs
-    using Counters for Counters.Counter;
     // Total supply - Should be exposed via getter
-    Counters.Counter private _totalSupply;
+    // Should start with zero anyway.
+    uint256 private _totalSupply;
     // EXPToken contract address - To refer to EXP balance of the user 
     address private _EXPContractAddress;
     // EXPToken Interface to get balanceOf
@@ -52,10 +51,10 @@ contract EXPerienceNFT is ERC721, Ownable {
         // For Testing Only: Let's limit minting to address only if they any amount of exp token
         require(_expBalanceofTo > 0, "EXPerience: Insufficient EXP balance");
         
-        // Increase supply 
-        _totalSupply.increment();
         // Get TokenID 
-        uint256 _tokenID = _totalSupply.current();
+        uint256 _tokenID = _totalSupply;
+        // Increment for next tokenID
+        ++_totalSupply;
         // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
         _safeMint(_to, _tokenID);
         // Emit the event 
@@ -64,7 +63,7 @@ contract EXPerienceNFT is ERC721, Ownable {
 
     // Total supply 
     function totalSupply() public view returns (uint256) {
-        return _totalSupply.current();
+        return _totalSupply;
     }
 
     // TokenURI(), this is where we will implement all our logic
