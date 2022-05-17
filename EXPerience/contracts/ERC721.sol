@@ -85,6 +85,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     /**
      * @dev See {IERC721Metadata-tokenURI}.
+     * - Change to reflect on-chain generative ASCII art 
      */
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
