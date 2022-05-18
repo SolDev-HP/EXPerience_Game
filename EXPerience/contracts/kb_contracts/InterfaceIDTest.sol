@@ -23,14 +23,14 @@ interface IERC20Metadata {
 }
 
 contract BaseCon is ImpMe {
-    function supportedInterfacesBySelectors() external view returns (bytes4) {
+    function supportedInterfacesBySelectors() external pure returns (bytes4) {
         return this.supportedInterfacesBySelectors.selector ^ this.func1.selector ^ this.func2.selector;
     }
 
-    function supportedInterfaces() external view returns (bytes4) {
+    function supportedInterfaces() external pure returns (bytes4) {
         return this.func1.selector ^ this.func2.selector;               // Should yield same results as type(ImpMe).interfaceId
     }
-    function supportsImpMe() external view returns (bytes4) {
+    function supportsImpMe() external pure returns (bytes4) {
         return type(ImpMe).interfaceId;
     }
     function func1(string memory) external view returns (bool) { }
@@ -38,7 +38,7 @@ contract BaseCon is ImpMe {
 }
 
 contract BaseTwo is IERC20Metadata {
-    function baseTwoInterface() public view returns (bytes4) {
+    function baseTwoInterface() public pure returns (bytes4) {
         return type(IERC20Metadata).interfaceId;
     }
 
