@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import "./ERC20.sol";
+import "./tokens/ERC20.sol";
 import "./utils/Ownable.sol";
 
 /// @author 0micronat_. - https://github.com/SolDev-HP (Playground)
