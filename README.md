@@ -114,7 +114,7 @@ Ex:
 
 
 ### Tests & coverage report (WIP)
-
+```
 tests\test_EXPToken_contract.py ...........                              [100%]
 ================================== Coverage ===================================== 
 
@@ -129,3 +129,4 @@ tests\test_EXPToken_contract.py ...........                              [100%]
 Coverage report saved at .\reports\coverage.json
 View the report using the Brownie GUI
 ============================== 12 passed in 10.36s ==============================
+```
