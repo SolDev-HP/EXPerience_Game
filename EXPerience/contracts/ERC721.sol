@@ -6,14 +6,14 @@ pragma solidity >=0.8.0;
 import "../interfaces/IERC721.sol";
 import "../interfaces/extensions/IERC721Metadata.sol";
 import "./utils/Context.sol";
-import "./ERC165.sol";
+import "./ERC165Storage.sol";
 
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}.
  */
-contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
+contract ERC721 is Context, ERC165Storage, IERC721, IERC721Metadata {
     // Token name
     string private _name;
 
@@ -39,16 +39,17 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+
+        // Reporting supported interfaces 
+        _registerInterface(type(IERC721).interfaceId);
+        _registerInterface(type(IERC721Metadata).interfaceId);
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165) returns (bool) {
-        return
-            interfaceId == type(IERC721).interfaceId ||
-            interfaceId == type(IERC721Metadata).interfaceId ||
-            super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165Storage) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 
     /**

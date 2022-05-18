@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "./ERC165.sol";
+import "./ERC165Storage.sol";
 import "../interfaces/IERC20.sol";
 import "../interfaces/extensions/IERC20Metadata.sol";
 import "./utils/Context.sol";
@@ -38,10 +38,11 @@ import "./utils/Context.sol";
  // Context : retrieval of msg.sender and msg.data 
  // ERC165 : Implementation of supportsInterface(byte4) 
  // IERC165 : supportsInterface(byte4) external view 
+ // ERC165Storage : local introspection, interface storage registry
  // IERC20Metadata : External functions of _name, _symbol, _decimal
  // Keeping decimals fixed at 18
 
-contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
+contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
     mapping(address => uint256) private _balances;
 
     uint256 private _totalSupply;
@@ -66,16 +67,18 @@ contract ERC20 is Context, ERC165, IERC20, IERC20Metadata {
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+
+        // _register interfaces that this contract is supporting 
+        // So far ERC20 has IERC20 interface and ERC20Metadata interface support
+        _registerInterface(type(IERC20).interfaceId);
+        _registerInterface(type(IERC20Metadata).interfaceId);
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165) returns (bool) {
-        return
-            interfaceId == type(IERC20).interfaceId ||
-            interfaceId == type(IERC20Metadata).interfaceId ||
-            super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165Storage) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 
     /**
