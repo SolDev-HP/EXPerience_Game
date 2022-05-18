@@ -3,7 +3,6 @@ pragma solidity >=0.8.0;
 import "../interfaces/IERC20.sol";
 import "./ERC721.sol";
 import "./utils/Ownable.sol";
-import "./utils/Counters.sol";
 
 contract EXPerienceNFT is ERC721, Ownable {
     // Total supply - Should be exposed via getter
