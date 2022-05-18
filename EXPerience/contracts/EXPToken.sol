@@ -64,7 +64,9 @@ contract EXPToken is ERC20, Ownable {
         // Make sure user's balance isn't already zero 
         require(_balance > 0, "EXPToken (Balance): Insufficient balance");
         // Make sure our calculation doesn't bring it below zero 
-        require(_balance - lostAmount_ > 0, "EXPToken (Balance): Can't go below Min(0).");
+        // This calculation here will always throw "Integer Overflow" if _balance < lostAmount_
+        // To temporarily mitigate unexpected throws, check is necessary 
+        // require(_balance >= lostAmount_, "EXPToken (Balance): Can't go below Min(0).");
         // Burn given amount from user's balance 
         _burn(looser_, lostAmount_);
     }
