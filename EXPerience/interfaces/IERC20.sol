@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import "./IERC165.sol";
+import "./introspection/local/IERC165.sol";
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
  * @dev Taken from: OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)

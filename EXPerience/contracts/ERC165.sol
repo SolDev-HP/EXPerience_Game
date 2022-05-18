@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import "../interfaces/IERC165.sol";
+import "../interfaces/introspection/local/IERC165.sol";
 
 abstract contract ERC165 is IERC165 {
-    /// @notice Query if a contract implements an interface
+    /// @notice Query if a contract implements an interface 
     /// @param interfaceId The interface identifier, as specified in ERC-165
     /// @dev Interface identification is specified in ERC-165. This function
     ///  uses less than 30,000 gas.
