@@ -68,6 +68,9 @@ def test_upper_experience_limit_addition_above_100(exptoken):
 # 7. Users can not gain experience on their own - Admin only function
 # 8. Token creator can allow user to lose experience
 
+"""
+================== Supported Interfaces Checks =====================
+"""
 # x. Supported interface should return true for followings
 #    - IERC20           - 0x01ffc9a7
 #    - IERC20Metadata   - 0xa219a025

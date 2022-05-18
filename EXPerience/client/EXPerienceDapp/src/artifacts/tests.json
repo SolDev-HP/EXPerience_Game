@@ -3,27 +3,27 @@
     "BaseCon": "edc2a270aa58637a8c285e9eb2e71b6be904cbc6",
     "BaseTwo": "259dcdd2b06f054cb79c14082d8d5865e9dfcfc8",
     "Counters": "1ce946f6a4eaa185320328620ccf999b9e86db7c",
-    "ERC20": "7d2fa47e372cbde27c09823249b1d13672a0f177",
+    "ERC20": "48e6eb22ec592b3ef4e7a8d4e5f62090e940ad43",
     "ERC721": "86705e11fab449a688cabfdd7b59aa0d05799010",
-    "EXPToken": "1edfdb49abc9fb6442a35821f9cf1de23131a892",
+    "EXPToken": "c2ec240395152b8cf496576a8e1766126711af8c",
     "EXPerienceNFT": "930e57859535504d3db5de0b8a8e21e48c7e9493"
   },
   "tests": {
     "tests/test_EXPToken_contract.py": {
       "coverage": false,
       "isolated": false,
-      "results": "..........",
-      "sha1": "b517475a1ce6a3b62aa9a7c2c198d4939ea8f3f8",
+      "results": ".......",
+      "sha1": "429ad9d007806d7f26adbc10a054df5038fd6bc3",
       "txhash": [
-        "1bda6092a158b4ce8ab22cb913c38f95c72a54d3",
-        "337348eb845a54d40b8e30c7837e305924a9ed79",
-        "4595cb0b6c461511b5e91e81ba5c5a4bbb423875",
-        "d58d4c43535d79f0fdae939dbf00d6d8095b5db5"
+        "7b645fd44541dd3fd944c17eac05ce1f58afeefc",
+        "7f0ec2449687f0bcc06b5da4da8ce03a4d39717e",
+        "c931c0fc6f8390e0ce944e0bd1c07ef55491c69c",
+        "d41041a36b7973ef3479b2de8dbaf24834348848"
       ]
     }
   },
   "tx": {
-    "1bda6092a158b4ce8ab22cb913c38f95c72a54d3": {
+    "7b645fd44541dd3fd944c17eac05ce1f58afeefc": {
       "EXPToken": {
         "3": [
           [],
@@ -37,21 +37,7 @@
         ]
       }
     },
-    "337348eb845a54d40b8e30c7837e305924a9ed79": {
-      "EXPToken": {
-        "3": [
-          [],
-          [],
-          []
-        ],
-        "6": [
-          [],
-          [],
-          []
-        ]
-      }
-    },
-    "4595cb0b6c461511b5e91e81ba5c5a4bbb423875": {
+    "7f0ec2449687f0bcc06b5da4da8ce03a4d39717e": {
       "EXPToken": {
         "2": [
           [],
@@ -79,7 +65,21 @@
         ]
       }
     },
-    "d58d4c43535d79f0fdae939dbf00d6d8095b5db5": {
+    "c931c0fc6f8390e0ce944e0bd1c07ef55491c69c": {
+      "EXPToken": {
+        "3": [
+          [],
+          [],
+          []
+        ],
+        "6": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "d41041a36b7973ef3479b2de8dbaf24834348848": {
       "EXPToken": {
         "2": [
           [],
