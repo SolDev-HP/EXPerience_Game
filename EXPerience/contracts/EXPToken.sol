@@ -15,7 +15,6 @@ contract EXPToken is ERC20, Ownable {
     // Per user experience point capping = 100 * 10 ** 18
     uint256 internal constant MAXEXP = 100000000000000000000;
 
-
     // ================= EVENTS ======================
     event TokenAdminUpdated(address indexed admin_, bool indexed isAdmin_);
 
