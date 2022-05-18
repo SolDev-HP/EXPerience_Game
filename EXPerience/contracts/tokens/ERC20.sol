@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "./ERC165Storage.sol";
-import "../interfaces/IERC20.sol";
-import "../interfaces/extensions/IERC20Metadata.sol";
-import "./utils/Context.sol";
+import "../introspection/local/ERC165Storage.sol";
+import "../../interfaces/IERC20.sol";
+import "../../interfaces/extensions/IERC20Metadata.sol";
+import "../utils/Context.sol";
 
 /// @dev Taken from : OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/ERC20.sol)
 /// @dev Updated to support local introspection - supportsInterface() resitry with interface mappings
