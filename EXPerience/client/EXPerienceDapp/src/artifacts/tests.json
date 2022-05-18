@@ -1,0 +1,39 @@
+{
+  "contracts": {
+    "Counters": "1ce946f6a4eaa185320328620ccf999b9e86db7c",
+    "ERC20": "7d2fa47e372cbde27c09823249b1d13672a0f177",
+    "ERC721": "86705e11fab449a688cabfdd7b59aa0d05799010",
+    "EXPToken": "1edfdb49abc9fb6442a35821f9cf1de23131a892",
+    "EXPerienceNFT": "930e57859535504d3db5de0b8a8e21e48c7e9493"
+  },
+  "tests": {
+    "tests/test_EXPToken_contract.py": {
+      "coverage": false,
+      "isolated": [
+        "ERC20",
+        "EXPToken"
+      ],
+      "results": "..",
+      "sha1": "fa6486b75a236232e9187cbd2964cbeab130e8f3",
+      "txhash": [
+        "9acd91fdc7e52fb0d41f39f29bf038988600fb9c"
+      ]
+    }
+  },
+  "tx": {
+    "9acd91fdc7e52fb0d41f39f29bf038988600fb9c": {
+      "EXPToken": {
+        "4": [
+          [],
+          [],
+          []
+        ],
+        "7": [
+          [],
+          [],
+          []
+        ]
+      }
+    }
+  }
+}
