@@ -9,24 +9,92 @@
   "tests": {
     "tests/test_EXPToken_contract.py": {
       "coverage": false,
-      "isolated": [
-        "ERC20",
-        "EXPToken"
-      ],
-      "results": "..",
-      "sha1": "fa6486b75a236232e9187cbd2964cbeab130e8f3",
+      "isolated": false,
+      "results": "......",
+      "sha1": "bc02b3dc2033f7f40d000e5151c067887a5d3878",
       "txhash": [
-        "9acd91fdc7e52fb0d41f39f29bf038988600fb9c"
+        "144145f83f75072ac31987a7bb0009cf2b608b98",
+        "1a9720c19ddc506a9ddeb325df920cedd66977fc",
+        "6e760ac8494c2039301173da10b3075751308ab7",
+        "acdd70dd671caf9f73eff514963e9e469c220191"
       ]
     }
   },
   "tx": {
-    "9acd91fdc7e52fb0d41f39f29bf038988600fb9c": {
+    "144145f83f75072ac31987a7bb0009cf2b608b98": {
       "EXPToken": {
         "4": [
           [],
           [],
           []
+        ],
+        "7": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "1a9720c19ddc506a9ddeb325df920cedd66977fc": {
+      "EXPToken": {
+        "4": [
+          [],
+          [],
+          []
+        ],
+        "7": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "6e760ac8494c2039301173da10b3075751308ab7": {
+      "EXPToken": {
+        "2": [
+          [],
+          [],
+          []
+        ],
+        "4": [
+          [
+            13,
+            14
+          ],
+          [
+            32
+          ],
+          [
+            31
+          ]
+        ],
+        "7": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "acdd70dd671caf9f73eff514963e9e469c220191": {
+      "EXPToken": {
+        "2": [
+          [],
+          [],
+          []
+        ],
+        "4": [
+          [
+            13,
+            14,
+            15
+          ],
+          [
+            33
+          ],
+          [
+            31,
+            32
+          ]
         ],
         "7": [
           [],
