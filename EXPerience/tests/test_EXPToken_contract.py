@@ -67,3 +67,19 @@ def test_upper_experience_limit_addition_above_100(exptoken):
 # 6. Token admin can allow user to gain experience 
 # 7. Users can not gain experience on their own - Admin only function
 # 8. Token creator can allow user to lose experience
+
+# x. Supported interface should return true for followings
+#    - IERC20           - 0x01ffc9a7
+#    - IERC20Metadata   - 0xa219a025
+#    - IERC721          - 0x80ac58cd  - Not supported
+def test_supports_ierc20_interface(exptoken):
+    assert exptoken.supportsInterface('0x01ffc9a7', {"from": accounts[0]}) == True
+
+def test_supports_ierc20_metadata_interface(exptoken):
+    assert exptoken.supportsInterface('0xa219a025', {"from": accounts[0]}) == True
+
+def test_does_not_support_ierc721_interface(exptoken):
+    assert exptoken.supportsInterface('0x80ac58cd', {"from": accounts[0]}) == False
+
+def test_checks_valid_interface_id(exptoken):
+    assert exptoken.supportsInterface('0xffffffff', {"from": accounts[0]}) == False

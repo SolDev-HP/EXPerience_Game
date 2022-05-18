@@ -12,7 +12,6 @@ abstract contract ERC165Storage is ERC165 {
     /// @dev mapping of all supported interfaces 
     /// @notice you MUST NOT/NEVER set element 0xffffffff (Invalid InterfaceID) to true
     mapping(bytes4 => bool) private _supportedInterfaces;
-
     /** 
      * @dev See {IERC165:supportsInterface()}
      * @dev An update would be checking base class first for the given interfacId, and then verify in storage  
