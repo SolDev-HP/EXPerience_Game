@@ -18,6 +18,9 @@ contract EXPToken is ERC20, Ownable {
     // ================= EVENTS ======================
     event TokenAdminUpdated(address indexed admin_, bool indexed isAdmin_);
 
+    // ================= ERRORS ======================
+    error ActionNotSupported();
+
     /// @dev Initialize contract by providing Token name ex: "EXPToken" and symbol ex: "EXP"
     /// This should be able to create ERC20 token, initiator will be the primary admin who 
     /// can add or remove other admins 
@@ -64,5 +67,57 @@ contract EXPToken is ERC20, Ownable {
         require(_balance - lostAmount_ > 0, "EXPToken (Balance): Can't go below Min(0).");
         // Burn given amount from user's balance 
         _burn(looser_, lostAmount_);
+    }
+
+    /// @dev Overriding ERC20 functions, need to make sure they revert.
+    /// To preserve property of a soulbound token. Once minted to an address, cannot be transferred
+    /// However, in this implementation, we allow admins to reduce user's balance to zero
+    /**
+     * Emits a {ActionNotSupported} error.
+     */
+    function transfer(address, uint256) public pure override returns (bool) {
+        revert ActionNotSupported();
+    }
+
+    /**
+     * @dev See {IERC20-allowance}.
+     * Emits a {ActionNotSupported} error.
+     */
+    function allowance(address, address) public pure override returns (uint256) {
+        revert ActionNotSupported();
+    }
+
+    /**
+     * @dev See {IERC20-approve}.
+     * Emits a {ActionNotSupported} error
+     *
+     */
+    function approve(address, uint256) public pure override returns (bool) {
+        revert ActionNotSupported();
+    }
+
+    /**
+     * @dev See {IERC20-transferFrom}.
+     * Emits a {ActionNotSupported} error
+     */
+    function transferFrom(address, address, uint256) public pure override returns (bool) {
+        revert ActionNotSupported();
+    }
+
+    /**
+     * @dev Atomically increases the allowance granted to `spender` by the caller.
+     *
+     * Emits a {ActionNotSupported} error
+     */
+    function increaseAllowance(address, uint256) public pure override returns (bool) {
+        revert ActionNotSupported();
+    }
+
+    /**
+     * @dev Atomically decreases the allowance granted to `spender` by the caller.
+     * Emits a {ActionNotSupported} error
+     */
+    function decreaseAllowance(address, uint256) public pure override returns (bool) {
+        revert ActionNotSupported();
     }
 }

@@ -7,8 +7,7 @@ import "../interfaces/extensions/IERC20Metadata.sol";
 import "./utils/Context.sol";
 
 /// @dev Taken from : OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/ERC20.sol)
-/// @dev Update ERC20 contract to support Soul-bounding, once assigned - cannot be transferred 
-
+/// @dev Updated to support local introspection - supportsInterface() resitry with interface mappings
 /**
  * @dev Implementation of the {IERC20} interface.
  *
@@ -42,19 +41,21 @@ import "./utils/Context.sol";
  // IERC20Metadata : External functions of _name, _symbol, _decimal
  // Keeping decimals fixed at 18
 
+ // Update: It should match IERC20 and we shouldn't update functionality in base
+ // instead, we will focus on overriding concerned functions and settings them
+ // to throw. However, _registerInterface() is a personal choice. I think it can
+ // be utilized in similar classes and see if we can keep gas fixed/under 30000 
+ // that supportsInterface() call is supposed to consume. 
 contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
     mapping(address => uint256) private _balances;
 
+    mapping(address => mapping(address => uint256)) private _allowances;
+    
     uint256 private _totalSupply;
 
     string private _name;
     string private _symbol;
 
-    // Revert error OperationNotAllowed when user tries to perform restricted actions, transfer - transferFrom - approve etc.
-    // Using custom error is much cheaper than revert with a string description.
-    error OperationNotAllowed();
-    // Revert error for unsupported actions
-    error UnsupportedAction();
     /**
      * @dev Sets the values for {name} and {symbol}.
      *
@@ -130,56 +131,107 @@ contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
     /**
      * @dev See {IERC20-transfer}.
      *
-     * Restricted
      */
-    function transfer(address, uint256) public virtual override returns (bool) {
-        revert OperationNotAllowed();
+    function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+        return true;
     }
 
     /**
      * @dev See {IERC20-allowance}.
      *
-     * Unsupported
      */
-    function allowance(address, address) public view virtual override returns (uint256) {
-        revert UnsupportedAction();
+    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+        return _allowances[owner][spender];
     }
 
     /**
      * @dev See {IERC20-approve}.
      *
-     * Restricted 
      */
-    function approve(address, uint256) public virtual override returns (bool) {
-        revert OperationNotAllowed();
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, amount);
+        return true;
     }
 
     /**
      * @dev See {IERC20-transferFrom}.
      *
-     * Restricted
      */
-    function transferFrom(address, address, uint256) public virtual override returns (bool) {
-        revert OperationNotAllowed();
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        address spender = _msgSender();
+        _spendAllowance(from, spender, amount);
+        _transfer(from, to, amount);
+        return true;
     }
 
     /**
      * @dev Atomically increases the allowance granted to `spender` by the caller.
      *
-     * Unsupported
      */
-    function increaseAllowance(address, uint256) public virtual returns (bool) {
-        revert UnsupportedAction();
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, allowance(owner, spender) + addedValue);
+        return true;
     }
 
     /**
      * @dev Atomically decreases the allowance granted to `spender` by the caller.
      *
-     * Unsupported
      */
-    function decreaseAllowance(address, uint256) public virtual returns (bool) {
-        revert UnsupportedAction();
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        uint256 currentAllowance = allowance(owner, spender);
+        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
+        unchecked {
+            _approve(owner, spender, currentAllowance - subtractedValue);
+        }
+
+        return true;
     }
+
+    /**
+     * @dev Moves `amount` of tokens from `from` to `to`.
+     *
+     * This internal function is equivalent to {transfer}, and can be used to
+     * e.g. implement automatic token fees, slashing mechanisms, etc.
+     *
+     * Emits a {Transfer} event.
+     *
+     * Requirements:
+     *
+     * - `from` cannot be the zero address.
+     * - `to` cannot be the zero address.
+     * - `from` must have a balance of at least `amount`.
+     */
+    function _transfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual {
+        require(from != address(0), "ERC20: transfer from the zero address");
+        require(to != address(0), "ERC20: transfer to the zero address");
+
+        _beforeTokenTransfer(from, to, amount);
+
+        uint256 fromBalance = _balances[from];
+        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
+        unchecked {
+            _balances[from] = fromBalance - amount;
+        }
+        _balances[to] += amount;
+
+        emit Transfer(from, to, amount);
+
+        _afterTokenTransfer(from, to, amount);
+    }
+
 
     /** @dev Creates `amount` tokens and assigns them to `account`, increasing
      * the total supply.
@@ -191,7 +243,7 @@ contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
      * - `account` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "EXPToken (Mint): Mint to Add(0) - X");
+        require(account != address(0), "ERC20: mint to the zero address");
 
         _beforeTokenTransfer(address(0), account, amount);
 
@@ -218,12 +270,12 @@ contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
      * - Remove require, instead revert with custom error to save gas
      */
     function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "EXPToken (Burn): Burn from Add(0) - X.");
+        require(account != address(0), "ERC20: burn from the zero address");
 
         _beforeTokenTransfer(account, address(0), amount);
 
         uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "EXPToken (Burn): Insufficient balance.");
+        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
         unchecked {
             _balances[account] = accountBalance - amount;
         }
@@ -237,11 +289,48 @@ contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
     /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
      *
-     * Restricted
+     * This internal function is equivalent to `approve`, and can be used to
+     * e.g. set automatic allowances for certain subsystems, etc.
+     *
+     * Emits an {Approval} event.
+     *
+     * Requirements:
+     *
+     * - `owner` cannot be the zero address.
+     * - `spender` cannot be the zero address.
      */
-    function _approve(address, address, uint256) internal virtual {
-        //revert OperationNotAllowed();
-        revert();
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
+
+    /**
+     * @dev Updates `owner` s allowance for `spender` based on spent `amount`.
+     *
+     * Does not update the allowance amount in case of infinite allowance.
+     * Revert if not enough allowance is available.
+     *
+     * Might emit an {Approval} event.
+     */
+    function _spendAllowance(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
+        uint256 currentAllowance = allowance(owner, spender);
+        if (currentAllowance != type(uint256).max) {
+            require(currentAllowance >= amount, "ERC20: insufficient allowance");
+            unchecked {
+                _approve(owner, spender, currentAllowance - amount);
+            }
+        }
     }
 
     /**

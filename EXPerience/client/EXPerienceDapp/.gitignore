@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Temporary stop uploading artifacts. Unnecessarily dilutes commits 
+/src/artifacts
