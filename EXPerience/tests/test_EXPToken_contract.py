@@ -23,11 +23,11 @@ def exptoken():
 """
 ================== Access Control =====================
 """
-# 1. Token creator can add other admins 
+# Token creator can add other admins 
 def test_token_creator_add_admin(exptoken):
     exptoken.setTokenAdmins(accounts[1], True, {"from": accounts[0]});
 
-# 2. Token admins can not add other admins
+# Token admins can not add other admins
 def test_token_admins_cannot_add_admin(exptoken):
     with brownie.reverts("EXPToken (AccessControl): Not authorized."):
         exptoken.setTokenAdmins(accounts[2], True, {"from": accounts[1]});
@@ -36,6 +36,13 @@ def test_token_admins_cannot_add_admin(exptoken):
 def test_users_cannot_add_admins(exptoken):
     with brownie.reverts("EXPToken (AccessControl): Not authorized."):
         exptoken.setTokenAdmins(accounts[3], True, {"from": accounts[2]})
+
+# User's can't gain or reduce experience 
+def test_users_not_allowed_admin_actions(exptoken):
+    with brownie.reverts("EXPToken (AccessControl): Not authorized."):
+        exptoken.gainExperience(accounts[3], 1 * 10 ** 18, {"from": accounts[2]})
+    with brownie.reverts("EXPToken (AccessControl): Not authorized."):
+        exptoken.reduceExperience(accounts[3], 1 * 10 ** 18, {"from": accounts[2]})
 
 """
 ================== Token Allocation/Deallocation Authority/Token Balances =====================
@@ -86,3 +93,24 @@ def test_does_not_support_ierc721_interface(exptoken):
 
 def test_checks_valid_interface_id(exptoken):
     assert exptoken.supportsInterface('0xffffffff', {"from": accounts[0]}) == False
+
+"""
+======================== Supposed To Fail ===========================
+"""
+# Allowance, Approve, decreaseAllowance, increaseAllowance, transfer, transferFrom are not allowed by anyone 
+def test_banned_methods_always_revert(exptoken):
+    # Allowance tests
+    # Users should fail
+    with brownie.reverts():
+        exptoken.allowance(accounts[2], accounts[3], {"from": accounts[2]})
+    # Even with admin it should fail
+    with brownie.reverts():
+        exptoken.allowance(accounts[0], accounts[1], {"from": accounts[0]})
+
+    # Approve tests
+    with brownie.reverts():
+        exptoken.approve(accounts[2], 20 * 10 ** 18, {"from": accounts[2]})
+    with brownie.reverts():
+        exptoken.approve(accounts[0], 20 * 10 ** 18, {"from": accounts[0]})
+    with brownie.reverts():
+        exptoken.approve(accounts[1], 20 * 10 ** 18, {"from": accounts[1]})

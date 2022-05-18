@@ -111,3 +111,21 @@ Ex:
 
 ## UML for current implementation (ERC20 - [EXP]erience Token)
 ![EXPerience_UML](https://github.com/SolDev-HP/EXPerience_Game/blob/master/EXPerience/EXPerience_UML.svg)
+
+
+### Tests & coverage report (WIP)
+
+tests\test_EXPToken_contract.py ...........                              [100%]
+================================== Coverage ===================================== 
+
+
+  contract: EXPToken - 45.0%
+    EXPToken.gainExperience - 100.0%
+    ERC20._mint - 75.0%
+    EXPToken.reduceExperience - 20.8%
+    ERC20._burn - 0.0%
+    Ownable.owner - 0.0%
+
+Coverage report saved at .\reports\coverage.json
+View the report using the Brownie GUI
+============================== 12 passed in 10.36s ==============================
