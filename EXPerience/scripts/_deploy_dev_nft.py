@@ -3,7 +3,7 @@ from brownie import EXPerienceNFT, accounts
 from dotenv import load_dotenv
 load_dotenv()
 
-# EXPToken is deployed at 0x0F766FFaf3B4f913E7D85753f2BDC000895Db327 on dev 
+# EXPToken is deployed at XX-Retest-To-Find-Out on dev 
 def main():
     dev_admin1 = accounts.add(os.getenv("DEV_SADMIM_PRIV"))
     dev_admin2 = accounts.add(os.getenv("DEV_ADMIM2_PRIV"))
