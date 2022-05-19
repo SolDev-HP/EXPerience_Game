@@ -1,8 +1,9 @@
 #### Current Status 
 - [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
-- [ ] Create Angular frontend to interact with EXPerience Idea **In Progress**
-- [ ] Create SoulBound ERC721 and Integrate (Bounty 2) **In Progress** 
+- [x] Create SoulBound ERC721 and Integrate (Bounty 2)
+- [ ] Create Angular frontend to interact with EXPerience Idea -- **[WIP]**
 - [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance 
+- [ ] Prepare unit test -- **[WIP]** 
 - [ ] Ability to view leaderboard (Bounty 3)
 - [ ] Additional page to generate hackable levels and playground (Bounty 4)
 
@@ -12,9 +13,18 @@
 A slightly old version of contract is deployed and verified on ropsten: 0x8a573359959aD898b145BF19b6cc461a2c7EaCE2
 Visit: https://ropsten.etherscan.io/address/0x8a573359959aD898b145BF19b6cc461a2c7EaCE2#code
 
+Latest version (unverified) deployed contracts:
+EXP Token
+Ropsten: https://ropsten.etherscan.io/address/0x709ffc7a5ea37f91e727227780d9a6ba7bf3fc27
+Rinkeby: https://rinkeby.etherscan.io/address/0x8a573359959ad898b145bf19b6cc461a2c7eace2
+EXPerience NFT
+Ropsten: https://ropsten.etherscan.io/address/0x98c8a11faaf4466eccaf1b00149bdcf696d8793d
+Rinkeby: https://rinkeby.etherscan.io/address/0xe044b5f529fa707aa601ba25fabc480c1abee3bb
+
 Things I am currently working on:
 - Make basic angular frontend for users to interact with the whole idea of EXPerience (ERC20 + NFT + Leaderboard)
-- Import NFT contracts after testing and verification 
+- Unit tests to test all contracts 
+- Revert ERC721 to follow original standard and allow potential inheritence to still be able to access original actions. Changes should be overridden in EXPerienceNFT
 
 ### How to get going (Frontend doesn't do anything yet, it's just the barebones of ng init EXPerienceDapp) 
 
@@ -55,11 +65,15 @@ cd EXPerience
 brownie compile
 ```
 - Run the script to interact with the contract with the most basic things I can think of (Status: WIP)
+- Currently dev, ropsten, rinkeby scripts are updated
 ```
 # If deploying to development (ganache-cli), make sure you have .env file prepared according to the .env.example 
 brownie run .\scripts\_deploy_dev.py --network development 
 # If deploying to any other chain (Ex: ropsten)
 brownie run .\scripts\_deploy_ropsten.py --network ropsten
+# If you're planning on deploying NFT contract next, you'll need EXP token's contract address from ropsten 
+# Keep that in .env file 
+brownie run .\scripts\_deploy_ropsten_nft.py --network ropsten
 ```
 #### This will just do following as of now (Status: WIP)
 
@@ -79,6 +93,11 @@ brownie run .\scripts\_deploy_ropsten.py --network ropsten
 -- Gain experience for hodler1 by admin1 
 -- Gain experience for hodler2 by admin2 
 
+- development script interaction (_deploy_ropsten_nft.py)
+-- Create NFT contract 
+-- Add additional admin
+-- Gain experience NFT for hodler1 by admin1 
+-- Gain experience NFT for hodler2 by admin2 
 
 #### Run the frontend (if you so wish to, because it does nothing at all (no interaction with contracts yet))
 #### (Status: WIP)
@@ -119,14 +138,14 @@ tests\test_EXPToken_contract.py ...........                              [100%]
 ================================== Coverage ===================================== 
 
 
-  contract: EXPToken - 45.0%
+  contract: EXPToken - 88.7%
+    ERC20._mint - 100.0%
     EXPToken.gainExperience - 100.0%
-    ERC20._mint - 75.0%
-    EXPToken.reduceExperience - 20.8%
-    ERC20._burn - 0.0%
+    EXPToken.reduceExperience - 100.0%
+    ERC20._burn - 87.5%
     Ownable.owner - 0.0%
 
 Coverage report saved at .\reports\coverage.json
 View the report using the Brownie GUI
-============================== 12 passed in 10.36s ==============================
+============================== 25 passed in 27.71s ==============================
 ```
