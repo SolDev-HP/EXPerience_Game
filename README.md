@@ -14,12 +14,14 @@ A slightly old version of contract is deployed and verified on ropsten: 0x8a5733
 Visit: https://ropsten.etherscan.io/address/0x8a573359959aD898b145BF19b6cc461a2c7EaCE2#code
 
 Latest version (unverified) deployed contracts:
+
 EXP Token
-Ropsten: https://ropsten.etherscan.io/address/0x709ffc7a5ea37f91e727227780d9a6ba7bf3fc27
-Rinkeby: https://rinkeby.etherscan.io/address/0x8a573359959ad898b145bf19b6cc461a2c7eace2
+- Ropsten: https://ropsten.etherscan.io/address/0x709ffc7a5ea37f91e727227780d9a6ba7bf3fc27
+- Rinkeby: https://rinkeby.etherscan.io/address/0x8a573359959ad898b145bf19b6cc461a2c7eace2
+
 EXPerience NFT
-Ropsten: https://ropsten.etherscan.io/address/0x98c8a11faaf4466eccaf1b00149bdcf696d8793d
-Rinkeby: https://rinkeby.etherscan.io/address/0xe044b5f529fa707aa601ba25fabc480c1abee3bb
+- Ropsten: https://ropsten.etherscan.io/address/0x98c8a11faaf4466eccaf1b00149bdcf696d8793d
+- Rinkeby: https://rinkeby.etherscan.io/address/0xe044b5f529fa707aa601ba25fabc480c1abee3bb
 
 Things I am currently working on:
 - Make basic angular frontend for users to interact with the whole idea of EXPerience (ERC20 + NFT + Leaderboard)
@@ -77,27 +79,27 @@ brownie run .\scripts\_deploy_ropsten_nft.py --network ropsten
 ```
 #### This will just do following as of now (Status: WIP)
 
-- development script interaction (_deploy_dev.py)
--- Create contract 
--- Add additional admin
--- Gain experience for hodler1 by admin1 
--- Gain experience for hodler2 by admin2 
--- hodler1 tries to gain experience (Fails, AccessControl)
--- hodler1 tries to loose experience (Fails, AccessControl)
--- hodler1 tries to transfer (Fails, Blocked/Unsupported action)
--- hodler2 tries to approve (Fails, Blocked/Unsupported action)
+##### development script interaction (_deploy_dev.py)
+- Create contract 
+- Add additional admin
+- Gain experience for hodler1 by admin1 
+- Gain experience for hodler2 by admin2 
+- hodler1 tries to gain experience (Fails, AccessControl)
+- hodler1 tries to loose experience (Fails, AccessControl)
+- hodler1 tries to transfer (Fails, Blocked/Unsupported action)
+- hodler2 tries to approve (Fails, Blocked/Unsupported action)
 
-- development script interaction (_deploy_ropsten.py)
--- Create contract 
--- Add additional admin
--- Gain experience for hodler1 by admin1 
--- Gain experience for hodler2 by admin2 
+##### development script interaction (_deploy_ropsten.py)
+- Create contract 
+- Add additional admin
+- Gain experience for hodler1 by admin1 
+- Gain experience for hodler2 by admin2 
 
-- development script interaction (_deploy_ropsten_nft.py)
--- Create NFT contract 
--- Add additional admin
--- Gain experience NFT for hodler1 by admin1 
--- Gain experience NFT for hodler2 by admin2 
+##### development script interaction (_deploy_ropsten_nft.py)
+- Create NFT contract 
+- Add additional admin
+- Gain experience NFT for hodler1 by admin1 
+- Gain experience NFT for hodler2 by admin2 
 
 #### Run the frontend (if you so wish to, because it does nothing at all (no interaction with contracts yet))
 #### (Status: WIP)
