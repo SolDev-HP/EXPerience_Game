@@ -1,7 +1,24 @@
 {
-  "dev": {
+  "3": {
     "EXPToken": [
-      "0xBC6C0B1F4DfDcDB97db8f9Ad35346cE52a1Cb723"
+      "0x709fFC7a5Ea37F91e727227780D9A6ba7bF3FC27",
+      "0xE044B5F529fA707aA601BA25FABc480C1ABEe3BB"
+    ],
+    "EXPerienceNFT": [
+      "0x98c8A11faaF4466eccaF1b00149bDcF696D8793D"
+    ]
+  },
+  "4": {
+    "EXPToken": [
+      "0x8a573359959aD898b145BF19b6cc461a2c7EaCE2"
+    ],
+    "EXPerienceNFT": [
+      "0xE044B5F529fA707aA601BA25FABc480C1ABEe3BB"
+    ]
+  },
+  "dev": {
+    "EXPerienceNFT": [
+      "0x756f009d068aABF37652b848C46a47337CAf7512"
     ]
   }
 }
