@@ -21,6 +21,9 @@ contract EXPerienceNFT is ERC721, Ownable {
     event ExperienceNFTGenerated(address indexed _experienceGainer);
     event TokenAdminSet(address indexed _admin, bool indexed _isAdmin);
 
+    // ================= ERRORS ======================
+    error ActionRestricted();
+
     // Constructor of EXPerience NFT Contract, expects nama and symbol of the NFT Contract 
     // and address where EXP Token is deployed
     constructor(string memory _name, string memory _symbol, address _expcontract) 
@@ -90,5 +93,36 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Now we have following details required to generate a tokenURI 
         // owner of the nft, nft token ID, owner's EXP balance 
         return BadgeFactory._generateTokenURI(_tokenID, ownerBal, owner);
+    }
+
+    /// @dev functions that are restricted 
+    /// Overridden from ERC721 and modifier to reflect 
+    /// Soulbound nature of the NFT
+    function approve(address, uint256) public pure override {
+        revert ActionRestricted();
+    }
+
+    function getApproved(uint256) public pure override returns (address) {
+        revert ActionRestricted();
+    }
+
+    function setApprovalForAll(address, bool) public pure override {
+        revert ActionRestricted();
+    }
+
+    function isApprovedForAll(address, address) public pure override returns (bool) {
+        revert ActionRestricted();
+    }
+
+    function transferFrom(address, address, uint256) public pure override {
+        revert ActionRestricted();
+    }
+
+    function safeTransferFrom(address, address, uint256) public pure override {
+        revert ActionRestricted();
+    }
+
+    function safeTransferFrom(address, address, uint256, bytes memory) public pure override {
+         revert ActionRestricted();
     }
 }
