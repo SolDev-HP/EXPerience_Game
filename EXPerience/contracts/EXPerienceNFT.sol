@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "../interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
+import "./libs/BadgeFactory.sol";
 
 contract EXPerienceNFT is ERC721, Ownable {
     // Total supply - Should be exposed via getter
@@ -76,8 +77,18 @@ contract EXPerienceNFT is ERC721, Ownable {
     // --- Ex: Tier-1 trophie for users who have 1 to 20 EXP tokens
     // --- Tier-2 trophies for users who have 21 to 40 EXP tokens and so on...
     function tokenURI(uint256 _tokenID) public view override returns (string memory) {
-        // Some way of gathering the data that what kind of NFT should be shown 
-        // Should change based on holder's EXP balance 
-        // generateTokenURI(...args) -> Some Generator Library 
+        // Make sure _tokenID is valid 
+        require(_exists(_tokenID), "EXPerience NFT: Invalid TokenID");
+        // Get the owner of the _tokenID
+        address owner = ownerOf(_tokenID); 
+        // We need owner's EXP token balance
+        // Based on balance, we can prepare a variable that denotes which 
+        // Symbol should be written in the center of the circle. 
+        // Get owner's EXP token holdings
+        uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner);
+
+        // Now we have following details required to generate a tokenURI 
+        // owner of the nft, nft token ID, owner's EXP balance 
+        return BadgeFactory._generateTokenURI(_tokenID, ownerBal, owner);
     }
 }
