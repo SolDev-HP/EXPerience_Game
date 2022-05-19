@@ -11,7 +11,7 @@ def main():
     dev_hodler2 = os.getenv("DEV_HODLER2_PUB")
 
     # Deploy EXPerience NFT contract 
-    expNFT = EXPerienceNFT.deploy("EXPerience-NFT", "EXPNFT", os.getenv("EXP_CONTRACT"), {"from": dev_admin1})
+    expNFT = EXPerienceNFT.deploy("EXPerience-NFT", "EXPNFT", os.getenv("EXP_CONTRACT_DEV"), {"from": dev_admin1})
 
     # Admin1 adds new admin on EXPerience NFT 
     expNFT.setTokenAdmin(os.getenv("DEV_ADMIM2_PUB"), True, {"from": dev_admin1})
@@ -22,22 +22,26 @@ def main():
     # Mint NFT for User2 <- From Admin2
     expNFT.genExperience(dev_hodler2, {"from": dev_admin2})     # Shouldn't fail - User has EXP
 
+    # Img url 
+    # print(expNFT.getimgurl(1, {"from": dev_admin1} ))
+    # print(expNFT.getAnimurl(1, {"from": dev_admin1} ))
+
     # Mint NFT for User3 <- From admin1
     # This requires further logic of whether to assign these NFTs to addresses 
     # holding EXP tokens already or not. Though at current point, it wouldn't 
     # make much sense to allow minting NFTs to addresses that do not hold EXP tokens 
-    try:
-        expNFT.genExperience(os.getenv("PUBLIC_KEY_HODLER2"), {"from": dev_admin1})   # Should fail, user doesn't have EXP
-    except:
-        print("Expected error. Continue...")
+    # try:
+    #     expNFT.genExperience(os.getenv("PUBLIC_KEY_HODLER2"), {"from": dev_admin1})   # Should fail, user doesn't have EXP
+    # except:
+    #     print("Expected error. Continue...")
 
-    # Mint NFT again for User1 
-    try:
-        expNFT.genExperience(dev_hodler1, {"from": dev_admin1})     # Should fail, already minted
-    except:
-        print("Expected Error. Continue...")
-    # Mint NFT again for User1 
-    try:
-        expNFT.genExperience(dev_hodler1, {"from": dev_admin2})     # Should fail, already minted
-    except:
-        print("Expected error")
+    # # Mint NFT again for User1 
+    # try:
+    #     expNFT.genExperience(dev_hodler1, {"from": dev_admin1})     # Should fail, already minted
+    # except:
+    #     print("Expected Error. Continue...")
+    # # Mint NFT again for User1 
+    # try:
+    #     expNFT.genExperience(dev_hodler1, {"from": dev_admin2})     # Should fail, already minted
+    # except:
+    #     print("Expected error")
