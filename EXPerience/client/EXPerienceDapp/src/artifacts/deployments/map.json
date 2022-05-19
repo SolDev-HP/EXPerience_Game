@@ -13,12 +13,14 @@
       "0x8a573359959aD898b145BF19b6cc461a2c7EaCE2"
     ],
     "EXPerienceNFT": [
+      "0x4f9284214B2f051A1655632055bfe6736fF9D9CB",
+      "0xdd8c243f390FDEeeb9Ed66688Faf33bAfB7FC003",
       "0xE044B5F529fA707aA601BA25FABc480C1ABEe3BB"
     ]
   },
   "dev": {
-    "EXPToken": [
-      "0x94ec4c7Bc92210dB9b6ACC1ce5eb2C52cC1cA1c0"
+    "EXPerienceNFT": [
+      "0xcb862c350CE5eD7B39595F59a469df2fa04d6332"
     ]
   }
 }
