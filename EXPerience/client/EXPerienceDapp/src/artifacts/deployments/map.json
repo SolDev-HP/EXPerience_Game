@@ -20,7 +20,11 @@
   },
   "dev": {
     "EXPToken": [
-      "0xD383476645492cf892a5451E714C7483B9B3b797"
+      "0xFEB42234BAf7E4e60f66927145A8Dd467f2c1DC1",
+      "0xc559f4242ef08ABa7f3c5Ee2406d03b47fa0c680"
+    ],
+    "EXPerienceNFT": [
+      "0x3CbF5A94D45420568742628dB3C7746372CC694c"
     ]
   }
 }
