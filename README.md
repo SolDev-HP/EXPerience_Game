@@ -1,6 +1,7 @@
 #### Current Status 
 - [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
 - [x] Create SoulBound ERC721 and Integrate (Bounty 2)
+- [x] Prepare unit tests for EXPToken Contract
 - [ ] Create Angular frontend to interact with EXPerience Idea -- **[WIP]**
 - [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance 
 - [ ] Prepare unit test -- **[WIP]** 
@@ -9,6 +10,8 @@
 
 #### EXPerience Game project. This will allow users to play a game (Yet to be decided upon, Dino game could be interesting too) and submit their score. In return they get EXP tokens that signify their experience. Later we will include EXPerience NFT. These are soulbound tokens and NFTs. Once minted to an address, can not be transferred to anyone else. This is for EthernautDAO bounty submission.
 #### Author: 0micronat_. (SolDev-HP)
+
+#### Keeping a journal on Discord to better categorize different ideas under one term/umbrella/direction/vision - SoulVerse (Cheeky I know but for the lack of better work I would go with this as it represents exactly what I am trying to do here. Develop things into something meaningful.) Discord - https://discord.gg/uMFXtqSrgf
 
 A slightly old version of contract is deployed and verified on ropsten: 0x8a573359959aD898b145BF19b6cc461a2c7EaCE2
 Visit: https://ropsten.etherscan.io/address/0x8a573359959aD898b145BF19b6cc461a2c7EaCE2#code
