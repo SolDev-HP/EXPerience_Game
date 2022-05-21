@@ -20,4 +20,10 @@ def main():
     EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER1"), 15 * 10 ** 18, {"from": sadmin_account})
     # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
     EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER2"), 29 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 3 checking 
+    EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER3"), 42 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 4 checking 
+    EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER4"), 69 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
+    EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER5"), 97 * 10 ** 18, {"from": admin2_account})
 

@@ -23,3 +23,12 @@ def main():
 
     # Mint NFT for User2 <- From Admin2
     EXPerienceCon.genExperience(os.getenv("PUBLIC_KEY_HODLER2"), {"from": admin2_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("PUBLIC_KEY_HODLER3"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("PUBLIC_KEY_HODLER4"), {"from": admin2_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("PUBLIC_KEY_HODLER5"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
