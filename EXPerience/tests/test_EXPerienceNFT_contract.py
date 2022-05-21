@@ -45,10 +45,14 @@ def test_only_admin_can_generate_nft(expnft):
         expnft.genExperience(accounts[1], {"from": accounts[1]})
     # Only deployer can generate EXPerience 
     expnft.genExperience(accounts[0], {"from": accounts[0]})
+    # verify totalsupply, it should be 1 so far 
+    assert expnft.totalSupply({"from": accounts[0]}) == 1
     # If account 1 is added by admin, then they can also generate EXPerience 
     expnft.setTokenAdmin(accounts[1], True, {"from": accounts[0]})
     # Now try generating, it shouldn't fail
     expnft.genExperience(accounts[1], {"from": accounts[1]})
+    # verify totalSupply again ==2?
+    assert expnft.totalSupply({"from": accounts[0]}) == 2
 
 def test_receiver_should_have_exp_balance(expnft):
     with brownie.reverts("EXPerience: Insufficient EXP balance"):

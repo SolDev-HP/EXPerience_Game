@@ -25,3 +25,22 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+#### currently temporarily excluded files from further git commits 
+
+```
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/contracts/BadgeFactory.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/contracts/EXPerienceNFT.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/deployments/dev/0x7dc85c19f7b68071D1c5c12211e67407827744aE.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/deployments/map.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/tests.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/deployments/dev/0x78E9b3dd716f7cD21F80be0a1470D2F2C4Ba1107.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/deployments/dev/0xd98162060b2FaBCc4bBd70513e7Ec15d5c13E6e4.json
+git update-index --assume-unchanged client/EXPerienceDapp/src/artifacts/deployments/dev/0xe55eBCe3ED249470D2f2AC63f3E5c1fF56dD5Fad.json
+
+Whenever you want to start including them again, fire 
+
+git update-index --no-assume-unchanged
+```
+

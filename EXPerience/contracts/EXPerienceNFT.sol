@@ -99,30 +99,37 @@ contract EXPerienceNFT is ERC721, Ownable {
     /// Overridden from ERC721 and modifier to reflect 
     /// Soulbound nature of the NFT
     function approve(address, uint256) public view override {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
         revert ActionRestricted();
     }
 
     function getApproved(uint256) public view override returns (address) {
+        this;
         revert ActionRestricted();
     }
 
     function setApprovalForAll(address, bool) public view override {
+        this;
         revert ActionRestricted();
     }
 
     function isApprovedForAll(address, address) public view override returns (bool) {
+        this;
         revert ActionRestricted();
     }
 
     function transferFrom(address, address, uint256) public view override {
+        this;
         revert ActionRestricted();
     }
 
     function safeTransferFrom(address, address, uint256) public view override {
+        this;
         revert ActionRestricted();
     }
 
     function safeTransferFrom(address, address, uint256, bytes memory) public view override {
-         revert ActionRestricted();
+        this;
+        revert ActionRestricted();
     }
 }

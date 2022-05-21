@@ -78,6 +78,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error.
      */
     function transfer(address, uint256) public view override returns (bool) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
         revert ActionNotSupported();
     }
 
@@ -86,6 +87,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error.
      */
     function allowance(address, address) public view override returns (uint256) {
+        this;
         revert ActionNotSupported();
     }
 
@@ -95,6 +97,7 @@ contract EXPToken is ERC20, Ownable {
      *
      */
     function approve(address, uint256) public view override returns (bool) {
+        this;
         revert ActionNotSupported();
     }
 
@@ -103,6 +106,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error
      */
     function transferFrom(address, address, uint256) public view override returns (bool) {
+        this;
         revert ActionNotSupported();
     }
 
@@ -112,6 +116,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error
      */
     function increaseAllowance(address, uint256) public view override returns (bool) {
+        this;
         revert ActionNotSupported();
     }
 
@@ -120,6 +125,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error
      */
     function decreaseAllowance(address, uint256) public view override returns (bool) {
+        this;
         revert ActionNotSupported();
     }
 }
