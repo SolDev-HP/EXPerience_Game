@@ -77,7 +77,7 @@ contract EXPToken is ERC20, Ownable {
     /**
      * Emits a {ActionNotSupported} error.
      */
-    function transfer(address, uint256) public pure override returns (bool) {
+    function transfer(address, uint256) public view override returns (bool) {
         revert ActionNotSupported();
     }
 
@@ -85,7 +85,7 @@ contract EXPToken is ERC20, Ownable {
      * @dev See {IERC20-allowance}.
      * Emits a {ActionNotSupported} error.
      */
-    function allowance(address, address) public pure override returns (uint256) {
+    function allowance(address, address) public view override returns (uint256) {
         revert ActionNotSupported();
     }
 
@@ -94,7 +94,7 @@ contract EXPToken is ERC20, Ownable {
      * Emits a {ActionNotSupported} error
      *
      */
-    function approve(address, uint256) public pure override returns (bool) {
+    function approve(address, uint256) public view override returns (bool) {
         revert ActionNotSupported();
     }
 
@@ -102,7 +102,7 @@ contract EXPToken is ERC20, Ownable {
      * @dev See {IERC20-transferFrom}.
      * Emits a {ActionNotSupported} error
      */
-    function transferFrom(address, address, uint256) public pure override returns (bool) {
+    function transferFrom(address, address, uint256) public view override returns (bool) {
         revert ActionNotSupported();
     }
 
@@ -111,7 +111,7 @@ contract EXPToken is ERC20, Ownable {
      *
      * Emits a {ActionNotSupported} error
      */
-    function increaseAllowance(address, uint256) public pure override returns (bool) {
+    function increaseAllowance(address, uint256) public view override returns (bool) {
         revert ActionNotSupported();
     }
 
@@ -119,7 +119,7 @@ contract EXPToken is ERC20, Ownable {
      * @dev Atomically decreases the allowance granted to `spender` by the caller.
      * Emits a {ActionNotSupported} error
      */
-    function decreaseAllowance(address, uint256) public pure override returns (bool) {
+    function decreaseAllowance(address, uint256) public view override returns (bool) {
         revert ActionNotSupported();
     }
 }

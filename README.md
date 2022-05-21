@@ -2,8 +2,8 @@
 - [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
 - [x] Create SoulBound ERC721 and Integrate (Bounty 2)
 - [x] Prepare unit tests for EXPToken Contract
+- [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance  -- **[Patially-Done]** 
 - [ ] Create Angular frontend to interact with EXPerience Idea -- **[WIP]**
-- [ ] Ability for users to see their NFT, a generative ASCII art that displays user's EXP Token balance 
 - [ ] Prepare unit test -- **[WIP]** 
 - [ ] Ability to view leaderboard (Bounty 3)
 - [ ] Additional page to generate hackable levels and playground (Bounty 4)
@@ -20,11 +20,14 @@ Latest version (unverified) deployed contracts:
 
 EXP Token
 - Ropsten: https://ropsten.etherscan.io/address/0x709ffc7a5ea37f91e727227780d9a6ba7bf3fc27
-- Rinkeby: https://rinkeby.etherscan.io/address/0x8a573359959ad898b145bf19b6cc461a2c7eace2
+- Rinkeby: https://rinkeby.etherscan.io/address/0xdf6ae52281c488be9F63156b74429a3272AAeF75
 
 EXPerience NFT
 - Ropsten: https://ropsten.etherscan.io/address/0x98c8a11faaf4466eccaf1b00149bdcf696d8793d
-- Rinkeby: https://rinkeby.etherscan.io/address/0xe044b5f529fa707aa601ba25fabc480c1abee3bb
+- Rinkeby: https://rinkeby.etherscan.io/address/0xe50f0307b3a902885B842D2f89f51D3fCfD5ACA4
+
+Listed on Opensea Testnet (Rinkeby)
+- Opensea: https://testnets.opensea.io/collection/experience-nft-z197k0atsc
 
 Things I am currently working on:
 - Make basic angular frontend for users to interact with the whole idea of EXPerience (ERC20 + NFT + Leaderboard)

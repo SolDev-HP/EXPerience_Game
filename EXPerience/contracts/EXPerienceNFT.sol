@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import "./libs/BadgeFactory.sol";
 import "../interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
+import "./libs/BadgeFactory.sol";
 
 contract EXPerienceNFT is ERC721, Ownable {
     // Total supply - Should be exposed via getter
@@ -95,9 +95,6 @@ contract EXPerienceNFT is ERC721, Ownable {
         return BadgeFactory._generateTokenURI(_tokenID, ownerBal, owner);
     }
 
-    function testURI(uint256 _tokenID) public pure returns (string memory) {
-        return BadgeFactory.callthisForImage(_tokenID);
-    }
     /// @dev functions that are restricted 
     /// Overridden from ERC721 and modifier to reflect 
     /// Soulbound nature of the NFT
