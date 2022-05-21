@@ -10,27 +10,34 @@ import "../utils/Base64.sol";
 library BadgeFactory {
     // Define our SVG - We are capping our viewbox to 300 300 
     // SVG containers 
-    string internal constant _svgCont_Start = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve"><defs><path id="circlePath" d="M 150, 150 m -120, 0 a 120,120 0 0,1 240,0 a 120,120 0 0,1 -240,0"/></defs><g><text><textPath xlink:href="#circlePath">EXPerience Level - ';
-    string internal constant _svgCont_End = '                                       EthernautDAO Bounty - 0micront_. </textPath></text></g></svg>';
 
-    // Base64 encoded version of the svg container with styles added 
+    // Finally found a solution to intergate css animation and svg inside an svg. Current output is satisfying 
+    // with expected quality expectations matching. Still requires continuous updates and improvements
+    string internal constant _svgCont_Start = '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"> <style type="text/css"> <![CDATA[ *, *:before, *:after { box-sizing: border-box;} body { height: 100vh; background: #000;} .center { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center;} .circle { position: relative; width: 200px; height: 200px; color: #fff; background: #000; border-radius: 50%; border: 2px solid;} .logo { font-size: 125px; line-height: 190px; vertical-align: middle;} .button { position: absolute; bottom: 0px; left: 0; right: 0; padding: 8px; font-weight: bold; text-transform: uppercase; background: #000; border: 2px solid; animation: slide 1.4s ease-in-out infinite; cursor: pointer;} .button:hover { color: #000; background: #fff; border-color: #fff;} @keyframes slide { 0% { transform: translateX(10px) } 50% {transform: translateX(-10px) } 100% { transform: translateX(10px) }} .text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; font-size: 24px; font-weight: bold; text-transform: uppercase; animation: rotate 14s linear infinite; fill: #fff;} @keyframes rotate { from { transform: rotate(0); } to { transform: rotate(360deg); }} ]]> </style> <foreignObject x="20" y="20" width="300" height="300"><!-- In the context of SVG embedded in an HTML document, the XHTML  namespace could be omitted, but it is mandatory in the  context of an SVG document --> <div class="center" xmlns="http://www.w3.org/1999/xhtml"><div class="circle" xmlns="http://www.w3.org/1999/xhtml"><div class="logo" xmlns="http://www.w3.org/1999/xhtml">II</div><div class="text" xmlns="http://www.w3.org/1999/xhtml">  <svg x="0" y="0" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"> <defs> <path id="circlePath" d=" M 150, 150 m -120, 0 a 120,120 0 0,1 240,0 a 120,120 0 0,1 -240,0 "  /> </defs> <g> <text> <textPath href="#circlePath" xml:space="preserve">EXPerience NFT!         For.EthernautDAO         Level - ';
+
+    string internal constant _svgCont_Mid = '</textPath></text></g></svg></div><div class="button" xmlns="http://www.w3.org/1999/xhtml">[EXP] Balance - ';
+
+    string internal constant _svgCont_End = '</div></div></div></foreignObject></svg>';
+
+    // Base64 encoded version of the svg container with styles added
+    // Now our SVG container contains enough information about person holding the NFT, their EXP balance 
+    // Everything on-chain (The exciting part or the part that motivates me further to develop better solutions) 
     function _base64EncodeImage(uint256 _tokenAmount) internal pure returns (string memory) {
         string memory _returning_svg = Base64.encode(abi.encodePacked(
-            _svgCont_Start,
-            Strings.toString(_tokenAmount),  
-            _svgCont_End 
+                _svgCont_Start,
+                _getExperienceLevel(_tokenAmount),  
+                _svgCont_Mid,
+                Strings.toString(_tokenAmount),
+                _svgCont_End 
             ));
 
         return string(abi.encodePacked("data:image/svg+xml;base64,", _returning_svg)); 
     }
 
     // Styles for the image 
-    function _getStyleForAnimation() internal pure returns (string memory) {
-        // Pre-defined style that we have right now 
-        bytes memory _svg_styles = abi.encodePacked('<style> *,:after,:before{box-sizing:border-box}body{height:100vh;background:#000}.center{height:100%;display:flex;align-items:center;justify-content:center;text-align:center}.circle{position:relative;width:200px;height:200px;color:#fff;background:#000;border-radius:50%;border:2px solid}.logo{font-size:140px;line-height:200px;vertical-align:middle}.button{position:absolute;bottom:20px;left:0;right:0;padding:8px;font-weight:700;text-transform:uppercase;background:#000;border:2px solid;animation:slide 1.4s ease-in-out infinite;cursor:pointer}.button:hover{color:#000;background:#fff;border-color:#fff}@keyframes slide{0%{transform:translateX(10px)}50%{transform:translateX(-10px)}100%{transform:translateX(10px)}}.text{position:absolute;top:0;left:0;width:100%;height:100%;font-size:24px;font-weight:700;text-transform:uppercase;animation:rotate 14s linear infinite;fill:#fff}@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}} </style>');
-        // aaaaand return. I think we can do much more here, but this is just bareboned to test how it'll work 
-        return string(_svg_styles);
-    }
+    //function _getStyleForAnimation() internal pure returns (string memory) {
+        // If ever required internal styles, use this function
+    //}
 
     // Get experience level based on EXP token amount being held by user 
     // The easiest I could come up with in order to prototype this
@@ -44,7 +51,7 @@ library BadgeFactory {
         else if(_tokenAmount > 60 && _tokenAmount <= 80)
             return "IV";
         else 
-            return "V";
+            return "-G-";
     }
 
     // Now the main function that will handle generating actual token url 
@@ -55,33 +62,14 @@ library BadgeFactory {
         string memory _imgUrl = _base64EncodeImage(_tokenAmount);
         // Get experience level that can be show in the middle of the image 
         string memory _expLevel = _getExperienceLevel(_tokenAmount);
-        // styles when animating 
-        string memory _anim_styles = _getStyleForAnimation();
-        // Get baseMarkup to place svg generated from _imgUrl
-        // If animation url is asked for, we need to prepare a mime type data:text/html with base64 encoding of what
-        // we want to display being animated, In our case, EXPerience would be a sort of a badge 
-        // assgined to the user, showing Level in the center of the circle
-        string memory _base64Markup = string(abi.encodePacked(
-            'data:text/html;base64,',
-            Base64.encode(abi.encodePacked(
-                '<!DOCTYPE html><html>',
-                _anim_styles,
-                '<div class="center"><div class="circle"><div class="logo">II</div><div class="text">',
-                '<object type="image/svg+xml" data="',
-                _imgUrl,
-                '" alt="EXPerience_NFT"></object></div><div class="button">[EXP] Balance - ',
-                Strings.toString(_tokenAmount / 10 ** 18), 
-                '</div></div></div></html>'
-                ))
-        ));
-
+        
         // Json that will be returned when tokenURI function request is received 
         // This prepared the expected response format, including all the necessary data 
         // to display image after call to tokenURI
         bytes memory _metaJson_start = abi.encodePacked(
-            '{"name": "EXPerience Badge#',
+            '{"name": "EXPerience NFT#',
             Strings.toString(_nftID),
-            '", "description": "EXPerience Badge. Part of Ethernaut DAO bounties. Soulbound token/asset experience through EXP Token and EXPerience NFT.',
+            '", "description": "EXPerience NFT. Part of Ethernaut DAO bounties. Soulbound token/asset experience through EXP Token and EXPerience NFT.',
             '", "external_url": "https://github.com/SolDev-HP/EXPerience_Game"',
             ', "attributes": [{"trait_type": "EXPerience Level", "value": "',
             _expLevel,
@@ -94,7 +82,7 @@ library BadgeFactory {
             '", "image": "',
             _imgUrl,
             '", "animation_url": "',
-            _base64Markup,
+            _imgUrl,
             '"}'
         );
         
