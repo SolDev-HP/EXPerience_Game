@@ -27,7 +27,7 @@ EXPerience NFT
 - Rinkeby: https://rinkeby.etherscan.io/address/0xe50f0307b3a902885B842D2f89f51D3fCfD5ACA4
 
 Listed on Opensea Testnet (Rinkeby)
-- Opensea: https://testnets.opensea.io/collection/experience-nft-z197k0atsc
+- Opensea: https://testnets.opensea.io/collection/experience-nft-l7oqvlyfpg
 
 Things I am currently working on:
 - Make basic angular frontend for users to interact with the whole idea of EXPerience (ERC20 + NFT + Leaderboard)
