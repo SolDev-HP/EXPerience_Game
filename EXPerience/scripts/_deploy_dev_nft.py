@@ -25,6 +25,7 @@ def main():
     # Img url 
     # print(expNFT.getimgurl(1, {"from": dev_admin1} ))
     # print(expNFT.getAnimurl(1, {"from": dev_admin1} ))
+    print(expNFT.testURI(1 * 10 ** 18, {"from": dev_admin1}))
 
     # Mint NFT for User3 <- From admin1
     # This requires further logic of whether to assign these NFTs to addresses 
