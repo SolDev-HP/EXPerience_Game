@@ -1,8 +1,8 @@
 #### Deployments 
 
-View on Opensea: https://testnets.opensea.io/collection/experience-nft-xblcas07kq
-Rinkeby EXP ERC20: https://rinkeby.etherscan.io/address/0x176F9A81168eb265747b98Ce820d97519e67C082
-Rinkeby EXPerience NFT: https://rinkeby.etherscan.io/address/0x3fc8e715b4d83a60a27c87b7037cf4a802f43412
+- View on Opensea: https://testnets.opensea.io/collection/experience-nft-xblcas07kq
+- Rinkeby EXP ERC20: https://rinkeby.etherscan.io/address/0x176F9A81168eb265747b98Ce820d97519e67C082
+- Rinkeby EXPerience NFT: https://rinkeby.etherscan.io/address/0x3fc8e715b4d83a60a27c87b7037cf4a802f43412
 
 #### Branch: dev/more_dynamic_nft
 
@@ -27,59 +27,24 @@ Rinkeby EXPerience NFT: https://rinkeby.etherscan.io/address/0x3fc8e715b4d83a60a
 Dark Orange -#FF8C00
 Black - #000000 
 Magenta - #FF00FF
-
-Maroon
-#800000
-
-Gray
-#808080
-
-Pale Violet Red
-#DB7093
-
-Medium Slate Blue
-#7B68EE
-
-Crimson
-#DC143C
-
-Blue Violet
-#8A2BE2
-
-Dark Turquoise
-#00CED1
-
-Olive
-#808000
-
-Midnight Blue
-#191970
-
-Teal
-#008080
-
-Navy
-#000080
-
-Lime Green
-#32CD32
-
-Lavender
-#E6E6FA
-
-Medium Sea Green
-#3CB371
-
-Light Sea Green
-#20B2AA
-
-Chocolate
-#D2691E
-
-Aquamarine
-#7FFFD4
+Maroon - #800000
+Gray - #808080
+Pale Violet Red - #DB7093
+Medium Slate Blue - #7B68EE
+Crimson - #DC143C
+Blue Violet - #8A2BE2
+Dark Turquoise - #00CED1
+Olive - #808000
+Midnight Blue - #191970
+Teal - #008080
+Navy - #000080
+Lime Green - #32CD32
+Lavender - #E6E6FA
+Medium Sea Green - #3CB371
+Light Sea Green - #20B2AA
+Chocolate - #D2691E
+Aquamarine - #7FFFD4
 ```
-
 ====================================================================================================================================
 
 #### Current Status 
