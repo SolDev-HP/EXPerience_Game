@@ -122,7 +122,9 @@ contract EXPerienceNFT is ERC721, Ownable {
             _tokenID, 
             ownerBal, 
             owner, 
-            BadgeFactory.ColorDetails(_colorNames[_colorSelector], _colorsHex[_colorSelector])
+            //BadgeFactory.ColorDetails(_cName, _cHex) - Stack too deep?
+            _colorNames[_colorSelector],   // Selected color indexed at _colorSelector 
+            _colorsHex[_colorSelector]
         );
     }
 
