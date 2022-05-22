@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
+pragma experimental ABIEncoderV2;   // Certainly for the struct getting passed around 
 
 import "../utils/Strings.sol";
 import "../utils/Base64.sol";
