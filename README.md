@@ -1,3 +1,9 @@
+#### Deployments 
+
+View on Opensea: https://testnets.opensea.io/collection/experience-nft-xblcas07kq
+Rinkeby EXP ERC20: https://rinkeby.etherscan.io/address/0x176F9A81168eb265747b98Ce820d97519e67C082
+Rinkeby EXPerience NFT: https://rinkeby.etherscan.io/address/0x3fc8e715b4d83a60a27c87b7037cf4a802f43412
+
 #### Branch: dev/more_dynamic_nft
 
 - Introducing background colors as one of the attributes
