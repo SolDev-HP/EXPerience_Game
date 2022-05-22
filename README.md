@@ -1,3 +1,95 @@
+#### Branch: dev/more_dynamic_nft
+
+- Introducing background colors as one of the attributes
+- a. It's a sort of mapping we can use to determine following thing at mint time 
+- a.1. fairly random background color allocation
+- a.2. Evolution are still compared on the fly based on EXP balance 
+
+- Evolution stage is to categorize certain levels threshold, like if you're between level (== EXP balance) 1 and 20, you'll be assigned to wanderer's role/position/evolution stage (as it evolves as you gain more experience/level)
+
+- Evolution stages (That I could come up with after what felt like a heavy brainstorming session with too much coffee)
+1. Wanderer       (Level 1 to 20 == EXP balance anywhere between 0 to 20 excluding 0)(Center image in NFT - [A.jpg])
+2. Fighter        (Level 21 to 40)(Center image in NFT - [B.jpg])
+3. Revolutionary  (Level 41 to 60)
+4. Legendary      (Level 61 to 80)
+5. God            (Level 81 to 100)
+
+- Current color collection that need to be fairly randomize while NFT is being minted
+- (Should be able to give some fancy names to them to make them into funky attributes)
+
+```
+Dark Orange
+#FF8C00
+
+Black
+#000000
+
+Magenta
+#FF00FF
+
+Maroon
+#800000
+
+Gray
+#808080
+
+Pale Violet Red
+#DB7093
+
+Medium Slate Blue
+#7B68EE
+
+Crimson
+#DC143C
+
+Blue Violet
+#8A2BE2
+
+Crimson
+#DC143C
+
+Dark Turquoise
+#00CED1
+
+Olive
+#808000
+
+Midnight Blue
+#191970
+
+Teal
+#008080
+
+Navy
+#000080
+
+Lime Green
+#32CD32
+
+Lavender
+#E6E6FA
+
+Medium Sea Green
+#3CB371
+
+Light Sea Green
+#20B2AA
+
+Chocolate
+#D2691E
+
+Aquamarine
+#7FFFD4
+
+Goldenrod
+#DAA520
+
+Medium Orchid
+#BA55D3
+```
+
+====================================================================================================================================
+
 #### Current Status 
 - [x] Create SoulBound ERC20 for EthernautDAO bounty submission (Bounty 1)
 - [x] Create SoulBound ERC721 and Integrate (Bounty 2)
