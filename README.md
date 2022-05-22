@@ -18,14 +18,9 @@
 - (Should be able to give some fancy names to them to make them into funky attributes)
 
 ```
-Dark Orange
-#FF8C00
-
-Black
-#000000
-
-Magenta
-#FF00FF
+Dark Orange -#FF8C00
+Black - #000000 
+Magenta - #FF00FF
 
 Maroon
 #800000
