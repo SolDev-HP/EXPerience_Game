@@ -32,3 +32,19 @@ def main():
 
     # Mint NFT for User2 <- From Admin2
     EXPerienceCon.genExperience(os.getenv("PUBLIC_KEY_HODLER5"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
+
+    ## Mint 5 more to demonstrate background changes are random 
+    # Mint NFT for User1 <- From Admin1
+    EXPerienceCon.genExperience(os.getenv("HOLDER6_RINKBY_PUB"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("HOLDER7_RINKBY_PUB"), {"from": admin2_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("HOLDER8_RINKBY_PUB"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("HOLDER9_RINKBY_PUB"), {"from": admin2_account})     # Shouldn't fail - User has EXP
+
+    # Mint NFT for User2 <- From Admin2
+    EXPerienceCon.genExperience(os.getenv("HOLDER10_RINKBY_PUB"), {"from": sadmin_account})     # Shouldn't fail - User has EXP

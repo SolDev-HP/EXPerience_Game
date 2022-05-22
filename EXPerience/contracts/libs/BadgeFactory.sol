@@ -181,9 +181,9 @@ library BadgeFactory {
             '"external_url": "https://github.com/SolDev-HP/EXPerience_Game"',
             ', "attributes": [{"trait_type": "EXP Balance", "value": "',
             Strings.toString(_tokenAmount),
-            '", "Colorized-by", "value": "',
+            '"}, {"trait_type": "Colorized-by", "value": "',
             _cName,
-            '", "EXP-Stage", "value": "', 
+            '"}, {"trait_type": "EXP-Stage", "value": "', 
             _getEvoStage(_tokenAmount),
             '"}], "owner": "'
         );
