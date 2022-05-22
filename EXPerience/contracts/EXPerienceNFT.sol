@@ -1,10 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
+pragma experimental ABIEncoderV2;   // literally for string[], for the lack of better understanding/ideas 
 import "../interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
 import "./libs/BadgeFactory.sol";
 
+// Our source of randomness will be bloshhash 
+// Block hash PRNG - the hash of a block as source of randomness
+// Potentially this can be manipulated with, but I doubt anyone would care to do that here, 
+// this is a place holder until we move to Chainlink-VRF
 contract EXPerienceNFT is ERC721, Ownable {
     // Total supply - Should be exposed via getter
     // Should start with zero anyway.
@@ -20,6 +25,21 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Events 
     event ExperienceNFTGenerated(address indexed _experienceGainer);
     event TokenAdminSet(address indexed _admin, bool indexed _isAdmin);
+
+    // Our ugly _colorName => _colorHex 
+    string[20] private _colorNames = [
+        'Dark Orange', 'Black', 'Magenta', 'Maroon', 'Gray',
+        'Pale Violet Red', 'Medium Slate Blue', 'Crimson', 'Blue Violet', 'Dark Turquoise',
+        'Olive', 'Midnight Blue', 'Teal', 'Navy', 'Lime Green',
+        'Lavender', 'Medium Sea Green', 'Light Sea Green', 'Chocolate', 'Aquamarine'
+    ];
+    string[20] private _colorsHex = [
+        '#FF8C00', '#000000', '#FF00FF', '#800000', '#808080',
+        '#DB7093', '#7B68EE', '#DC143C', '#8A2BE2', '#00CED1',
+        '#808000', '#191970', '#008080', '#000080', '#32CD32',
+        '#E6E6FA', '#3CB371', '#20B2AA', '#D2691E', '#7FFFD4'
+    ];
+    uint private _colorSelector;
 
     // ================= ERRORS ======================
     error ActionRestricted();
@@ -56,7 +76,12 @@ contract EXPerienceNFT is ERC721, Ownable {
         uint256 _expBalanceofTo = _expContract.balanceOf(_to);
         // For Testing Only: Let's limit minting to address only if they any amount of exp token
         require(_expBalanceofTo > 0, "EXPerience: Insufficient EXP balance");
-        
+
+        // Source of randomness Blockhash 
+        uint _aNumber = uint(blockhash(block.number - 1));
+        // We want our color selection to be within 0 and 20 (Excluding 20)
+        _colorSelector = _aNumber % 20;
+
         // Get TokenID 
         uint256 _tokenID = _totalSupply;
         // Increment for next tokenID
@@ -92,7 +117,13 @@ contract EXPerienceNFT is ERC721, Ownable {
 
         // Now we have following details required to generate a tokenURI 
         // owner of the nft, nft token ID, owner's EXP balance 
-        return BadgeFactory._generateTokenURI(_tokenID, ownerBal, owner);
+        // Added: Pass in the color details - according to the _colorSelector set while minting 
+        return BadgeFactory._generateTokenURI(
+            _tokenID, 
+            ownerBal, 
+            owner, 
+            BadgeFactory.ColorDetails(_colorNames[_colorSelector], _colorsHex[_colorSelector])
+        );
     }
 
     /// @dev functions that are restricted 

@@ -45,9 +45,6 @@ Crimson
 Blue Violet
 #8A2BE2
 
-Crimson
-#DC143C
-
 Dark Turquoise
 #00CED1
 
@@ -80,12 +77,6 @@ Chocolate
 
 Aquamarine
 #7FFFD4
-
-Goldenrod
-#DAA520
-
-Medium Orchid
-#BA55D3
 ```
 
 ====================================================================================================================================
