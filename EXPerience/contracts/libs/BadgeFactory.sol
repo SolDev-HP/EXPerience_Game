@@ -8,6 +8,63 @@ import "../utils/Base64.sol";
 // to generate badges that support necessary update passed in
 // by tokenURI() function call 
 library BadgeFactory {
+    // We need five svg images to put in the center, each image is a representation of the user's level's category
+    // Like evolutions - certain levels at certain evolution stage 
+    // Here's what I've planned - [Levels as evolutions]
+    // Evo 1 - Wanderer - Level 1 to level 20
+    //       - 20 possible backgrounds - can we randomize this?
+    // Evo 2 - Fighter - Level 21 to Level 40
+    //       - Same 20 possible backgrounds - Somethings to differenciate from previous backgrounds 
+    // Evo 3 - Revolutionary - Level 41 to Level 60 
+    //       - Same 20 different backgrounds 
+    // Evo 4 - Legendary - Level 61 to Level 80
+    // Evo 5 - God - Level 81 to Level 100 
+    // @Todo: improve this code, refactor more and more and make it concise and epic 
+
+    // ======================== Start - Custom Center SVG Setup / Allows modification to what tokenURI returns =============================
+    // @Todo: Implement this, also insertion/deletion, allows custom addition of images, potential background choices
+    // This is how it feels to map color name to color hex code, everything indexed so our 
+    // random number can be used to pick color at an index 
+    // We need hex to update nft, name for attributes 
+    // struct _ColorMap {
+    //     string _hexCode;
+    //     string _colorName;
+    // }
+    // // This is like having a mapping 
+    // // mapping(string => string) -> '#hex' => 'color-name'
+    // // And below code to expand it just enough to store our things 
+    // struct ColorCollection {
+    //     mapping(uint => _ColorMap) _keyedColorMap; 
+    //     uint[] _fixedKeys; 
+    //     // Keeping this open allows ability to create insertInto/removeFrom functionality 
+    //     // As of now, our limit is 23 colors, so _fixedKeys are supposed to be 23 
+    // }
+    // Similar to above, we can create evo state mapping 
+    // struct _EvolutionStage {
+    //     string _name;
+    //     string _repImg;
+    // }
+
+    // struct EvoStageCollection {
+    //     mapping(uint => _EvolutionStage) _keyedEvoStage;
+    //     uint[] _fixedKeys;
+    // }
+    // ======================== /END =============================
+    
+    // Lets follow basic instict first, messy and shitty storage code but let's see what it produces
+    // Our center images depending on EXP levels and their categories as mentioned above 
+    string internal constant _evoWanderer = '';
+    string internal constant _evoFighter = ''; 
+    string internal constant _evoRevolutionary = '';
+    string internal constant _evoLegendary = '';
+    string internal constant _evoGod = '';
+
+    // Now for colorname and color code 
+    struct ColorDetails {
+        string _colorName;
+        string _colorCode;
+    }
+
     // Define our SVG - We are capping our viewbox to 300 300 
     // SVG containers 
 
@@ -23,17 +80,20 @@ library BadgeFactory {
 
     // Get experience level based on EXP token amount being held by user 
     // The easiest I could come up with in order to prototype this
+    // Now instead of simple text, we're returning another svg, this is getting exciting :D 
     function _getExperienceLevel(uint256 _tokenAmount) internal pure returns (string memory) {
         if(_tokenAmount > 0 && _tokenAmount <= 20)
-            return "I";
+            return _evoWanderer;
         else if(_tokenAmount > 20 && _tokenAmount <= 40)
-            return "II";
+            return _evoFighter;
         else if(_tokenAmount > 40 && _tokenAmount <= 60)
-            return "III";
+            return _evoRevolutionary;
         else if(_tokenAmount > 60 && _tokenAmount <= 80)
-            return "IV";
+            return _evoLegendary;
         else 
-            return "-G-";
+            // We still haven't checked potential cases where it's suppose to come here and doesnt, and vice-e-versa 
+            // @Todo: more tests needed 
+            return _evoGod;
     }
 
     // Base64 encoded version of the svg container with styles added
