@@ -46,7 +46,7 @@ import "../utils/Context.sol";
  // to throw. However, _registerInterface() is a personal choice. I think it can
  // be utilized in similar classes and see if we can keep gas fixed/under 30000 
  // that supportsInterface() call is supposed to consume. 
-contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
+abstract contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
     mapping(address => uint256) private _balances;
 
     mapping(address => mapping(address => uint256)) private _allowances;
@@ -130,72 +130,54 @@ contract ERC20 is Context, ERC165Storage, IERC20, IERC20Metadata {
 
     /**
      * @dev See {IERC20-transfer}.
-     *
+     * {Abstracted} - The idea behind doing this is to remove unreachable code that pose 
+     * any danger to the ethos of the implementation. Sure we're keeping original implementation of 
+     * ERC20 around - just to make sure we don't accidently generate unnecessary bugs
+     * But these functions, when derived in current project's context, are unless/unreachable
+     * Better mark them virtual and let derivee decide on how to implement them.
+     * Still maintaining official ERC20 interface, and reducing deadends + unnecessary code to save gas
      */
-    function transfer(address to, uint256 amount) public virtual override returns (bool) {
-        address owner = _msgSender();
-        _transfer(owner, to, amount);
-        return true;
-    }
+    function transfer(address to, uint256 amount) public virtual returns (bool);
 
     /**
      * @dev See {IERC20-allowance}.
-     *
+     * Abstracted
      */
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
-        return _allowances[owner][spender];
-    }
+    function allowance(address owner, address spender) public view virtual returns (uint256);
 
     /**
      * @dev See {IERC20-approve}.
-     *
+     * Abstracted
      */
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
-        address owner = _msgSender();
-        _approve(owner, spender, amount);
-        return true;
-    }
+    function approve(address spender, uint256 amount) public virtual returns (bool);
 
     /**
      * @dev See {IERC20-transferFrom}.
-     *
+     * Abstracted
      */
     function transferFrom(
         address from,
         address to,
         uint256 amount
-    ) public virtual override returns (bool) {
-        address spender = _msgSender();
-        _spendAllowance(from, spender, amount);
-        _transfer(from, to, amount);
-        return true;
-    }
+    ) public virtual returns (bool);
 
     /**
      * @dev Atomically increases the allowance granted to `spender` by the caller.
-     *
+     * Abstracted
      */
-    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
-        address owner = _msgSender();
-        _approve(owner, spender, allowance(owner, spender) + addedValue);
-        return true;
-    }
-
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool);
     /**
      * @dev Atomically decreases the allowance granted to `spender` by the caller.
-     *
+     * Abstracted
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        address owner = _msgSender();
-        uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
-        unchecked {
-            _approve(owner, spender, currentAllowance - subtractedValue);
-        }
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool);
 
-        return true;
-    }
 
+    // Up until now we've abstracted our public interface so that deriving contracts 
+    // can override these and implement them however they see fit. 
+    // Now all that's left is to check if internal functions are necessary to be removed
+    // They do provide some ground work for any ERC20 that needs to be implemented in a certain way
+    // Allowed no. transfers before tokens locks up, matures, etc 
     /**
      * @dev Moves `amount` of tokens from `from` to `to`.
      *
