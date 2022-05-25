@@ -1,0 +1,61 @@
+<div class="main-container">
+    <mat-tab-group mat-align-tabs="center" class="tabbed-navigation">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>account_balance_wallet</mat-icon>
+                &nbsp;&nbsp; Login
+            </ng-template>
+
+            <div class="tab-content-root">
+                <!-- Need a way to indicate [Active Tab] -->
+                <!--
+                    Logic to implement so that
+                    if(!loggedInUser) {
+                        mat-tab["Play"].enabled = false
+                        mat-tab["NFTView"].enabled = false
+                        mat-tab["Leaderboard"].enabled = false
+                    } else {
+                        // Enable everything.
+                    }
+                -->
+                <button mat-raised-button color="primary"> Login With Metamask </button>
+            </div>
+        </mat-tab>
+        <mat-tab disabled="true">
+            <ng-template mat-tab-label>
+                <mat-icon>gamepad</mat-icon>
+                &nbsp;&nbsp; Play-Zone
+            </ng-template>
+            <div class="tab-content-root">
+                <!--
+                    Game logic lies here. 
+                    Tracked items would be
+                    // player-address, currentEXP, play game window, game score, a button to submit current highscore  
+                -->
+            </div>
+        </mat-tab>
+        <mat-tab disabled="true">
+            <ng-template mat-tab-label>
+                <mat-icon>panorama</mat-icon>
+                &nbsp;&nbsp; View NFT
+            </ng-template>
+            <div class="tab-content-root">
+                <!--
+                    Framed NFT View, nothing fancy should happen here for now 
+                -->
+            </div>
+        </mat-tab>
+        <mat-tab disabled="true">
+            <ng-template mat-tab-label>
+                <mat-icon>leaderboard</mat-icon>
+                &nbsp;&nbsp; Leaderboard
+            </ng-template>
+            <div class="tab-content-root">
+                <!--
+                    A way to calculate current winner on top, and display top 10,
+                    last row should be user's place (if not in top 10)
+                -->
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
