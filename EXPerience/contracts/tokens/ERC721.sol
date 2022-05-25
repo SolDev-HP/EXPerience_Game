@@ -13,7 +13,7 @@ import "../introspection/local/ERC165Storage.sol";
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}.
  */
-contract ERC721 is Context, ERC165Storage, IERC721, IERC721Metadata {
+abstract contract ERC721 is Context, ERC165Storage, IERC721, IERC721Metadata {
     // Token name
     string private _name;
 
@@ -107,70 +107,53 @@ contract ERC721 is Context, ERC165Storage, IERC721, IERC721Metadata {
         return "";
     }
 
+    // As we did in EXPToken ERC20, we need to remove all public interface override 
+    // that can potentially be overridden by the deriving contract and implemented 
+    // as they see fit 
+    // Abstract these out to remove gas overhead 
     /**
      * @dev See {IERC721-approve}.
      * Should be overriden and restricted if what to implement soulbound properties 
      * of the NFT
+     * Abstracted
      */
-    function approve(address to, uint256 tokenId) public virtual override {
-        address owner = ERC721.ownerOf(tokenId);
-        require(to != owner, "ERC721: approval to current owner");
-
-        require(
-            _msgSender() == owner || isApprovedForAll(owner, _msgSender()),
-            "ERC721: approve caller is not owner nor approved for all"
-        );
-
-        _approve(to, tokenId);
-    }
+    function approve(address to, uint256 tokenId) public virtual;
 
     /**
      * @dev See {IERC721-getApproved}.
-     * 
+     * Abstracted
      */
-    function getApproved(uint256 tokenId) public view virtual override returns (address) {
-        require(_exists(tokenId), "ERC721: approved query for nonexistent token");
-
-        return _tokenApprovals[tokenId];
-    }
+    function getApproved(uint256 tokenId) public view virtual returns (address);
 
     /**
      * @dev See {IERC721-setApprovalForAll}.
+     * Abstracted
      */
-    function setApprovalForAll(address operator, bool approved) public virtual override {
-        _setApprovalForAll(_msgSender(), operator, approved);
-    }
+    function setApprovalForAll(address operator, bool approved) public virtual;
 
     /**
      * @dev See {IERC721-isApprovedForAll}.
+     * Abstracted
      */
-    function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
-        return _operatorApprovals[owner][operator];
-    }
+    function isApprovedForAll(address owner, address operator) public view virtual returns (bool);
 
     /**
      * @dev See {IERC721-transferFrom}.
+     * Abstracted
      */
-    function transferFrom(address from, address to, uint256 tokenId) public virtual override {
-        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
-
-        _transfer(from, to, tokenId);
-    }
+    function transferFrom(address from, address to, uint256 tokenId) public virtual;
 
     /**
      * @dev See {IERC721-safeTransferFrom}.
+     * Abstracted
      */
-    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual override {
-        safeTransferFrom(from, to, tokenId, "");
-    }
+    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual;
 
     /**
      * @dev See {IERC721-safeTransferFrom}.
+     * Abstracted
      */
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual override {
-         require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: transfer caller is not owner nor approved");
-        _safeTransfer(from, to, tokenId, data);
-    }
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual;
 
     /**
      * @dev These internal functions are not implemented as we don't need them right now.
