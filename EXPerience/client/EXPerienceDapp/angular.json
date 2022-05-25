@@ -31,6 +31,9 @@
               "src/styles.css"
             ],
             "scripts": [
+            ],
+            "allowedCommonJsDependencies": [
+              "angular-slickgrid", "stream"
             ]
           },
           "configurations": {

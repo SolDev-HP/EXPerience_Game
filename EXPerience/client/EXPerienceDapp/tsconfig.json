@@ -21,7 +21,12 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "resolveJsonModule": true,
+    "noImplicitAny": false,  // This seems dangerous, need more testing for this
+    "paths": {
+      "stream" : [ "./node_module/stream-browserify" ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
