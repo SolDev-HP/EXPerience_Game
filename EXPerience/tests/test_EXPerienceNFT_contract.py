@@ -57,3 +57,18 @@ def test_only_admin_can_generate_nft(expnft):
 def test_receiver_should_have_exp_balance(expnft):
     with brownie.reverts("EXPerience: Insufficient EXP balance"):
         expnft.genExperience(accounts[4], {"from": accounts[0]})
+
+# setExpContractAddress can only be called by the owner 
+def test_set_exp_contract_only_owner(expnft):
+    with brownie.reverts("EXPToken (AccessControl): Not authorized."):
+        expnft.setExpContractAddress(accounts[2], {"from": accounts[1]})
+        # Parameter is supposed to be a contract, but its going to fail any way so any address works 
+
+# 0xDeaD check 
+def test_set_exp_contract_valid_address_check(expnft):
+    with brownie.reverts("Invalid EXP Token Contract address"):
+        expnft.setExpContractAddress(os.getenv("DEAD_ADD"), {"from": accounts[0]})
+
+# total supply should match with everyone's balance 
+def test_total_supply(expnft):
+    assert expnft.totalSupply() == (expnft.balanceOf(accounts[0]) + expnft.balanceOf(accounts[1]) + expnft.balanceOf(accounts[2]) + expnft.balanceOf(accounts[3]))

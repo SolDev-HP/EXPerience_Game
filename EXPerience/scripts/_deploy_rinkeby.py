@@ -27,3 +27,15 @@ def main():
     # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
     EXPerience.gainExperience(os.getenv("PUBLIC_KEY_HODLER5"), 97 * 10 ** 18, {"from": admin2_account})
 
+    # Add more users, testing the background selection in nft
+    # Level 1 checking 
+    EXPerience.gainExperience(os.getenv("HOLDER6_RINKBY_PUB"), 0.7 * 10 ** 18, {"from": sadmin_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
+    EXPerience.gainExperience(os.getenv("HOLDER7_RINKBY_PUB"), 22 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 3 checking 
+    EXPerience.gainExperience(os.getenv("HOLDER8_RINKBY_PUB"), 59.99 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 4 checking 
+    EXPerience.gainExperience(os.getenv("HOLDER9_RINKBY_PUB"), 84 * 10 ** 18, {"from": admin2_account})
+    # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
+    EXPerience.gainExperience(os.getenv("HOLDER10_RINKBY_PUB"), 100 * 10 ** 18, {"from": admin2_account})
+

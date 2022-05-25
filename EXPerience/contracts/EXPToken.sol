@@ -44,11 +44,11 @@ contract EXPToken is ERC20, Ownable {
         require(_TokenAdmins[msg.sender] == true, "EXPToken (AccessControl): Not authorized.");
         // Make use of state variable only once if it's being used multiple times within function
         // In this case, balanceOf will access user's balance state var 
-        uint256 _balance = balanceOf(gainer_);
+        uint256 _bal = balanceOf(gainer_);
         // Make sure user doesn't already have max exprience points 
-        require(_balance < MAXEXP, "EXPToken (Balance): Already at Max(100).");
+        require(_bal < MAXEXP, "EXPToken (Balance): Already at Max(100).");
         // Make sure it doesn't go above capped possible points after _minting 
-        require(_balance + gainAmount_ <= MAXEXP, "EXPToken (Balance): Will go above Max(100).");
+        require(_bal + gainAmount_ <= MAXEXP, "EXPToken (Balance): Will go above Max(100).");
         // Mint tokens to the address
         _mint(gainer_, gainAmount_);
     }
@@ -60,9 +60,9 @@ contract EXPToken is ERC20, Ownable {
         require(_TokenAdmins[msg.sender] == true, "EXPToken (AccessControl): Not authorized.");
         // Make use of state variable only once if it's being used multiple times within function
         // In this case, balanceOf will access user's balance state var 
-        uint256 _balance = balanceOf(looser_);
+        uint256 _bal = balanceOf(looser_);
         // Make sure user's balance isn't already zero 
-        require(_balance > 0, "EXPToken (Balance): Insufficient balance");
+        require(_bal > 0, "EXPToken (Balance): Insufficient balance");
         // Make sure our calculation doesn't bring it below zero 
         // This calculation here will always throw "Integer Overflow" if _balance < lostAmount_
         // To temporarily mitigate unexpected throws, check is necessary 
