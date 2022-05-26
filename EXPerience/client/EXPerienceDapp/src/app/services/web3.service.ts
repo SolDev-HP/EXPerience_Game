@@ -9,7 +9,6 @@ import { getWeb3 } from '../utils/get-web3.util';
 import { getEthereum } from '../utils/get-ethereum.util';
 import { LoggingService } from "../shared/logging.service";
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -44,6 +43,12 @@ export class Web3Service {
         this._web3 = web3;
         this._accounts = accounts;
         this._chainId = chainid;
+        
+        // Verify chainID here, and return on anything else but rinkeby
+        if(this._chainId !== 4) {
+            this._logger.log(`ChainID ${this._chainId} is not supported as of now`);
+            return undefined;
+        }
 
         return { web3, accounts, chainid };
     }
@@ -67,9 +72,9 @@ export class Web3Service {
         // load contract artifacts to find abi 
         let contractArtifacts;
         try {
-            contractArtifacts = await import(`../../artifacts/${chain}/${address}.json`);
+            contractArtifacts = await import(`../../artifacts/deployments/${chain}/${address}.json`);
         } catch (e) {
-            this._logger.log(`Failed to load contract artifacts from ../../artifacts/${chain}/${address}`);
+            this._logger.log(`Failed to load contract artifacts from ../../artifacts/${chain}/${address}. Exception Logs - ${e}`);
             return undefined;
         }
 
@@ -86,11 +91,13 @@ export class Web3Service {
     }
 
     get chainID(): number | string {
-        if(this._chainId === 3) {
-            return 3;
-        } else if (this._chainId === 5777) {
-            return 'ganache-cli';
-        } 
-        return 0;
+        // if(this._chainId === 3) {
+        //     return 3;
+        // } else if (this._chainId === 5777) {
+        //     return 'ganache-cli';
+        // } 
+        // return 0;
+        // simply return whatever as of now 
+        return this._chainId;
     }
 }

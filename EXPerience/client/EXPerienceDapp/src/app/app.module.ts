@@ -1,3 +1,4 @@
+import { LoggingService } from './shared/logging.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,7 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    LoggingService
+  ],
   bootstrap: [LandingComponent]
 })
 export class AppModule { }

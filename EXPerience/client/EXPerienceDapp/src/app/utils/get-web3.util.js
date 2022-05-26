@@ -7,7 +7,7 @@ export const getWeb3 = async() => {
     // get the ethereum first 
     const ethereum = await getEthereum();
     let web3;
-    let logger = LoggingService();
+    let logger = new LoggingService();
 
     if(ethereum) {
         // We have a provider, get web3 instance 
@@ -26,6 +26,6 @@ export const getWeb3 = async() => {
     }
 
     // So now we return the instance of the web3
-    logger.log(web3);
+    // logger.log(web3);
     return web3;
 };

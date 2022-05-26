@@ -33,7 +33,7 @@
             "scripts": [
             ],
             "allowedCommonJsDependencies": [
-              "angular-slickgrid", "stream"
+              "angular-slickgrid", "stream", "web3"
             ]
           },
           "configurations": {
@@ -41,8 +41,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",

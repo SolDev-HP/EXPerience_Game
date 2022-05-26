@@ -25,8 +25,21 @@
     "resolveJsonModule": true,
     "noImplicitAny": false,  // This seems dangerous, need more testing for this
     "paths": {
-      "stream" : [ "./node_module/stream-browserify" ]
-    }
+      "crypto": ["./node_modules/crypto-browserify"],
+        "stream": ["./node_modules/stream-browserify"],
+        "assert": ["./node_modules/assert"],
+        "http": ["./node_modules/stream-http"],
+        "https": ["./node_modules/https-browserify"],
+        "os": ["./node_modules/os-browserify"],       // This solution came from github::ChainSafe/web3.js > README.md
+        "url": ["./node_modules/url"],                // Also include `npm install --save-dev url`, resolves url problem as well 
+        //(not mentioned in readme, added to resolve local, this might not be needed) 
+    },
+    "types": [
+      "node"
+    ],
+    "typeRoots": [ 
+      "./node_modules/@types" 
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

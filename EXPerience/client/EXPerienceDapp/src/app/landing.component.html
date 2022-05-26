@@ -1,9 +1,9 @@
 <div class="main-container">
     <mat-tab-group mat-align-tabs="center" class="tabbed-navigation">
-        <mat-tab>
+        <mat-tab disabled="{{login_tab_status}}">
             <ng-template mat-tab-label>
                 <mat-icon>account_balance_wallet</mat-icon>
-                &nbsp;&nbsp; {{LoginTabTitle}}
+                &nbsp;&nbsp; {{nTabTitle}}
             </ng-template>
 
             <div class="tab-content-root">
@@ -18,10 +18,10 @@
                         // Enable everything.
                     }
                 -->
-                <button mat-raised-button color="primary"> Login With Metamask </button>
+                <button mat-raised-button color="primary" disabled="{{button_disabled}}" (click)="getWeb3Connection()"> {{Login_Status}} </button>
             </div>
         </mat-tab>
-        <mat-tab disabled="true">
+        <mat-tab disabled="{{play_tab_status}}">
             <ng-template mat-tab-label>
                 <mat-icon>gamepad</mat-icon>
                 &nbsp;&nbsp; Play-Zone
@@ -34,7 +34,7 @@
                 -->
             </div>
         </mat-tab>
-        <mat-tab disabled="true">
+        <mat-tab disabled="{{view_tab_status}}">
             <ng-template mat-tab-label>
                 <mat-icon>panorama</mat-icon>
                 &nbsp;&nbsp; View NFT
@@ -45,7 +45,7 @@
                 -->
             </div>
         </mat-tab>
-        <mat-tab disabled="true">
+        <mat-tab disabled="{{leaderboard_tab_status}}">
             <ng-template mat-tab-label>
                 <mat-icon>leaderboard</mat-icon>
                 &nbsp;&nbsp; Leaderboard

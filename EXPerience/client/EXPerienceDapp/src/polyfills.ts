@@ -51,3 +51,16 @@ import 'zone.js';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+// Angular and web3
+// Details from :: https://github.com/ChainSafe/web3.js#web3-and-angular
+
+ import { Buffer } from 'buffer';
+
+ (window as any).global = window;
+ global.Buffer = Buffer;
+ global.process = {
+     env: { DEBUG: undefined },
+     version: '',
+     nextTick: require('next-tick')
+ } as any;

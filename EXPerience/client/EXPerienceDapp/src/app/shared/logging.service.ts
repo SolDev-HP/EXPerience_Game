@@ -2,10 +2,13 @@
 // Setting this in initial stages will help 
 
 import { Injectable } from "@angular/core";
-@Injectable() 
+import * as util from 'util';
+import { inspect } from "util";
 
+@Injectable() 
 export class LoggingService {
-    log(message: any) {
-        console.log(new Date() + " : " + JSON.stringify(message));
+    constructor() { }
+    log(_logMsg: any) {
+        console.log(new Date() + " : " + util.inspect(_logMsg));
     }
 }
