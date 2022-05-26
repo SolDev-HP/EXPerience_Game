@@ -1,5 +1,5 @@
 <div class="main-container">
-    <mat-tab-group mat-align-tabs="center" class="tabbed-navigation">
+    <mat-tab-group mat-align-tabs="center" class="tabbed-navigation" [(selectedIndex)]="tab_selected_index">
         <mat-tab disabled="{{login_tab_status}}">
             <ng-template mat-tab-label>
                 <mat-icon>account_balance_wallet</mat-icon>

@@ -29,6 +29,8 @@ import { getEthereum } from './utils/get-ethereum.util';
 export class LandingComponent implements OnInit {
     player_online: boolean = false;
     button_disabled: boolean = false;
+    // Tab index
+    tab_selected_index: number = 0;
     // First tab title 
     nTabTitle = "[ Login ]";
     // Button text on first tab to login with metamask
@@ -90,11 +92,27 @@ export class LandingComponent implements OnInit {
             this.play_tab_status = false;
             this.view_tab_status = false;
             this.leaderboard_tab_status = false;
+            // Player online - wallet connected 
+            this.player_online = true;
 
             // Update tab status so that we can identify if user is logged in or not 
             // and what indications should be present on the frontend 
             this.nTabTitle = "[ Logged In ]";
             this.Login_Status = "[ Disconnect ]";
+            // Move to play tab
+            this.tab_selected_index = 1;
+        } else {
+            // Set player online status to false 
+            // Update tab status so that we can identify if user is logged in or not 
+            // and what indications should be present on the frontend 
+            this.nTabTitle = "[ Login ]";
+            this.Login_Status = "[ Login With Metamask ]";
+            this.player_online = false;
+
+            // When disconnected, remove all tabs 
+            this.play_tab_status = true;
+            this.view_tab_status = true;
+            this.leaderboard_tab_status = true;
         }
     }
 }
