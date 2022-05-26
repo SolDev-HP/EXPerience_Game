@@ -26,13 +26,18 @@
                 <mat-icon>gamepad</mat-icon>
                 &nbsp;&nbsp; Play-Zone
             </ng-template>
-            <div class="tab-content-root">
-                <!--
-                    Game logic lies here. 
-                    Tracked items would be
-                    // player-address, currentEXP, play game window, game score, a button to submit current highscore  
-                -->
-            </div>
+            <ng-template matTabContent>
+                <!-- This content is lazy loaded. As we require player to connect their wallet first, 
+                only then the game should load, and unload based on user's interaction with the tabs -->
+                <div class="tab-content-root">
+                    <!--
+                        Game logic lies here. 
+                        Tracked items would be
+                        // player-address, currentEXP, play game window, game score, a button to submit current highscore  
+                    -->
+                    
+                </div>
+            </ng-template>
         </mat-tab>
         <mat-tab disabled="{{view_tab_status}}">
             <ng-template mat-tab-label>

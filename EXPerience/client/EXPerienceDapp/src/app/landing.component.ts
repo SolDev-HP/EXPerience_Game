@@ -1,12 +1,18 @@
 // Here, we start our frontend to navigate towards EXPerience game play 
 // + earning some EXP tokens + View your NFT change as you gain.
 // Tabbular design in following way 
-// 
+//
+// - Initial state 
 //     --------------------------------------------------------------------
 //     |   [ Login ]   |    Game     |    NFTView    |    Leaderboard     |
 //     |  Wallet Conn. |   Locked    |    Locked     |       Locked       |  
 //     |___ (Active)___|_____________|_______________|____________________|
 // 
+// - After user connects metamask 
+//     --------------------------------------------------------------------
+//     | [ Logged-In ] |    Game     |    NFTView    |    Leaderboard     |
+//     |  Wallet Conn. |   (Active)  |               |                    |  
+//     |_______________|_____________|_______________|____________________|
 // Initial landing should be on [Login] tab, 
 // other tabs are disabled until login has been performed 
 // once you login, you can play game, view nft tab, or view leaderboard,
@@ -40,6 +46,8 @@ export class LandingComponent implements OnInit {
     play_tab_status:boolean = true;
     view_tab_status:boolean = true;
     leaderboard_tab_status:boolean = true;
+    // print later
+    print_later: string = "test";
 
     constructor(
         private _web3Service: Web3Service,
@@ -68,7 +76,6 @@ export class LandingComponent implements OnInit {
     async getWeb3Connection() {
         if(!this.player_online) {
             const _web3ServiceStatus = await this._web3Service.init();
-
             if(!_web3ServiceStatus) {
                 return;
             }
