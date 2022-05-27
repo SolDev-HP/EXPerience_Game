@@ -39,7 +39,7 @@ library BadgeFactory {
 
     string private constant _selectedCoreCommon = '</linearGradient></defs><pattern id="pattern" x="0" y="0" width="100%" height="100%"><rect x="-150%" y="0" width="200%" height="150%" fill="url(#gradient)" transform="rotate(-65)"><animate attributeType="XML" attributeName="x" from="-150%" to="50%" dur="4s" repeatCount="indefinite"/></rect><rect x="-350%" y="0" width="200%" height="150%" fill="url(#gradient)" transform="rotate(-65)"><animate attributeType="XML" attributeName="x" from="-350%" to="-150%" dur="4s" repeatCount="indefinite"/></rect></pattern>';
 
-    string private constant _selectedCoreEnd = '<text x="50%" y="47%" class="base" fill="url(#pattern)" dominant-baseline="middle" text-anchor="middle" style="font-family: Josefin Sans, sans-serif;font-size:140px;">';
+    string private constant _selectedCoreEnd = '<text x="50%" y="47%" class="base" fill="url(#pattern)" dominant-baseline="middle" text-anchor="middle" style="font-family: Josefin Sans, sans-serif;font-size:140px; ">';
 
     function _getSVGCore(uint256 tokenAmount_) private pure returns (bytes memory) {
         // Our four cores
