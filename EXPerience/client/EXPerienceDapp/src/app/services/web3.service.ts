@@ -28,6 +28,8 @@ export class Web3Service {
         try {
             const ethereum = await getEthereum();
             ethereum.enable();
+            // ethereum.request({ method: 'eth_requestAccounts' });
+
             this._logger.log("Ethereum enabled - " + ethereum);
         } catch (e) {
             this._logger.log("Could not enable accounts. Try again/Check this further. Exception Details - " + e);
