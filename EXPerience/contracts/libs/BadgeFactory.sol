@@ -129,7 +129,7 @@ library BadgeFactory {
     // Now our SVG container contains enough information about person holding the NFT, their EXP balance 
     // Everything on-chain (The exciting part or the part that motivates me further to develop better solutions) 
     function _base64EncodeImage(uint256 _tokenAmount, string memory _cHex) internal pure returns (string memory) {
-        string memory _returning_svg = Base64.encode(abi.encodePacked(
+        bytes memory _returning_svg = Base64.encodeBytes(abi.encodePacked(
                 _svgCont_Start,
                 _cHex,
                 _svgCont_Start_P1,
@@ -152,7 +152,7 @@ library BadgeFactory {
     // Now the main function that will handle generating actual token url 
     /// @param _nftID - NFT token ID for which this function call is happening 
     /// @param _tokenAmount - Value of total EXP Token the owner of the NFT has 
-    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner, string memory _cName, string memory _cHex) internal pure returns (string memory tokenURI) {
+    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner, string memory _cName, string memory _cHex) public pure returns (string memory tokenURI) {
         // _tokenAmount going beyond expected values. As it's uint256, need to dial it down to 18 decimal 
         _tokenAmount = _tokenAmount / (10 ** 18);
         // Get our image url prepared with _tokenAmount 
@@ -162,7 +162,7 @@ library BadgeFactory {
         // Base64Encoded HTML part to identify where the problem is - Issue: Opensea isn't viewing NFT as expected 
         string memory _base64Markup = string(abi.encodePacked(
             'data:text/html;base64,', 
-            Base64.encode(abi.encodePacked(
+            Base64.encodeBytes(abi.encodePacked(
                     '<!DOCTYPE html><html><object type="image/svg+xml" data="',
                     _imgUrl,
                     '" alt="EXPerience"></object></html>'
@@ -201,7 +201,9 @@ library BadgeFactory {
         tokenURI = string(
             abi.encodePacked(
                 'data:application/json;base64,',
-                Base64.encode(_metaJson_end)
+                Base64.encodeBytes(_metaJson_end)       // This is expected bytes/strings anyway
+                // If you pass it string (param1) or bytes (param2) like encoded bytes we received from 
+                // Base64 library
             )
         );
     }

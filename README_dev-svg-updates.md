@@ -52,3 +52,53 @@ If Library and EXPerienceNFT contracts are deployed together
 If Library deployed seperately 
   - use library address in EXPerience NFT contract, passing into constructor, same as EXP 
 ```
+
+#### Deployed bytecode size observations Ability to change between libraries 
+#### That demonstrate different visibility for token/nft
+#### Having different library perform svg generation logic differently 
+
+- This allows setting which library to use
+- ability to chaneg the library when contract is deployed 
+- both return the same thing, but with different calculations 
+
+```
+New compatible solc version available: 0.8.13
+Compiling contracts...
+  Solc version: 0.8.13
+  Optimizer: Enabled  Runs: 200
+  EVM Version: Istanbul
+Generating build data...
+ - EXPerienceNFT
+ - ERC165
+ - ERC165Storage
+ - EthernautFactory
+ - ERC721
+ - Base64
+ - Context
+ - Ownable
+ - Strings
+ - IERC20
+ - IERC721
+ - IERC721Metadata
+ - IERC165
+
+============ Deployment Bytecode Sizes ============
+  EthernautFactory  -  21,290B  (86.63%)
+  EXPerienceNFT     -   3,923B  (15.96%)
+  EXPToken          -   2,661B  (10.83%)
+  Base64            -      86B  (0.35%)
+  Counters          -      86B  (0.35%)
+  Strings           -      86B  (0.35%)
+
+  Further changes - Trying to include BadgeFactory for a baseline comparison 
+
+  ============ Deployment Bytecode Sizes ============
+  EthernautFactory  -  21,290B  (86.63%)
+  BadgeFactory      -  14,355B  (58.41%)
+  EXPerienceNFT     -   3,923B  (15.96%)
+  EXPToken          -   2,661B  (10.83%)
+  Base64            -      86B  (0.35%)
+  Counters          -      86B  (0.35%)
+  Strings           -      86B  (0.35%)
+
+  ```
