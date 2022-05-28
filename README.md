@@ -1,3 +1,10 @@
+#### Updates from dev/svg_updates_aleta branch
+- Currently deployed to rinkeby with updated svg designs received from Aleta 
+- Rinkeby Testnet: https://rinkeby.etherscan.io/address/0xE23ADC5e1E3C47243d0b14Eb8EC0cA7D53901Fab
+- Opensea Link: https://testnets.opensea.io/collection/experience-nft-jm2r5z4ecm
+- Rarible Link: https://rinkeby.rarible.com/collection/0xe23adc5e1e3c47243d0b14eb8ec0ca7d53901fab/items
+- More details within README_dev-svg-updates.md file
+
 #### Deployments 
 
 - View on Opensea: https://testnets.opensea.io/collection/experience-nft-xblcas07kq
