@@ -1,8 +1,10 @@
+from distutils.debug import DEBUG
 import os 
 from brownie import accounts, EXPerienceNFT
 from dotenv import load_dotenv
 load_dotenv()
 
+DEBUG = True
 # File for Rinkeby deployment would remain same as Ropsten 
 # The only change is addition of environment variable,
 # we should track different chainID contracts within different 
@@ -48,3 +50,11 @@ def main():
 
     # Mint NFT for User2 <- From Admin2
     EXPerienceCon.genExperience(os.getenv("HOLDER10_RINKBY_PUB"), {"from": sadmin_account})     # Shouldn't fail - User has EXP
+
+    # Print some URIs, debug them
+    if(DEBUG):
+        try:
+            print(f'Token #1 URI {EXPerienceCon.tokenURI(0)}')
+            print(f'Token #1 URI {EXPerienceCon.tokenURI(1)}')       # simple call for token uri on token #1, shouldn't need an account - simple call
+        except:
+            print("Check again. Exception occurred")         # If this works, we'll print all URIs -> also create svgs with data 

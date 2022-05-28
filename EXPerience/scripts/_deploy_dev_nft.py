@@ -10,6 +10,8 @@ def main():
     dev_hodler1 = os.getenv("DEV_HODLER1_PUB")
     dev_hodler2 = os.getenv("DEV_HODLER2_PUB")
 
+    # Deploy library first, we need to pass that address into EXPerience NFT 
+    # expLib = EthernautFactory.deploy({"from": dev_admin1})
     # Deploy EXPerience NFT contract 
     expNFT = EXPerienceNFT.deploy("EXPerience-NFT", "EXPNFT", os.getenv("EXP_CONTRACT_DEV"), {"from": dev_admin1})
 
@@ -22,6 +24,7 @@ def main():
     # Mint NFT for User2 <- From Admin2
     expNFT.genExperience(dev_hodler2, {"from": dev_admin2})     # Shouldn't fail - User has EXP
 
+    print(expNFT.tokenURI(0))
     # Img url 
     # print(expNFT.getimgurl(1, {"from": dev_admin1} ))
     # print(expNFT.getAnimurl(1, {"from": dev_admin1} ))

@@ -53,14 +53,14 @@
                     -->
                     <h1> User has nft {{useraddress}} </h1>
                 </div>
-                <div class="tab-content-root" *ngIf="!(doesUserHaveNFT() | async)">
-                    <!-- If user doesn't have nft, give a way for them to mint it, if exp balance is present. 
-                    If even exp balance is not present, direct them towards how they can gain experience -->
+                <!-- <div class="tab-content-root" *ngIf="!(doesUserHaveNFT() | async)">
+                    If user doesn't have nft, give a way for them to mint it, if exp balance is present. 
+                    If even exp balance is not present, direct them towards how they can gain experience 
                     <p style="float: right; color: green; font-size: 10px"> Player: {{useraddress}}</p>
                     <br/><br/>
                     <h1> No NFT view </h1>
-                </div>
-            <!--</ng-template>-->
+                </div> 
+            </ng-template>-->
         </mat-tab>
         <mat-tab disabled="{{leaderboard_tab_status}}">
             <ng-template mat-tab-label>

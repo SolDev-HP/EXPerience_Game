@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;   // literally for string[], for the lack of b
 import "../interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
-import "./libs/BadgeFactory.sol";
+import "./libs/EthernautFactory.sol";
 
 // Our source of randomness will be bloshhash 
 // Block hash PRNG - the hash of a block as source of randomness
@@ -23,7 +23,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     mapping(address => bool) private _tokenAdmins;
 
     // Events 
-    event ExperienceNFTGenerated(address indexed _experienceGainer);
+    event ExperienceNFTGenerated(address indexed _experienceGainer, uint256 indexed _tokenID);
     event TokenAdminSet(address indexed _admin, bool indexed _isAdmin);
 
     // ================= ERRORS ======================
@@ -31,6 +31,7 @@ contract EXPerienceNFT is ERC721, Ownable {
 
     // Constructor of EXPerience NFT Contract, expects nama and symbol of the NFT Contract 
     // and address where EXP Token is deployed
+    // Construction slightly changes as we incorporate library address within the deployment scripts 
     constructor(string memory _name, string memory _symbol, address _expcontract) 
         ERC721(_name, _symbol) {
         // Set EXP Contract address 
@@ -65,11 +66,11 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Get TokenID 
         uint256 _tokenID = _totalSupply;
         // Increment for next tokenID
-        ++_totalSupply;
+        _totalSupply++;
         // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
         _safeMint(_to, _tokenID);
         // Emit the event 
-        emit ExperienceNFTGenerated(_to);
+        emit ExperienceNFTGenerated(_to, _tokenID);
     }
 
     // Total supply 
@@ -99,7 +100,7 @@ contract EXPerienceNFT is ERC721, Ownable {
         // owner of the nft, nft token ID, owner's EXP balance 
         // We dont need to pass any hex color name or code 
         // As everything is handled by the library, specifically _prepareSVGContainer, and _prepareColors
-        return BadgeFactory._generateTokenURI(
+        return EthernautFactory._generateTokenURI(
             _tokenID, 
             ownerBal, 
             owner
