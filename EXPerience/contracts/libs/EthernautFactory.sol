@@ -143,7 +143,7 @@ library EthernautFactory {
     // Now the main function that will handle generating actual token url 
     /// @param _nftID - NFT token ID for which this function call is happening 
     /// @param _tokenAmount - Value of total EXP Token the owner of the NFT has 
-    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) internal pure returns (string memory tokenURI) {
+    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) public pure returns (string memory tokenURI) {
         // _tokenAmount going beyond expected values. As it's uint256, need to dial it down to 18 decimal 
         // This will always result in 0 for every player that has sub-1 EXP 
         // To solve this, we can increase our allow level. For example, just to be considered, have atleast 0.01 EXP or something
@@ -173,12 +173,9 @@ library EthernautFactory {
         // to display image after call to tokenURI
         bytes memory _metaJson_start = abi.encodePacked(
             '{ "name": "EXPerience NFT #',
-            ' ',
             Strings.toString(_nftID),
             '',
-            '", "description": "EXPerience NFT. Part of Ethernaut DAO bounties. Soulbound token/asset experience through EXP Token and EXPerience NFT.", ',
-            '"external_url": "https://github.com/SolDev-HP/EXPerience_Game"',
-            ', "attributes": [{"trait_type": "EXP Balance", "value": "',
+            '", "description": "EXPerience NFT. Part of Ethernaut DAO bounties. Soulbound token/asset experience through EXP Token and EXPerience NFT.", "external_url": "https://github.com/SolDev-HP/EXPerience_Game", "attributes": [{"trait_type": "EXP Balance", "value": "',
             Strings.toString(_tokenAmount / 10 ** 2),
             '"}], "owner": "'
         );
