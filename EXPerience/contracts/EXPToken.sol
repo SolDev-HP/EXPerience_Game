@@ -2,18 +2,27 @@
 pragma solidity >=0.8.0;
 import "./tokens/ERC20.sol";
 import "./utils/Ownable.sol";
+import "./qrng/QRNGRequester.sol";
 
 /// @author 0micronat_. - https://github.com/SolDev-HP (Playground)
 /// @dev EXPToken (EXP) contract that handles minting and assigning EXP to the users 
 /// Only primary admin can add other admins 
 /// All admin can _mint token to given address, and _burn token from given address 
 
-contract EXPToken is ERC20, Ownable {
+contract EXPToken is ERC20, Ownable, QRNGRequester {
     // ================= State Vars ==================
     // Token admins 
     mapping(address => bool) internal _TokenAdmins;
     // Per user experience point capping = 100 * 10 ** 18
     uint256 internal constant MAXEXP = 100000000000000000000;
+
+    // To test received random number 
+    uint256 public randomNumber;
+
+    // mapping of who requested for randomness based on requestId that we receive
+    // when we send a request for randomness, but it has to stay internal so we can utilize it
+    // within EXPToken contract 
+    mapping(bytes32 => address) internal requestIdToWhoRequestedMapping;
 
     // ================= EVENTS ======================
     event TokenAdminUpdated(address indexed admin_, bool indexed isAdmin_);
@@ -24,7 +33,10 @@ contract EXPToken is ERC20, Ownable {
     /// @dev Initialize contract by providing Token name ex: "EXPToken" and symbol ex: "EXP"
     /// This should be able to create ERC20 token, initiator will be the primary admin who 
     /// can add or remove other admins 
-    constructor(string memory name_, string memory symbol_) ERC20(name_, symbol_) {
+    constructor(string memory name_, string memory symbol_, address _airnodeAddress) 
+        ERC20(name_, symbol_) 
+        QRNGRequester(_airnodeAddress)
+        {
         /// Make msg sender the first admin 
         _TokenAdmins[msg.sender] = true;
     }
@@ -128,4 +140,42 @@ contract EXPToken is ERC20, Ownable {
         this;
         revert ActionNotSupported();
     }
+
+    // We need a function that can request for randomness 
+    function requestRandomEXPerienceForPlayer(address _whichPlayer) public OnlyOwner {
+        // Make sure we have airnodeAddress before we proceed for request 
+        require(airnodeAddress != address(0), "Set Airnode Address first");
+        // Request for randomness for the player and save the interfaceID 
+        // for later reference 
+        // As it is an external function call even though it's in the same contract. 
+        // We can make it makeReqeust_ a public one because it end up calling makeRequest 
+        // which is external anyway.
+        bytes32 _requestId = this.makeRequestForRandomNumber();
+        // Once we receive the interface id, update mapping 
+        requestIdToWhoRequestedMapping[_requestId] = _whichPlayer;
+        // So that later we can find this player and update their experience when 
+        // we receive the callback from AirnodeRrp 
+    }
+    // For QRNG 
+    // We will be using QRNGRequester contract
+    // To generate random uint, we will use the function already implemented within that contract 
+    // However, the callback function is listed here because we want to use 
+    // the received results 
+    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external onlyAirnodeRrp override {
+        // A callback function only accessible by AirnodeRrp
+        // Check if we are acutally expecting a request to be fulfilled 
+        require (
+            expectingRequestWithIdToBeFulfilled[_requestId],
+            "Unknown request ID");
+        
+        // Set the expectations back low
+        expectingRequestWithIdToBeFulfilled[_requestId] = true;
+        // Now on to the number that we received 
+        uint256 qrngUint256 = abi.decode(data, (uint256));
+        // Can we limit it to be within 100? But instead, we will first see 
+        // what range it sends back 
+        randomNumber = qrngUint256;
+        // Emit the event stating we received the random number 
+        emit RandomNumberReceived(_requestId, qrngUint256); 
+    } 
 }

@@ -15,6 +15,8 @@ def main():
     # Deploy EXPerience NFT contract 
     expNFT = EXPerienceNFT.deploy("EXPerience-NFT", "EXPNFT", os.getenv("EXP_CONTRACT_DEV"), {"from": dev_admin1})
 
+    print(expNFT)
+    print(expNFT.address)
     # Admin1 adds new admin on EXPerience NFT 
     expNFT.setTokenAdmin(os.getenv("DEV_ADMIM2_PUB"), True, {"from": dev_admin1})
 

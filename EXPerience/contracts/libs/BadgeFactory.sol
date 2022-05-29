@@ -152,7 +152,7 @@ library BadgeFactory {
     // Now the main function that will handle generating actual token url 
     /// @param _nftID - NFT token ID for which this function call is happening 
     /// @param _tokenAmount - Value of total EXP Token the owner of the NFT has 
-    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner, string memory _cName, string memory _cHex) public pure returns (string memory tokenURI) {
+    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner, string memory _cName, string memory _cHex) internal pure returns (string memory tokenURI) {
         // _tokenAmount going beyond expected values. As it's uint256, need to dial it down to 18 decimal 
         _tokenAmount = _tokenAmount / (10 ** 18);
         // Get our image url prepared with _tokenAmount 
