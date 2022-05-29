@@ -100,10 +100,12 @@ FOR_QRNG_AIRNODE_ENDPOINT_ID =
 FOR_QRNG_ARINODE_SPONSOR_WALLET = 
 ```
 
-### Current status 
+### Current status - WORKS!!!  
 - EXPToken contract modified accordingly to accommodate QRNG changes 
 - deployment script that guides through deployment - generating sponsor wallet 
-- Current output conditions 
+- So here are the details of my last deployment, that seem to have fulfilled the request for randomness 
+
+- Script is _deploy_exp_with_qrng_rinkeby.py
 ```
 (.venv)> brownie run .\scripts\_deploy_exp_with_qrng_rinkeby.py --network rinkeby
 INFO: Could not find files for the given pattern(s).
@@ -111,55 +113,141 @@ Brownie v1.16.4 - Python development framework for Ethereum
 
 ExperienceProject is the active project.
 
+// Contract EXPToken gets deployed here
+
 Running 'scripts\_deploy_exp_with_qrng_rinkeby.py::main'...
-Transaction sent: 0x05932957f4b98f66857b1cc91c3eda9d8ab841023f822cf3021251e67f44439b
-  Gas price: 1.500000002 gwei   Gas limit: 1335162   Nonce: 185
-  EXPToken.constructor confirmed   Block: 10760110   Gas used: 1213784 (90.91%)  EXPToken deployed at: 0xf27B6083C7a610Fbb0f9888EFE33d17A4f90324a
+Transaction sent: 0xeb9e482c4a5a8b4ed28587a8171da88198de8bb07dea8748551c757f96de73d7
+  Gas price: 1.013666863 gwei   Gas limit: 1248052   Nonce: 197
+  EXPToken.constructor confirmed   Block: 10761804   Gas used: 1134593 (90.91%)  EXPToken deployed at: 0x5F0b68280cc5aD5908FCce9b841C4B7B9808AAA8
 
-Execute this in other teaminal, and save result for the next input box. 
+// It prompts to get me a sponsor wallet 
 
-npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 --sponsor-address 0xf27B6083C7a610Fbb0f9888EFE33d17A4f90324a
+Execute this in other teaminal, and save result for the next input box.        
+npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 --sponsor-address 0x5F0b68280cc5aD5908FCce9b841C4B7B9808AAA8
+
+// So now that we have a sponsor wallet, we can top it up so that it 
+// can send and receive fulfillment requests 
+// Rinkeby Eth Balance: 0.002 ETH on 0x272FC11d91a2F6c36DCe71E1D0c8c640aC75EA44
+// Tx hash: 0x95d8cd899d530a1e71f7ceaf9d675a8feb8d91763815e9126b95b69b23ac078f
 
 Waiting till you get the sponsor address... Press any key once received...     
+Enter sponsor Wallet - 0x272FC11d91a2F6c36DCe71E1D0c8c640aC75EA44
 
-Enter sponsor Wallet - 0xB92E82496f05027e232ae4f3Ae7630964d20bbA5
-Sponsor wallet received - 0xB92E82496f05027e232ae4f3Ae7630964d20bbA5
-Trimmed address is now 0xB92E82496f05027e232ae4f3Ae7630964d20bbA5
+Sponsor wallet received - 0x272FC11d91a2F6c36DCe71E1D0c8c640aC75EA44
 
+Trimmed address is now 0x272FC11d91a2F6c36DCe71E1D0c8c640aC75EA44
 Verify sponsor address. We're now setting request params. Press any key to continue...
 
-Transaction sent: 0x1cab38a37332f24e178e18b3610670c3d128688c43383ecfca849fd27727032a
-  Gas price: 1.500000002 gwei   Gas limit: 100521   Nonce: 186
-  EXPToken.setRequestParameters confirmed   Block: 10760113   Gas used: 91383 (90.91%)
+// Once you verify that you got the sponsor address and you've topped it off
+// Script will run basic erc20 functions of adding an admin and assigning some exp tokens to
+// public users 
 
-Transaction sent: 0xdd431dc5040cf5f5b014ba9541fd68e5fe8635814c5a8af904affa44d582493a
-  Gas price: 1.500000002 gwei   Gas limit: 52746   Nonce: 187
-  EXPToken.setTokenAdmins confirmed   Block: 10760114   Gas used: 47951 (90.91%)
+Transaction sent: 0x9f6e8de85cc7ea951c788d27bd55c1f87f4967ddf7703b0f8e90dfba8af86c89
+  Gas price: 1.013666864 gwei   Gas limit: 100614   Nonce: 198
+  EXPToken.setRequestParameters confirmed   Block: 10761806   Gas used: 91468 (90.91%)
 
-Transaction sent: 0x6ce038b796b6f338afc2a38d7c4de9d5f289df05d43b47ebb5f42fd00da6ae03
-  Gas price: 1.500000002 gwei   Gas limit: 78062   Nonce: 188
-  EXPToken.gainExperience confirmed   Block: 10760115   Gas used: 70966 (90.91%)
+Transaction sent: 0xf1a5775791c4e4f23738991eb9b49589114e26d3d0c8832c34d1a514fde3f082
+  Gas price: 1.013666864 gwei   Gas limit: 52720   Nonce: 199
+  EXPToken.setTokenAdmins confirmed   Block: 10761807   Gas used: 47928 (90.91%)
 
-Transaction sent: 0xc6c7ac34eb3d61348d9f5d6fc9d5b76f83267f440f3418895a72323c0c7451c1
-  Gas price: 1.500000003 gwei   Gas limit: 59265   Nonce: 78
-  EXPToken.gainExperience confirmed   Block: 10760116   Gas used: 53878 (90.91%)
+Transaction sent: 0xbde2046ce87a6a4dd0d5aaebd69d572f646574248317f06fcc68bd255e6c957b
+  Gas price: 1.013666864 gwei   Gas limit: 78062   Nonce: 200
+  EXPToken.gainExperience confirmed   Block: 10761808   Gas used: 70966 (90.91%)
 
-Transaction sent: 0x54e1f049caa4c5238dc8adf2f65a820f9fa2c6a4bbfbd2f729495d9bb8e332d0
-  Gas price: 1.500000003 gwei   Gas limit: 59265   Nonce: 189
-  EXPToken.gainExperience confirmed   Block: 10760117   Gas used: 53878 (90.91%)
+Transaction sent: 0xc0f08652f60b3ad9bcc5d8f9ebcaa6f7ced3f73cec235e03efdd68a9177ccff8
+  Gas price: 1.013666864 gwei   Gas limit: 59265   Nonce: 82
+  EXPToken.gainExperience confirmed   Block: 10761809   Gas used: 53878 (90.91%)
 
-Transaction sent: 0xb8a12e20fd1509ce5ff50a938d0abfd3ec5f4e6ffc96779a196f600599b8b3eb
-  Gas price: 1.500000003 gwei   Gas limit: 59265   Nonce: 79
-  EXPToken.gainExperience confirmed   Block: 10760118   Gas used: 53878 (90.91%)
+Transaction sent: 0x3ed003891c1070ab390474f12c3b10ee1a9c3a80c27132d80f6eb69439bbbc74
+  Gas price: 1.013666863 gwei   Gas limit: 59265   Nonce: 201
+  EXPToken.gainExperience confirmed   Block: 10761810   Gas used: 53878 (90.91%)
 
-Transaction sent: 0x0c5631c73c57b90cede8a569b37580fe98c685948fe44bb9090600024974c51b
-  Gas price: 1.500000003 gwei   Gas limit: 59265   Nonce: 190
-  EXPToken.gainExperience confirmed   Block: 10760119   Gas used: 53878 (90.91%)
+Transaction sent: 0x7a40a292d277aa6182c0782d1adf9dd5eb99d80143789b7029a9d099dda898c1
+  Gas price: 1.013666863 gwei   Gas limit: 59265   Nonce: 83
+  EXPToken.gainExperience confirmed   Block: 10761811   Gas used: 53878 (90.91%)
+
+Transaction sent: 0x48063059c1d16c2ebf51734a3ea24cd96e1898c6446bebacafa80d30755acbda
+  Gas price: 1.013666862 gwei   Gas limit: 59265   Nonce: 202
+  EXPToken.gainExperience confirmed   Block: 10761812   Gas used: 53878 (90.91%)
+
+// Now we track our random number by a public variable that will be filled with 
+// the return value when fulfillment callback happens 
 
 Random number before request
 0
 
-ValueError: Gas estimation failed: 'execution reverted: QRNG Access Control'. This transaction will likely revert. If you wish to broadcast, you must set the gas limit manually. 
+// THIS - we successfully sent our request for random number 
+
+Transaction sent: 0x8c20e55464d7697ac9b8ff45619bef2dae8e5e6c63c902242eb080f5ae75ff5d
+  Gas price: 1.013666862 gwei   Gas limit: 126926   Nonce: 203
+  EXPToken.requestRandomEXPerienceForPlayer confirmed   Block: 10761813   Gas used: 115388 (90.91%)
+
+// Now I verified the transaction, but the next step is now to confirm if we receive random number
+// or not. At the moment it seems that it hasn't. But on the sponsor address
+// there is an interesting transaction 
+
+Verify that the transaction went through. Wait for randomness fulfillment to occur. And then Press any key to continue...
+
+Random number after request
+0
+
+// Originates from : Sponsor wallet 0x272fc11d91a2f6c36dce71e1d0c8c640ac75ea44
+// Tx Hash : 0x06670ba7e950338efa7c786961b3dfb61feab2ce8dbe18eb78aeb0a5d267a2bc
+// To : 0xa0AD79D995DdeeB18a14eAef56A549A04e3Aa1Bd (AirnodeRrpV0)
+// here's the input data 
+
+Function: fulfill(bytes32 requestId, address airnode, address fulfillAddress, bytes4 fulfillFunctionId, bytes data, bytes signature)
+
+MethodID: 0x1decbf18
+[0]:  7bbb9f206727428f1bd1f6c771ba3f3885eade4daadf361d284576dc7e4c22ad
+[1]:  0000000000000000000000009d3c147ca16db954873a498e0af5852ab39139f2
+[2]:  0000000000000000000000005f0b68280cc5ad5908fcce9b841c4b7b9808aaa8
+[3]:  911a52ba00000000000000000000000000000000000000000000000000000000
+[4]:  00000000000000000000000000000000000000000000000000000000000000c0
+[5]:  0000000000000000000000000000000000000000000000000000000000000100
+[6]:  0000000000000000000000000000000000000000000000000000000000000020
+[7]:  60c694e03965ad4ce2ecafed70067d01108463b40a2e2b8119609d9bc5beb6a3
+[8]:  0000000000000000000000000000000000000000000000000000000000000041
+[9]:  7a24cd73fe1cb8fd480005c58d75cc783a6119b6fd37103d486656633c5f928f
+[10]: 5b87070e88b4b7d3b2d1cd3bda150a1f610e41a7ab7d371cf255caeb1918e5ab
+[11]: 1b00000000000000000000000000000000000000000000000000000000000000
+
+#	  Name	                Type	Data
+0	  requestId	            bytes32	0x7bbb9f206727428f1bd1f6c771ba3f3885eade4daadf361d284576dc7e4c22ad
+1	  airnode	              address	0x9d3C147cA16DB954873A498e0af5852AB39139f2
+2	  fulfillAddress	      address	0x5F0b68280cc5aD5908FCce9b841C4B7B9808AAA8
+3	  fulfillFunctionId	    bytes4	0x911a52ba
+4	  data	                bytes	0x60c694e03965ad4ce2ecafed70067d01108463b40a2e2b8119609d9bc5beb6a3
+5	  signature	            bytes	0x7a24cd73fe1cb8fd480005c58d75cc783a6119b6fd37103d486656633c5f928f5b87070e88b4b7d3b2d1cd3bda150a1f610e41a7ab7d371cf255caeb1918e5ab1b
+
+
+// We have a request id that is supposed to be fulfilled 
+// 0x7bbb9f206727428f1bd1f6c771ba3f3885eade4daadf361d284576dc7e4c22ad
+// Our fulfullment function's location - EXP token contract address 
+// 0x5F0b68280cc5aD5908FCce9b841C4B7B9808AAA8
+// And function selector for which function to be called 
+// fulfillFunctionId	    bytes4	0x911a52ba
+
+And here are the function signatures for better reference 
+
+Sighash   |   Function Signature
+========================
+39509351  =>  increaseAllowance(address,uint256)
+3d14b86c  =>  setTokenAdmins(address,bool)
+f56bbc9c  =>  gainExperience(address,uint256)
+8ce05e6d  =>  require(_TokenAdmins[msg.sender],"EXPToken)
+e0b1e940  =>  reduceExperience(address,uint256)
+a9059cbb  =>  transfer(address,uint256)
+dd62ed3e  =>  allowance(address,address)
+095ea7b3  =>  approve(address,uint256)
+23b872dd  =>  transferFrom(address,address,uint256)
+a457c2d7  =>  decreaseAllowance(address,uint256)
+7bdf2525  =>  setRequestParameters(address,bytes32,address)
+d9909f05  =>  requestRandomEXPerienceForPlayer(address)
+911a52ba  =>  fulfillRandomNumberRequest(bytes32,bytes)   // fulfillFunctionId
+
+Now we wait for the random number reception 
+
 ```
 
 --------------- Work under progress ------------------

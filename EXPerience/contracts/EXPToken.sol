@@ -2,30 +2,54 @@
 pragma solidity >=0.8.0;
 import "./tokens/ERC20.sol";
 import "./utils/Ownable.sol";
-import "./qrng/QRNGRequester.sol";
+// This import is dumb. But node_module is already present in ExperienceDapp
+// And this is a combined project anyway. So it's fine, eventually everything
+// gets flattened into one thing. so remember to adjust this path wherever 
+// airnode protocol is installed. Those base contracts are necessary to make your contract 
+// understand request-response protocol and handle the random number received
+import "../client/EXPerienceDapp/node_modules/@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
+
 
 /// @author 0micronat_. - https://github.com/SolDev-HP (Playground)
 /// @dev EXPToken (EXP) contract that handles minting and assigning EXP to the users 
 /// Only primary admin can add other admins 
 /// All admin can _mint token to given address, and _burn token from given address 
 
-contract EXPToken is ERC20, Ownable, QRNGRequester {
+contract EXPToken is ERC20, Ownable, RrpRequesterV0 {
     // ================= State Vars ==================
-    // Token admins 
-    mapping(address => bool) internal _TokenAdmins;
+    // Now we need storage for parameters 
+    // airnode - this is the location of Airnode that has implemented Airnode Rrp
+    // endpointIdUnit256 - A path on airnode, that will provide us the random result.
+    // It's like we are requesting randomness, but from a certain path that handles uint256
+    // sponsor wallet - The address that will pay for the fees when callback happens 
+    address public apiProviderAirnode;
+    address public sponsorWallet;
+    bytes32 public endpointIdUint256;
     // Per user experience point capping = 100 * 10 ** 18
     uint256 internal constant MAXEXP = 100000000000000000000;
-
     // To test received random number 
     uint256 public randomNumber;
 
+    // Token admins that are allowed to mint/burn tokens
+    mapping(address => bool) internal _TokenAdmins;
     // mapping of who requested for randomness based on requestId that we receive
     // when we send a request for randomness, but it has to stay internal so we can utilize it
     // within EXPToken contract 
     mapping(bytes32 => address) internal requestIdToWhoRequestedMapping;
+    // the mapping that will store requestId and corresponding details if 
+    // request has been fulfilled or not. 
+    // So when let's say admin calls generateRandomExperienceForPlayer(address _player)
+    // That function should make a request for random number 
+    // This request creates a request ID and is added into the mapping with boolean indicating 
+    // that request is yet to fulfilled. Once we receive a callback from the airnode 
+    // this request ID will then be marked false, as it has been fulfilled now 
+    mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
 
     // ================= EVENTS ======================
     event TokenAdminUpdated(address indexed admin_, bool indexed isAdmin_);
+    // Events to notify whether request was made, or response was received 
+    event RandomNumberRequested(bytes32 indexed _requestId);
+    event RandomNumberReceived(bytes32 indexed _requestId, uint256 _response);
 
     // ================= ERRORS ======================
     error ActionNotSupported();
@@ -35,7 +59,7 @@ contract EXPToken is ERC20, Ownable, QRNGRequester {
     /// can add or remove other admins 
     constructor(string memory name_, string memory symbol_, address _airnodeAddress) 
         ERC20(name_, symbol_) 
-        QRNGRequester(_airnodeAddress)
+        RrpRequesterV0(_airnodeAddress)
         {
         /// Make msg sender the first admin 
         _TokenAdmins[msg.sender] = true;
@@ -141,27 +165,50 @@ contract EXPToken is ERC20, Ownable, QRNGRequester {
         revert ActionNotSupported();
     }
 
+    // Set request parameters,
+    // Once deployed, next task should be setting request parameters, which are then 
+    // utilized while making the request 
+    function setRequestParameters(address _airnode, bytes32 _endpointIdUint256, address _sponsorWallet) public OnlyOwner {
+            require(msg.sender == _owner, "QRNG Access Control");
+            // We need to make sure this function stays within reach of admin only 
+            // Hence we try to include the ownable contract  
+            apiProviderAirnode = _airnode;
+            endpointIdUint256 = _endpointIdUint256;
+            sponsorWallet = _sponsorWallet;
+        }
     // We need a function that can request for randomness 
     function requestRandomEXPerienceForPlayer(address _whichPlayer) public OnlyOwner {
-        // Make sure we have airnodeAddress before we proceed for request 
-        require(airnodeAddress != address(0), "Set Airnode Address first");
         // Request for randomness for the player and save the interfaceID 
         // for later reference 
-        // As it is an external function call even though it's in the same contract. 
-        // We can make it makeReqeust_ a public one because it end up calling makeRequest 
-        // which is external anyway.
-        bytes32 _requestId = this.makeRequestForRandomNumber();
+        // call makeFullRequest from AirnodeRrp contract with the details 
+        // that we already have and hold on to request id for later 
+        // fulfilment 
+        // airnodeRrp is the address that we set within the constructor 
+        bytes32 requestId = airnodeRrp.makeFullRequest(
+                                apiProviderAirnode,         // Airnode's address where this request will be forwarded 
+                                endpointIdUint256,          // A path to uint256 for a single random uint256 number
+                                address(this),              // Sponsor, who is sponsoring this request 
+                                sponsorWallet,              // Sponsor's wallet that will be paying for the fees of the callback
+                                address(this),              // Where the callback function for fulfillment resides 
+                                this.fulfillRandomNumberRequest.selector,   // which callback function to call upon fulfilment 
+                                ""                          // Any other paramters (usually the case when requesting Array(random array filled with different type values))
+                            );
+        // we have the request id now, set it in the mapping
+        expectingRequestWithIdToBeFulfilled[requestId] = true;
+        // return our requestId so tht we can handle it within EXPToken contract
         // Once we receive the interface id, update mapping 
-        requestIdToWhoRequestedMapping[_requestId] = _whichPlayer;
+        requestIdToWhoRequestedMapping[requestId] = _whichPlayer;
         // So that later we can find this player and update their experience when 
         // we receive the callback from AirnodeRrp 
+        // emit the event 
+        emit RandomNumberRequested(requestId);
     }
     // For QRNG 
     // We will be using QRNGRequester contract
     // To generate random uint, we will use the function already implemented within that contract 
     // However, the callback function is listed here because we want to use 
     // the received results 
-    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external onlyAirnodeRrp override {
+    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external onlyAirnodeRrp {
         // A callback function only accessible by AirnodeRrp
         // Check if we are acutally expecting a request to be fulfilled 
         require (

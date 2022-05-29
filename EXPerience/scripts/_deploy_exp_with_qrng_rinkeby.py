@@ -42,12 +42,12 @@ def main():
     # airnode-admin package for sponsor wallet generation.
     
     # subProc = subprocess.Popen('npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub ' + _airnode_xpub + ' --airnode-address ' + _airnode_address + ' --sponsor-address ' + _expContract_address, stdout=subprocess.PIPE)
-    print('Execute this in other teaminal, and save result for the next input box. npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub ' + _airnode_xpub + ' --airnode-address ' + _airnode_address + ' --sponsor-address ' + _expContract_address)
-    input("Waiting till you get the sponsor address... Press any key once received...")
+    print('\nExecute this in other teaminal, and save result for the next input box.\nnpx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub ' + _airnode_xpub + ' --airnode-address ' + _airnode_address + ' --sponsor-address ' + _expContract_address)
+    input("\n\nWaiting till you get the sponsor address... Press any key once received...")
     # sponsorWalletResult = subProc.stdout.read()
     sponsorWalletResult = input("Enter sponsor Wallet - ")
 
-    print(f'Sponsor wallet received - {sponsorWalletResult}')
+    print(f'\nSponsor wallet received - {sponsorWalletResult}')
     # The output result should be something like 
     # Sponsor wallet address: 0xADDress 
     # So we need to cutdown extra part and get the wallet address from the result 
@@ -60,7 +60,7 @@ def main():
     _sponsorWallet = '0x' + sponsorWalletResult[-40:] # Trimmed from sponsorWalletResults
     
     # verify 
-    print(f'Trimmed address is now {_sponsorWallet}')
+    print(f'\nTrimmed address is now {_sponsorWallet}')
     input("Verify sponsor address. We're now setting request params. Press any key to continue...")
    
     # This should finally allow us to set our sponsor wallet within EXPToken contract 
@@ -82,7 +82,7 @@ def main():
         # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
         expContract.gainExperience(hodler5, 95 * 10 ** 18, {"from": admin_account})
     except:
-        print("Dont expect these to fail. but they occasionally do. Dont stop there")
+        print("\nDont expect these to fail. but they occasionally do. Dont stop there")
 
     # Two more accounts which will be tested for random number generation and experience assignment 
     hodler6 = os.getenv("HOLDER6_RINKBY_PUB")
@@ -92,7 +92,7 @@ def main():
     # =========================== Randomness Checks =====================================
     # current random number should be zero as we haven't send any requests yet 
     # verify
-    print('Random number before request')
+    print('\nRandom number before request')
     print(expContract.randomNumber({"from": admin_account}))
     # expContract.randomNumber({"from": admin_account})       # This should be zero
     # Request some random experience for the player 
@@ -101,9 +101,9 @@ def main():
     # by airnode for fulfillment - Though, what would be the risk if we do that? (Research more)
     # This also requires gasPrice indication. Because if we don't supply, it throw valueError 
     # stating it can't estimate gas 
-    expContract.requestRandomEXPerienceForPlayer(hodler6, {"from": admin_account, "gas_limit": 100000000})
+    expContract.requestRandomEXPerienceForPlayer(hodler6, {"from": admin_account})
     # Verify
-    input("Verify that the transaction went through. Wait for randomness fulfillment to occur. And then Press any key to continue...")
+    input("\nVerify that the transaction went through. Wait for randomness fulfillment to occur. And then Press any key to continue...")
     # Read the randomnumber again, it should've changed with the fulfilled data 
-    print('Random number after request')
+    print('\nRandom number after request')
     print(expContract.randomNumber({"from": admin_account}))
