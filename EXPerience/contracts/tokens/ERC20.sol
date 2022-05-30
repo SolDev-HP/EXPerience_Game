@@ -2,8 +2,8 @@
 pragma solidity >=0.8.0;
 
 import "../introspection/local/ERC165Storage.sol";
-import "../../interfaces/IERC20.sol";
-import "../../interfaces/extensions/IERC20Metadata.sol";
+import "../interfaces/IERC20.sol";
+import "../interfaces/extensions/IERC20Metadata.sol";
 import "../utils/Context.sol";
 
 /// @dev Taken from : OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/ERC20.sol)

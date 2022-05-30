@@ -3,8 +3,8 @@
 
 pragma solidity >=0.8.0;
 
-import "../../interfaces/IERC721.sol";
-import "../../interfaces/extensions/IERC721Metadata.sol";
+import "../interfaces/IERC721.sol";
+import "../interfaces/extensions/IERC721Metadata.sol";
 import "../utils/Context.sol";
 import "../introspection/local/ERC165Storage.sol";
 

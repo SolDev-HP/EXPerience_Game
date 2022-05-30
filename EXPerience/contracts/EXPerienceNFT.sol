@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 pragma experimental ABIEncoderV2;   // literally for string[], and struct params in functions for the lack of better understanding/ideas 
-import "../interfaces/IERC20.sol";
+import "./interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
 import "./libs/EthernautFactory.sol";

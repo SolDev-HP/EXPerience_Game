@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-import "../../../interfaces/introspection/local/IERC165.sol";
+import "../../interfaces/introspection/local/IERC165.sol";
 
 abstract contract ERC165 is IERC165 {
     /// @notice Query if a contract implements an interface 
