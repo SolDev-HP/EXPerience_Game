@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-pragma experimental ABIEncoderV2;   // literally for string[], for the lack of better understanding/ideas 
+pragma experimental ABIEncoderV2;   // literally for string[], and struct params in functions for the lack of better understanding/ideas 
 import "../interfaces/IERC20.sol";
 import "./tokens/ERC721.sol";
 import "./utils/Ownable.sol";
@@ -89,12 +89,12 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Make sure _tokenID is valid 
         require(_exists(_tokenID), "EXPerience NFT: Invalid TokenID");
         // Get the owner of the _tokenID
-        address owner = ownerOf(_tokenID); 
+        address owner_ = ownerOf(_tokenID); 
         // We need owner's EXP token balance
         // Based on balance, we can prepare a variable that denotes which 
         // Symbol should be written in the center of the circle. 
         // Get owner's EXP token holdings
-        uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner);
+        uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner_);
 
         // Now we have following details required to generate a tokenURI 
         // owner of the nft, nft token ID, owner's EXP balance 
@@ -103,7 +103,7 @@ contract EXPerienceNFT is ERC721, Ownable {
         return EthernautFactory._generateTokenURI(
             _tokenID, 
             ownerBal, 
-            owner
+            owner_
         );
     }
 
