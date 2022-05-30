@@ -216,7 +216,7 @@ contract EXPToken is ERC20, Ownable, RrpRequesterV0 {
             "Unknown request ID");
         
         // Set the expectations back low
-        expectingRequestWithIdToBeFulfilled[_requestId] = true;
+        expectingRequestWithIdToBeFulfilled[_requestId] = false;
         // Now on to the number that we received 
         uint256 qrngUint256 = abi.decode(data, (uint256));
         // Can we limit it to be within 100? But instead, we will first see 
