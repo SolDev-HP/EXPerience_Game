@@ -169,7 +169,6 @@ contract EXPToken is ERC20, Ownable, RrpRequesterV0 {
     // Once deployed, next task should be setting request parameters, which are then 
     // utilized while making the request 
     function setRequestParameters(address _airnode, bytes32 _endpointIdUint256, address _sponsorWallet) public OnlyOwner {
-            require(msg.sender == _owner, "QRNG Access Control");
             // We need to make sure this function stays within reach of admin only 
             // Hence we try to include the ownable contract  
             apiProviderAirnode = _airnode;
