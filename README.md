@@ -3,13 +3,13 @@ SoulBound ERC20 - Bounty on EthernautDAO
 SoulBound ERC721 - Bounty on EthernautDAO
 
 ## Current deployments 
-EXPToken (Rinkeby) = https://rinkeby.etherscan.io/address/0x67A89D96Dd50Ee95450B535Ec8F7812Ea5E70851
+EXPToken (Rinkeby) = https://rinkeby.etherscan.io/address/0xaF88F460053af481d49B4Db70Bf26a613b9c2372
 
-EXPerienceNFT (Rinkeby) = https://rinkeby.etherscan.io/address/0xbb6f3641b5a1884e1315c4f838c6a6c43e3cebac
+EXPerienceNFT (Rinkeby) = https://rinkeby.etherscan.io/address/0xEF54196aC12356C17F77B6d19dF44a059F4fAbB9
 
-OpenSea = https://testnets.opensea.io/collection/experience-nft-544ojjimlv
+OpenSea = https://testnets.opensea.io/collection/experience-nft-hb2vqfzqks
 
-Rarible = https://rinkeby.rarible.com/collection/0xbb6f3641b5a1884e1315c4f838c6a6c43e3cebac/items
+Rarible = https://rinkeby.rarible.com/collection/0xef54196ac12356c17f77b6d19df44a059f4fabb9/items
 
 ## Bounty Details (Bounty 1 - Soulbound ERC20)
 ### Soulbound ERC20 
@@ -131,87 +131,122 @@ ExperienceProject is the active project.
 // EXPToken contract is getting deployed here 
 
 Running 'scripts\deployall_rinkeby.py::main'...
-Transaction sent: 0x06d1d5371fe3f83a06df52eb4476e251bd35847b8997dd743fd283813d4b93bc
-  Gas price: 1.499999992 gwei   Gas limit: 1145400   Nonce: 244
-  EXPToken.constructor confirmed   Block: 10801178   Gas used: 1041273 (90.91%)
-  EXPToken deployed at: 0x67A89D96Dd50Ee95450B535Ec8F7812Ea5E70851
+Transaction sent: 0xc1301bac132fae1c684c5c36d1810a225dd432f79b55723ffd246d360cd65529
+  Gas price: 1.499999991 gwei   Gas limit: 1145400   Nonce: 259
+  EXPToken.constructor confirmed   Block: 10801610   Gas used: 1041273 (90.91%)
+  EXPToken deployed at: 0xaF88F460053af481d49B4Db70Bf26a613b9c2372
 
 // Once EXPToken contract is deployed, we can now generate sponsor wallet 
 // We do this by requesting derive-sponsor-wallet-address from airnode-admin utils from api3 
 
 Execute this in other teaminal, and save result for the next input box.
-npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77rSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf --airnode-address 0x9d3C147cA16DB954873Ae0af5852AB39139f2 --sponsor-address 0x67A89D96Dd50Ee95450B535Ec8F7812Ea5E70851
+npx @api3/airnode-admin derive-sponsor-wallet-address --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 --sponsor-address 0xaF88F460053af481d49B4Db70Bf26a613b9c2372
 
 Waiting till you get the sponsor address... Press any key once received...
-Enter sponsor Wallet - 0x4FB24A33a8795a1A3Df72c575c840E6Bf4973e43
+Enter sponsor Wallet - 0xE76ed3BEC63A9A175895Eb9a68b18692590FC7d4
 
-Sponsor wallet received - 0x4FB24A33a8795a1A3Df72c575c840E6Bf4973e43
+Sponsor wallet received - 0xE76ed3BEC63A9A175895Eb9a68b18692590FC7d4
 
-Trimmed address is now 0x4FB24A33a8795a1A3Df72c575c840E6Bf4973e43
+Trimmed address is now 0xE76ed3BEC63A9A175895Eb9a68b18692590FC7d4
 Verify sponsor address. We're now setting request params. Press any key to continue...
 
 // After the address is received, it will perform setRequestParams to sett
 // airnode and requesters addresses
 
-Transaction sent: 0xab9702f9421588c1c856d7706e5ed2fe27a96dc27847dad1f64015167721c1d9
-  Gas price: 1.499999992 gwei   Gas limit: 100545   Nonce: 245
-  EXPToken.setRequestParameters confirmed   Block: 10801180   Gas used: 91405 (90.91%)
+Transaction sent: 0xe6942d6d2f26e45d3b1443862151b68f0733d033d949352d909dba0287a9050f
+  Gas price: 1.499999992 gwei   Gas limit: 100545   Nonce: 260
+  EXPToken.setRequestParameters confirmed   Block: 10801612   Gas used: 91405 (90.91%)
 
 // Set token admin for EXPToken
 // And perform basic EXP Token distribution 
 
-Transaction sent: 0xe2763a8f12692730cbc6dbce2e5b51df8b384e018c5ac4f4287c47d7f397c8fe
-  Gas price: 1.499999992 gwei   Gas limit: 53054   Nonce: 246
-  EXPToken.setTokenAdmin confirmed   Block: 10801181   Gas used: 48231 (90.91%)
+Transaction sent: 0xa9fae3f6bf6fc074e6f8305f41af6a2b11d4a7979293657f42d8dfa1b1c36d9a
+  Gas price: 1.499999991 gwei   Gas limit: 53054   Nonce: 261
+  EXPToken.setTokenAdmin confirmed   Block: 10801613   Gas used: 48231 (90.91%)
 
-Transaction sent: 0x5c43ec2ccf2553cbe237bfbf3975508e26eb1696254c2456fddd67a48bc9e789
-  Gas price: 1.499999992 gwei   Gas limit: 78056   Nonce: 247
-  EXPToken.gainExperience confirmed   Block: 10801182   Gas used: 70960 (90.91%)
+Transaction sent: 0x3f6f473e2f977bcf3d1a6e6519da963d2b3948361446a35b699df7a940183017
+  Gas price: 1.499999991 gwei   Gas limit: 78056   Nonce: 262
+  EXPToken.gainExperience confirmed   Block: 10801614   Gas used: 70960 (90.91%)
 
-Transaction sent: 0x8674947e73f2cacd686de45fee2b164ef95111ac3f68583ea306cfb08719eeac
-  Gas price: 1.499999992 gwei   Gas limit: 59259   Nonce: 93
-  EXPToken.gainExperience confirmed   Block: 10801183   Gas used: 53872 (90.91%)
+Transaction sent: 0xc5584c86a4c0d62ce14acec5f7e3685d72fa3390c15eb20a7b5d96eca18999ff
+  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 99
+  EXPToken.gainExperience confirmed   Block: 10801615   Gas used: 53872 (90.91%)
 
-Transaction sent: 0xb1896f919c0c7672c478992291984cb6664d6e6e13f6ba4b0b6c30661654ace7
-  Gas price: 1.499999992 gwei   Gas limit: 59259   Nonce: 248
-  EXPToken.gainExperience confirmed   Block: 10801185   Gas used: 53872 (90.91%)
+Transaction sent: 0xffede9c49ecf7c5f62a6320869cd0ecae63e75347b660be52ed69904f0bee564
+  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 263
+  EXPToken.gainExperience confirmed   Block: 10801616   Gas used: 53872 (90.91%)
 
-Transaction sent: 0xa551793c984af67cc8e15c4d2f8b57ce2460356f0b5a42df18e65febff388840
-  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 94
-  EXPToken.gainExperience confirmed   Block: 10801186   Gas used: 53872 (90.91%)
+Transaction sent: 0x47eca2a841eda30b85ca9136c44bc0295827afd7f82aa952d6c4fd8b3915cc3f
+  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 100
+  EXPToken.gainExperience confirmed   Block: 10801617   Gas used: 53872 (90.91%)
 
-Transaction sent: 0x1e513aa4331dcb1dd5aafed3958a8a05db16b6594c994e37372f211040b6a5e7
-  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 249
-  EXPToken.gainExperience confirmed   Block: 10801187   Gas used: 53872 (90.91%)
+Transaction sent: 0xebeb16346395860b89a4ff4d44c3ae8de8c3fa127bbd6ae94517320c2f31ebdd
+  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 264
+  EXPToken.gainExperience confirmed   Block: 10801618   Gas used: 53872 (90.91%)
+
+Transaction sent: 0x4ebd5a197e459ba88901ece04fe895afe59db5820e9fe01b34b22ae67a2cfc37
+  Gas price: 1.49999999 gwei   Gas limit: 59259   Nonce: 101
+  EXPToken.gainExperience confirmed   Block: 10801619   Gas used: 53872 (90.91%)
+
+Transaction sent: 0x74c239354d1d9e48b390e385f053eddefb75000e57758226614a448a81eb8d60
+  Gas price: 1.499999991 gwei   Gas limit: 59259   Nonce: 102
+  EXPToken.gainExperience confirmed   Block: 10801620   Gas used: 53872 (90.91%)
+
+// Request a random uint256 number from API3 QRNG airnode 
+
+Transaction sent: 0xd590d3efa640721aa4d2f72227c59dfb2bff25026f7c541c42403b7ad434bbd4
+  Gas price: 1.499999991 gwei   Gas limit: 126890   Nonce: 265
+  EXPToken.requestRandomEXPerienceForPlayer confirmed   Block: 10801621   Gas used: 115355 (90.91%)
+
 
 // EXPerienceNFT Contract deployed 
 // Perform basic NFT distributions
 
-Transaction sent: 0xee80172c2d15e62378ecf495b1367d55f60079b5ec3d7ccc0b6cba1524b847ad
-  Gas price: 1.499999991 gwei   Gas limit: 126890   Nonce: 250
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801193   Gas used: 80257 (90.91%)
+Verify that the transaction went through. Wait for randomness fulfillment to occur. And then Press any key to continue...
+Transaction sent: 0x28260cd8633e34af5ff914c8429f61b7b60e5b3309028dc8bee4a5c52692f51c
+  Gas price: 1.499999991 gwei   Gas limit: 6025507   Nonce: 266
+  EXPerienceNFT.constructor confirmed   Block: 10801623   Gas used: 5477734 (90.91%)
+  EXPerienceNFT deployed at: 0xEF54196aC12356C17F77B6d19dF44a059F4fAbB9
 
-Transaction sent: 0x682e328b992dde6c46a32718e8d0dff0f54fec6c67894446d1da30521f763575
-  Gas price: 1.499999991 gwei   Gas limit: 88282   Nonce: 254
+// Basic NFT distribution 
+// Users already hold EXP tokens now so NFT will be able to display their 
+// levels denoted by EXPToken balance 
 
-Transaction sent: 0x65866808162528e8354a98f514aa7c73e2dd59bebc2dabff10e3eb570da00e22
-  Gas price: 1.499999991 gwei   Gas limit: 88282   Nonce: 96
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801195   Gas used: 80257 (90.91%)
+Transaction sent: 0x15309b3c8e6b4784867b2d60ca5117150eaad6fba0cad11c6168f1e6593815dd
+  Gas price: 1.499999991 gwei   Gas limit: 52684   Nonce: 267
+  EXPerienceNFT.setTokenAdmin confirmed   Block: 10801624   Gas used: 47895 (90.91%)
 
-  Gas price: 1.499999992 gwei   Gas limit: 88282   Nonce: 255
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801196   Gas used: 80257 (90.91%)
+Transaction sent: 0xdba9f8e2308c699126ceda50e41ac82e15a828dfa4d56b0060e100eb04abf351
+  Gas price: 1.499999991 gwei   Gas limit: 107092   Nonce: 268
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801626   Gas used: 97357 (90.91%)
 
-Transaction sent: 0x49cf3dd4a1f6e5878b818fc60559bff7295493667ae0a2d11bec034b9929897a
-  Gas price: 1.499999992 gwei   Gas limit: 88282   Nonce: 256
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801197   Gas used: 80257 (90.91%)
+Transaction sent: 0x4dcd27cc9feac95850daa251a7fbef7c42b2dc42c71a513db373b428b4b30bd4
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 103
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801627   Gas used: 80257 (90.91%)
 
-Transaction sent: 0x3bbad1de91f4cd441de7bc87351219809a9e5805e098bc7c2fb4b248cb49483f
-  Gas price: 1.499999992 gwei   Gas limit: 88282   Nonce: 97
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801198   Gas used: 80257 (90.91%)
+Transaction sent: 0x4a696c23344bf1b17c708a8e5fb9a462fc5b73f86ffd69e2c97a61e6472724d4
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 269
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801628   Gas used: 80257 (90.91%)
 
-Transaction sent: 0xb1fb8321a33c085b4c362775542b3e28c131e23c2fbf0c7242192b9100af9e54
-  Gas price: 1.499999992 gwei   Gas limit: 88282   Nonce: 257
-  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801199   Gas used: 80257 (90.91%)
+Transaction sent: 0xdb3165f4712e580493eb15b6c9c8009afb0e03d81e528bd2d3336747ec05c1a5
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 104
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801629   Gas used: 80257 (90.91%)
+
+Transaction sent: 0x2a35078d4c297a47c8ae572871b12742eb4f65fc1968ff19071f7beb6e1e05df
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 270
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801630   Gas used: 80257 (90.91%)
+
+Transaction sent: 0xb7cfc6cfb2fee379f2d75a8da7641d1b9d8674fdbad7b469bee65bd3b732307b
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 271
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801631   Gas used: 80257 (90.91%)
+
+Transaction sent: 0xf8a0c47f3386bafd254c6f86a30126bdec9ee1c00777c9fb52fa34d71dfefa1c
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 105
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801632   Gas used: 80257 (90.91%)
+
+Transaction sent: 0xbd336e6056db1a76413101a2134a3fdb20c86f79545898cd20add80c5e03b8a1
+  Gas price: 1.49999999 gwei   Gas limit: 88282   Nonce: 272
+  EXPerienceNFT.generateExperienceNFT confirmed   Block: 10801633   Gas used: 80257 (90.91%)
 
 
 ---------------------------------------------------------------------------------------------

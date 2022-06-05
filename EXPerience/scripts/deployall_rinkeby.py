@@ -18,6 +18,11 @@ def main():
     hodler4 = os.getenv("PUBLIC_KEY_HODLER4")
     hodler5 = os.getenv("PUBLIC_KEY_HODLER5")
 
+        # Two more accounts which will be tested for random number generation and experience assignment 
+    hodler6 = os.getenv("HOLDER6_RINKBY_PUB")
+    hodler7 = os.getenv("HOLDER7_RINKBY_PUB")
+    hodler8 = os.getenv("HOLDER8_RINKBY_PUB")
+
     # =========================== Airnode + QRNG Setup =====================================
     # Deploy EXPToken contract with airnodeRrp address 
     _airnodeRrpAddress = os.getenv("FOR_QRNG_AIRNODE_RRP_RINKEBY")
@@ -71,22 +76,23 @@ def main():
     expContract.setTokenAdmin(os.getenv("PUBLIC_KEY_ADMIN2"), True, {"from": admin_account})
     # Level 1 checking 
     try:
+        # Mint some EXP to Hodler1 from Admin - Level 1 checking 
         expContract.gainExperience(hodler1, 1 * 10 ** 18, {"from": admin_account})
-        # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
+        # Mint some EXP to Hodler2 from Admin2 - Level 1 checking 
         expContract.gainExperience(hodler2, 24 * 10 ** 18, {"from": second_admin})
-        # Mint some EXP to Hodler2 from Admin2 - Level 3 checking 
+        # Mint some EXP to Hodler3 from Admin - Level 2 checking 
         expContract.gainExperience(hodler3, 36 * 10 ** 18, {"from": admin_account})
-        # Mint some EXP to Hodler2 from Admin2 - Level 4 checking
+        # Mint some EXP to Hodler4 from Admin2 - Level 3 checking
         expContract.gainExperience(hodler4, 67 * 10 ** 18, {"from": second_admin})
-        # Mint some EXP to Hodler2 from Admin2 - Level 2 checking 
+        # Mint some EXP to Hodler5 from Admin - Level 4 checking 
         expContract.gainExperience(hodler5, 93 * 10 ** 18, {"from": admin_account})
+
+        # Mint some EXP to Hodler7 from Admin2 - Level 2 checking
+        expContract.gainExperience(hodler7, 50 * 10 ** 18, {"from": second_admin})
+        # Mint some EXP to Hodler8 from Admin2 - Level 3 checking
+        expContract.gainExperience(hodler8, 75 * 10 ** 18, {"from": second_admin})
     except:
         print("\nDont expect these to fail. but they occasionally do. Dont stop there")
-
-    # Two more accounts which will be tested for random number generation and experience assignment 
-    hodler6 = os.getenv("HOLDER6_RINKBY_PUB")
-    hodler7 = os.getenv("HOLDER7_RINKBY_PUB")
-    hodler8 = os.getenv("HOLDER8_RINKBY_PUB")
 
     # =========================== Randomness Checks =====================================
     # Add some tests here to verfiy
