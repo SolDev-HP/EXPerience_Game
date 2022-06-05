@@ -4,11 +4,14 @@ SoulBound ERC721 - Bounty on EthernautDAO
 
 ## Current deployments 
 EXPToken (Rinkeby) = https://rinkeby.etherscan.io/address/0x67A89D96Dd50Ee95450B535Ec8F7812Ea5E70851
+
 EXPerienceNFT (Rinkeby) = https://rinkeby.etherscan.io/address/0xbb6f3641b5a1884e1315c4f838c6a6c43e3cebac
+
 OpenSea = https://testnets.opensea.io/collection/experience-nft-544ojjimlv
+
 Rarible = https://rinkeby.rarible.com/collection/0xbb6f3641b5a1884e1315c4f838c6a6c43e3cebac/items
 
-## Bounty Details 
+## Bounty Details (Bounty 1 - Soulbound ERC20)
 ### Soulbound ERC20 
 - Implement a setApprovedMinter(address, bool) onlyOwner function 
 - No limit on total supply
@@ -17,7 +20,7 @@ Rarible = https://rinkeby.rarible.com/collection/0xbb6f3641b5a1884e1315c4f838c6a
 - Files have been updated to change EXPtoken to my own take that I was working under EXPerienceGame repo
 - Current Soulbound implementation also supports API3's QRNG implementation of random numbers 
 
-## Bounty Details 
+## Bounty Details (Bounty 2 - Soulbound ERC721)
 ### Soulbound ERC721 
 
 - Mintable NFT, nontransferable capable of reading and displaying how many EXP tokens you have in your wallet
