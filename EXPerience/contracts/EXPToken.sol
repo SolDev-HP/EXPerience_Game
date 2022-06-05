@@ -1,227 +1,215 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
-import "./tokens/ERC20.sol";
-import "./utils/Ownable.sol";
-// This import is dumb. But node_module is already present in ExperienceDapp
-// And this is a combined project anyway. So it's fine, eventually everything
-// gets flattened into one thing. so remember to adjust this path wherever 
-// airnode protocol is installed. Those base contracts are necessary to make your contract 
-// understand request-response protocol and handle the random number received
-import "../client/EXPerienceDapp/node_modules/@api3/airnode-protocol/contracts/rrp/requesters/RrpRequesterV0.sol";
+pragma solidity >=0.8.0 <0.9.0;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./qrng/QRNGRequester.sol";
+import "./interfaces/ISoulBound.sol";
 
-/// @author 0micronat_. - https://github.com/SolDev-HP (Playground)
-/// @dev EXPToken (EXP) contract that handles minting and assigning EXP to the users 
-/// Only primary admin can add other admins 
-/// All admin can _mint token to given address, and _burn token from given address 
+/** 
+ * @title Soulbound ERC20 token implementation - named EXPToken
+ * Requirement: 
+ *  - Implement a setApprovedMinter(address, bool) onlyOwner function
+ *  - No limit on total supply
+ *  - Transfer capabilities must be disabled after minting (soulbound)
+ * Updates:
+ *  - In addition to requirements, we can now generate random numbers 
+ *    using API3 QRNG implementation and Airnode on chains 
+ *    See: https://api3.org/QRNG
+ *  - Separate out functionalities. like, ISoulbound handles soulbound
+ *    properties, QRNGRequester handles random numbers from API3 QRNG
+ *  - Declutter main EXPToken contract
+ * @author SolDev-HP (https://github.com/SolDev-HP)
+ * @dev Implement ERC20 in a way that limits tokens capabilities such as 
+ * transfer, approval and make it soulbound - once minted, it can not 
+ * be transferred
+ */
 
-contract EXPToken is ERC20, Ownable, RrpRequesterV0 {
-    // ================= State Vars ==================
-    // Now we need storage for parameters 
-    // airnode - this is the location of Airnode that has implemented Airnode Rrp
-    // endpointIdUnit256 - A path on airnode, that will provide us the random result.
-    // It's like we are requesting randomness, but from a certain path that handles uint256
-    // sponsor wallet - The address that will pay for the fees when callback happens 
-    address public apiProviderAirnode;
-    address public sponsorWallet;
-    bytes32 public endpointIdUint256;
-    // Per user experience point capping = 100 * 10 ** 18
-    uint256 internal constant MAXEXP = 100000000000000000000;
-    // To test received random number 
-    uint256 public randomNumber;
+contract EXPToken is ERC20, Ownable, ISoulbound, QRNGRequester {
 
-    // Token admins that are allowed to mint/burn tokens
-    mapping(address => bool) internal _TokenAdmins;
-    // mapping of who requested for randomness based on requestId that we receive
-    // when we send a request for randomness, but it has to stay internal so we can utilize it
-    // within EXPToken contract 
-    mapping(bytes32 => address) internal requestIdToWhoRequestedMapping;
-    // the mapping that will store requestId and corresponding details if 
-    // request has been fulfilled or not. 
-    // So when let's say admin calls generateRandomExperienceForPlayer(address _player)
-    // That function should make a request for random number 
-    // This request creates a request ID and is added into the mapping with boolean indicating 
-    // that request is yet to fulfilled. Once we receive a callback from the airnode 
-    // this request ID will then be marked false, as it has been fulfilled now 
-    mapping(bytes32 => bool) public expectingRequestWithIdToBeFulfilled;
+    /**
+     * ==================================================================
+     *                          STATE VARIABLES
+     * ==================================================================
+     */
+    // Per user experience point capping @ 100 EXP Tokens
+    uint256 internal constant MAXEXP = 100 * 10 ** 18;
+    
+    /**
+     * @dev mapping to map token admins who are allowed to perform 
+     * mint operation
+     */
+    mapping(address => bool) public mTokenAdmins;
 
-    // ================= EVENTS ======================
-    event TokenAdminUpdated(address indexed admin_, bool indexed isAdmin_);
-    // Events to notify whether request was made, or response was received 
-    event RandomNumberRequested(bytes32 indexed _requestId);
-    event RandomNumberReceived(bytes32 indexed _requestId, uint256 _response);
+    /**
+     * ==================================================================
+     *                              ERRORS
+     * ==================================================================
+     */
+    
+    // Error to indicate that action can only be performed by token admins 
+    error OnlyTokenAdminsAllowed();
+    // Error to indicate that referenced address is a zero address 
+    error InvalidAddress();
+    // Error to indicate that performed action has no effects 
+    // And hence better to revert instead of unnecessarily access 
+    // other state variables  
+    error ActionHasNoEffects();
 
-    // ================= ERRORS ======================
-    error ActionNotSupported();
-
-    /// @dev Initialize contract by providing Token name ex: "EXPToken" and symbol ex: "EXP"
-    /// This should be able to create ERC20 token, initiator will be the primary admin who 
-    /// can add or remove other admins 
-    constructor(string memory name_, string memory symbol_, address _airnodeAddress) 
-        ERC20(name_, symbol_) 
-        RrpRequesterV0(_airnodeAddress)
-        {
-        /// Make msg sender the first admin 
-        _TokenAdmins[msg.sender] = true;
+    /**
+     *  @dev contructor expects token name (string), token symbol (string)
+     *  and our contract is also an instance of requester for 
+     *  request-response protocol implemented by on chain AirnodeRrpV0
+     *  API3's airnode-protocol->RrpRequesterV0 construction simply sets 
+     *  the interface with AirnodeRrpV0 address given by aRrpAirnode 
+     *  so that it can SetSponsorshipStatus for this requester 
+     */
+    constructor(string memory sTokenName, string memory sTokenSymbol, address aRrpAirnode)
+        ERC20(sTokenName, sTokenSymbol)
+        QRNGRequester(aRrpAirnode)
+    {
+        // Set deployed the first token admin 
+        mTokenAdmins[_msgSender()] = true;
+        // We don't need anything else except for setting up following things here
+        // IERC165, supportsInterface - IERC20, ISoulbound 
+        // For minting when we receive QRNG, we can set airnoderrp as token admin 
+        // so that it can mint too, but how feasible is this? better way?
+        mTokenAdmins[aRrpAirnode] = true;
     }
 
-    /// @dev Allow adding/removing admins for EXPToken
-    function setTokenAdmins(address admin_, bool isSet_) public OnlyOwner {
-        // Add/Remove token admins 
-        _TokenAdmins[admin_] = isSet_;
-        // Emit the admin update event 
-        emit TokenAdminUpdated(admin_, isSet_);
+
+    /**
+     * ==================================================================
+     *                  FUNCTIONS (Public) - ERC20 
+     * ==================================================================
+     */
+
+    // We override following functions from OpenZeppelin's ERC20   
+    // to make sure EXPToken follows properties of being a soulbound token 
+    function transfer(address, uint256) public override returns (bool) {
+        // Intended revert, action not allowed 
+        revert TokenIsSoulbound();
     }
+
+    function allowance(address, address) public view override returns (uint256) {
+        // Always revert 0. There's no allowance for anyone
+        return 0;
+    }
+
+    function approve(address, uint256) public override returns (bool) {
+        // Intended revert, approval is not possible
+        revert TokenIsSoulbound();
+    }
+
+    function transferFrom(address, address, uint256) public override returns (bool) {
+        // Intended revert, cannot be transferred 
+        revert TokenIsSoulbound();
+    }
+
+    function increaseAllowance(address, uint256) public override returns (bool) {
+        // Intended revert, there is no allowance
+        revert TokenIsSoulbound();
+    }
+
+    function decreaseAllowance(address, uint256) public override returns (bool) {
+        // Intended revert, there is no allowance
+        revert TokenIsSoulbound();
+    }
+
+    /**
+     * ==================================================================
+     *                  FUNCTIONS (Public) - ISoulbound 
+     * ==================================================================
+     */
+
+    /** 
+     * @notice Set admins
+     * @dev ability to set or unset admins, generates TokenAdminSet event
+     */
+    function setTokenAdmin(address aWhichAddress, bool bIsAdmin) 
+        external 
+        onlyOwner 
+    {
+        // Check address validity 
+        if (aWhichAddress == address(0)) { revert InvalidAddress(); }
+        // Check if operation actually has any effects or should 
+        // be disregarded 
+        if (mTokenAdmins[aWhichAddress] == bIsAdmin) { revert ActionHasNoEffects(); }
+        // Set token admin
+        mTokenAdmins[aWhichAddress] = bIsAdmin;
+        // Emit the token admin set event 
+        emit TokenAdminSet(aWhichAddress, bIsAdmin);
+    }
+
 
     /// @dev gainExperience function to add experience points to user's EXP balance 
     /// Need to make sure we cap experience to max exp limit
-    function gainExperience(address gainer_, uint256 gainAmount_) public {
-        // Make sure only admins can call this function 
-        require(_TokenAdmins[msg.sender] == true, "EXPToken (AccessControl): Not authorized.");
+    function gainExperience(address aWhichPlayer, uint256 iHowMuchGained) public {
+        // Make sure only token admins can call this function 
+        if (!mTokenAdmins[_msgSender()]) { revert OnlyTokenAdminsAllowed(); }
         // Make use of state variable only once if it's being used multiple times within function
         // In this case, balanceOf will access user's balance state var 
-        uint256 _bal = balanceOf(gainer_);
+        uint256 _bal = balanceOf(aWhichPlayer);
         // Make sure user doesn't already have max exprience points 
-        require(_bal < MAXEXP, "EXPToken (Balance): Already at Max(100).");
+        require(_bal < MAXEXP, "EXPToken (GainEXP): Already at Max(100).");
         // Make sure it doesn't go above capped possible points after _minting 
-        require(_bal + gainAmount_ <= MAXEXP, "EXPToken (Balance): Will go above Max(100).");
+        require(_bal + iHowMuchGained <= MAXEXP, "EXPToken (Balance): Will go above Max(100).");
         // Mint tokens to the address
-        _mint(gainer_, gainAmount_);
+        _mint(aWhichPlayer, iHowMuchGained);
     }
+
 
     /// @dev reduceExperience function to remove exp from user's balance 
     /// Need to make sure, it doesn't go below 0 after deduction and user's balance isn't already zero
-    function reduceExperience(address looser_, uint256 lostAmount_) public {
-        // Make sure only admins can call this function 
-        require(_TokenAdmins[msg.sender] == true, "EXPToken (AccessControl): Not authorized.");
-        // Make use of state variable only once if it's being used multiple times within function
-        // In this case, balanceOf will access user's balance state var 
-        uint256 _bal = balanceOf(looser_);
-        // Make sure user's balance isn't already zero 
-        require(_bal > 0, "EXPToken (Balance): Insufficient balance");
-        // Make sure our calculation doesn't bring it below zero 
-        // This calculation here will always throw "Integer Overflow" if _balance < lostAmount_
-        // To temporarily mitigate unexpected throws, check is necessary 
-        // require(_balance >= lostAmount_, "EXPToken (Balance): Can't go below Min(0).");
-        // Burn given amount from user's balance 
-        _burn(looser_, lostAmount_);
-    }
+    /// This will stay disabled. If required in the future, enabled from ISoulbound
+    // function reduceExperience(address looser_, uint256 lostAmount_) public {
+    //     // Make sure only admins can call this function 
+    //     require(_TokenAdmins[msg.sender] == true, "EXPToken (AccessControl): Not authorized.");
+    //     // Make use of state variable only once if it's being used multiple times within function
+    //     // In this case, balanceOf will access user's balance state var 
+    //     uint256 _bal = balanceOf(looser_);
+    //     // Make sure user's balance isn't already zero 
+    //     require(_bal > 0, "EXPToken (Balance): Insufficient balance");
+    //     // Make sure our calculation doesn't bring it below zero 
+    //     // This calculation here will always throw "Integer Overflow" if _balance < lostAmount_
+    //     // To temporarily mitigate unexpected throws, check is necessary 
+    //     // require(_balance >= lostAmount_, "EXPToken (Balance): Can't go below Min(0).");
+    //     // Burn given amount from user's balance 
+    //     _burn(looser_, lostAmount_);
+    // }
 
-    /// @dev Overriding ERC20 functions, need to make sure they revert.
-    /// To preserve property of a soulbound token. Once minted to an address, cannot be transferred
-    /// However, in this implementation, we allow admins to reduce user's balance to zero
-    /**
-     * Emits a {ActionNotSupported} error.
-     */
-    function transfer(address, uint256) public view override returns (bool) {
-        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-        revert ActionNotSupported();
-    }
 
     /**
-     * @dev See {IERC20-allowance}.
-     * Emits a {ActionNotSupported} error.
+     * ==================================================================
+     *                  FUNCTIONS (Public) - QRNGRequester 
+     * ==================================================================
      */
-    function allowance(address, address) public view override returns (uint256) {
-        this;
-        revert ActionNotSupported();
-    }
 
-    /**
-     * @dev See {IERC20-approve}.
-     * Emits a {ActionNotSupported} error
-     *
-     */
-    function approve(address, uint256) public view override returns (bool) {
-        this;
-        revert ActionNotSupported();
-    }
-
-    /**
-     * @dev See {IERC20-transferFrom}.
-     * Emits a {ActionNotSupported} error
-     */
-    function transferFrom(address, address, uint256) public view override returns (bool) {
-        this;
-        revert ActionNotSupported();
-    }
-
-    /**
-     * @dev Atomically increases the allowance granted to `spender` by the caller.
-     *
-     * Emits a {ActionNotSupported} error
-     */
-    function increaseAllowance(address, uint256) public view override returns (bool) {
-        this;
-        revert ActionNotSupported();
-    }
-
-    /**
-     * @dev Atomically decreases the allowance granted to `spender` by the caller.
-     * Emits a {ActionNotSupported} error
-     */
-    function decreaseAllowance(address, uint256) public view override returns (bool) {
-        this;
-        revert ActionNotSupported();
-    }
-
-    // Set request parameters,
-    // Once deployed, next task should be setting request parameters, which are then 
-    // utilized while making the request 
-    function setRequestParameters(address _airnode, bytes32 _endpointIdUint256, address _sponsorWallet) public OnlyOwner {
-            // We need to make sure this function stays within reach of admin only 
-            // Hence we try to include the ownable contract  
-            apiProviderAirnode = _airnode;
-            endpointIdUint256 = _endpointIdUint256;
-            sponsorWallet = _sponsorWallet;
-        }
-    // We need a function that can request for randomness 
-    function requestRandomEXPerienceForPlayer(address _whichPlayer) public OnlyOwner {
-        // Request for randomness for the player and save the interfaceID 
-        // for later reference 
-        // call makeFullRequest from AirnodeRrp contract with the details 
-        // that we already have and hold on to request id for later 
-        // fulfilment 
-        // airnodeRrp is the address that we set within the constructor 
-        bytes32 requestId = airnodeRrp.makeFullRequest(
-                                apiProviderAirnode,         // Airnode's address where this request will be forwarded 
-                                endpointIdUint256,          // A path to uint256 for a single random uint256 number
-                                address(this),              // Sponsor, who is sponsoring this request 
-                                sponsorWallet,              // Sponsor's wallet that will be paying for the fees of the callback
-                                address(this),              // Where the callback function for fulfillment resides 
-                                this.fulfillRandomNumberRequest.selector,   // which callback function to call upon fulfilment 
-                                ""                          // Any other paramters (usually the case when requesting Array(random array filled with different type values))
-                            );
-        // we have the request id now, set it in the mapping
-        expectingRequestWithIdToBeFulfilled[requestId] = true;
-        // return our requestId so tht we can handle it within EXPToken contract
-        // Once we receive the interface id, update mapping 
-        requestIdToWhoRequestedMapping[requestId] = _whichPlayer;
-        // So that later we can find this player and update their experience when 
-        // we receive the callback from AirnodeRrp 
-        // emit the event 
-        emit RandomNumberRequested(requestId);
-    }
-    // For QRNG 
-    // We will be using QRNGRequester contract
-    // To generate random uint, we will use the function already implemented within that contract 
-    // However, the callback function is listed here because we want to use 
-    // the received results 
-    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external onlyAirnodeRrp {
+    // Do we even need to set _sposorWallet as token admin so that we can mint
+    // when we receive our random number request fulfillment 
+    // Testing to see if we can actually pull this off by overriding base class 
+    // method, assigning new modifier, and then calling the base class method 
+    // once that returns success, we can then mint expected amount of tokens 
+    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external override onlyAirnodeRrp {
         // A callback function only accessible by AirnodeRrp
         // Check if we are acutally expecting a request to be fulfilled 
         require (
-            expectingRequestWithIdToBeFulfilled[_requestId],
+            mExpectingRequestWithIdToBeFulfilled[_requestId],
             "Unknown request ID");
         
         // Set the expectations back low
-        expectingRequestWithIdToBeFulfilled[_requestId] = false;
-        // Now on to the number that we received 
+        mExpectingRequestWithIdToBeFulfilled[_requestId] = false;
+        // once that is done, we can call mint? 
         uint256 qrngUint256 = abi.decode(data, (uint256));
-        // Can we limit it to be within 100? But instead, we will first see 
-        // what range it sends back 
-        randomNumber = qrngUint256;
         // Emit the event stating we received the random number 
         emit RandomNumberReceived(_requestId, qrngUint256); 
-    } 
+        // Need qrng between 0.01 and 0.99
+        // Received -> %100 -> (0 - 99) -> /100 -> is the result EXP tokens 
+        // doubtful idea :'D
+        gainExperience(mRequestIdToWhoRequested[_requestId], ((qrngUint256 % 100) * 10 ** 16));
+
+        // If we reach here, noooiiiccee!!!
+
+    }
+
 }

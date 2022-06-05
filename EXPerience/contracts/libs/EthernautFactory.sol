@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0;
 pragma experimental ABIEncoderV2;   // Certainly for the struct getting passed around 
 
-import "../utils/Strings.sol";
+// import "../utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "../utils/Base64.sol";
 
 // BadgeFactory that will be used by EXPerienceNFT 
@@ -67,7 +68,30 @@ library EthernautFactory {
         else                                                      { return _selectedCore4; }
     }
 
-    function _preparePackedColorStops(string[3] memory _colHexs) private pure returns (bytes memory) {
+    // function _preparePackedColorStops(string[3] memory _colHexs) private pure returns (bytes memory) {
+    //     bytes memory _stop_begin = '<stop offset="';
+    //     bytes memory _stop_mid = '%" style="stop-color:';
+    //     bytes memory _stop_end = ';"/>';
+
+    //     // Each step contains two modifications
+    //     // first is step offset, and then at that given offset - a color 
+    //     // This increases 100 bytes gas compared to initial strings idea 
+    //     // but for the lack of better optimized way, this is what I ended up with 
+    //     bytes memory stopPrep1_ = abi.encodePacked(_stop_begin, "0", _stop_mid, _colHexs[0], _stop_end); 
+    //     // Output:
+    //     // <stop offset="0%" style="stop-color:#ffffff;"/>
+
+    //     bytes memory stopPrep2_ = abi.encodePacked(_stop_begin, "10", _stop_mid, _colHexs[1], _stop_end); 
+    //     bytes memory stopPrep3_ = abi.encodePacked(_stop_begin, "30", _stop_mid, _colHexs[2], _stop_end); 
+    //     bytes memory stopPrep4_ = abi.encodePacked(_stop_begin, "70", _stop_mid, _colHexs[2], _stop_end); 
+    //     bytes memory stopPrep5_ = abi.encodePacked(_stop_begin, "90", _stop_mid, _colHexs[1], _stop_end); 
+    //     bytes memory stopPrep6_ = abi.encodePacked(_stop_begin, "100", _stop_mid, _colHexs[0], _stop_end); 
+       
+    //     // This will prepare our color stops - 6 stops in total at 0%, 10%, 30%, 70%, 90%, and 100%
+    //     return abi.encodePacked(stopPrep1_, stopPrep2_, stopPrep3_, stopPrep4_, stopPrep5_, stopPrep6_);
+    // }
+
+    function _preparePackedColorStops(string memory _colHex, string memory pathprogress) private pure returns (bytes memory) {
         bytes memory _stop_begin = '<stop offset="';
         bytes memory _stop_mid = '%" style="stop-color:';
         bytes memory _stop_end = ';"/>';
@@ -76,23 +100,28 @@ library EthernautFactory {
         // first is step offset, and then at that given offset - a color 
         // This increases 100 bytes gas compared to initial strings idea 
         // but for the lack of better optimized way, this is what I ended up with 
-        bytes memory stopPrep1_ = abi.encodePacked(_stop_begin, "0", _stop_mid, _colHexs[0], _stop_end); 
-        // Output:
-        // <stop offset="0%" style="stop-color:#ffffff;"/>
+        return abi.encodePacked(_stop_begin, pathprogress, _stop_mid, _colHex, _stop_end); 
+        // bytes memory stopPrep1_ = abi.encodePacked(_stop_begin, pathprogress, _stop_mid, _colHexs[0], _stop_end); 
+        // // Output:
+        // // <stop offset="0%" style="stop-color:#ffffff;"/>
 
-        bytes memory stopPrep2_ = abi.encodePacked(_stop_begin, "10", _stop_mid, _colHexs[1], _stop_end); 
-        bytes memory stopPrep3_ = abi.encodePacked(_stop_begin, "30", _stop_mid, _colHexs[2], _stop_end); 
-        bytes memory stopPrep4_ = abi.encodePacked(_stop_begin, "70", _stop_mid, _colHexs[2], _stop_end); 
-        bytes memory stopPrep5_ = abi.encodePacked(_stop_begin, "90", _stop_mid, _colHexs[1], _stop_end); 
-        bytes memory stopPrep6_ = abi.encodePacked(_stop_begin, "100", _stop_mid, _colHexs[0], _stop_end); 
+        // bytes memory stopPrep2_ = abi.encodePacked(_stop_begin, "10", _stop_mid, _colHexs[1], _stop_end); 
+        // bytes memory stopPrep3_ = abi.encodePacked(_stop_begin, "30", _stop_mid, _colHexs[2], _stop_end); 
+        // bytes memory stopPrep4_ = abi.encodePacked(_stop_begin, "70", _stop_mid, _colHexs[2], _stop_end); 
+        // bytes memory stopPrep5_ = abi.encodePacked(_stop_begin, "90", _stop_mid, _colHexs[1], _stop_end); 
+        // bytes memory stopPrep6_ = abi.encodePacked(_stop_begin, "100", _stop_mid, _colHexs[0], _stop_end); 
        
-        // This will prepare our color stops - 6 stops in total at 0%, 10%, 30%, 70%, 90%, and 100%
-        return abi.encodePacked(stopPrep1_, stopPrep2_, stopPrep3_, stopPrep4_, stopPrep5_, stopPrep6_);
+        // // This will prepare our color stops - 6 stops in total at 0%, 10%, 30%, 70%, 90%, and 100%
+        // return abi.encodePacked(stopPrep1_, stopPrep2_, stopPrep3_, stopPrep4_, stopPrep5_, stopPrep6_);
     }
 
     // Function responsible for returning <color stops> filled with given colors 
     // colors are based on tokenlevel that is checked upon returning the colorstops string - that is already abi encoded 
     // _PrepareSVGStopColors 
+    // Note on why weird return values: 
+    // To prepare 6 tags of color stops, we can either prepare all tags within one function and return a string of bytes 
+    // Or we can create a function that generates single step based on input, and we call it 6 times to create the result 
+    // that we want. Although latter method seem like too much work, it actually reduces bytecode size and can be beneficial 
     function _prepareSVGStopPoints(uint256 tokenAmount_) private pure returns (bytes memory) {
         // Within svg, color stops are 6 
         // they start from initial color stop, goes to last, starts from last and come back to first.
@@ -105,10 +134,43 @@ library EthernautFactory {
         ];
 
         // Return our selected color level
-        if (tokenAmount_ > 0 && tokenAmount_ <= 2500)       { return _preparePackedColorStops(_colors[0]); }
-        else if (tokenAmount_ > 2500 && tokenAmount_ <= 5000) { return _preparePackedColorStops(_colors[1]); }
-        else if (tokenAmount_ > 5100 && tokenAmount_ <= 7500) { return _preparePackedColorStops(_colors[2]); }
-        else                                                { return _preparePackedColorStops(_colors[3]); }
+        if (tokenAmount_ > 0 && tokenAmount_ <= 2500) { 
+            return abi.encodePacked(
+                _preparePackedColorStops(_colors[0][0], "0"),
+                _preparePackedColorStops(_colors[0][1], "10"),
+                _preparePackedColorStops(_colors[0][2], "30"),
+                _preparePackedColorStops(_colors[0][2], "70"),
+                _preparePackedColorStops(_colors[0][1], "90"),
+                _preparePackedColorStops(_colors[0][0], "100")
+            ); 
+        } else if (tokenAmount_ > 2500 && tokenAmount_ <= 5000) { 
+            return abi.encodePacked(
+                _preparePackedColorStops(_colors[1][0], "0"),
+                _preparePackedColorStops(_colors[1][1], "10"),
+                _preparePackedColorStops(_colors[1][2], "30"),
+                _preparePackedColorStops(_colors[1][2], "70"),
+                _preparePackedColorStops(_colors[1][1], "90"),
+                _preparePackedColorStops(_colors[1][0], "100")
+            ); 
+        } else if (tokenAmount_ > 5100 && tokenAmount_ <= 7500) { 
+            return abi.encodePacked(
+                _preparePackedColorStops(_colors[2][0], "0"),
+                _preparePackedColorStops(_colors[2][1], "10"),
+                _preparePackedColorStops(_colors[2][2], "30"),
+                _preparePackedColorStops(_colors[2][2], "70"),
+                _preparePackedColorStops(_colors[2][1], "90"),
+                _preparePackedColorStops(_colors[2][0], "100")
+            );  
+        } else { 
+            return abi.encodePacked(
+                _preparePackedColorStops(_colors[3][0], "0"),
+                _preparePackedColorStops(_colors[3][1], "10"),
+                _preparePackedColorStops(_colors[3][2], "30"),
+                _preparePackedColorStops(_colors[3][2], "70"),
+                _preparePackedColorStops(_colors[3][1], "90"),
+                _preparePackedColorStops(_colors[3][0], "100")
+            );  
+        }
     }
 
     // Base64 encoded version of the svg container with colors passed

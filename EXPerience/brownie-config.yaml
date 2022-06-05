@@ -15,3 +15,4 @@ compiler:
     solc:
         remappings:
             - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.6.0"
+            - '@api3=api3dao/airnode@0.6.3/packages/'

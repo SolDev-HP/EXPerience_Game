@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0;
 pragma experimental ABIEncoderV2;   // Certainly for the struct getting passed around 
 
-import "../utils/Strings.sol";
+//import "../utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "../utils/Base64.sol";
 
 // BadgeFactory that will be used by EXPerienceNFT 
