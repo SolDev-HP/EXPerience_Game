@@ -64,7 +64,7 @@ library EthernautFactory {
         // Return our selected core based on tokenAmount_
         if (tokenAmount_ > 0 && tokenAmount_ <= 2500)           { return _selectedCore1; }
         else if (tokenAmount_ > 2500 && tokenAmount_ <= 5000)   { return _selectedCore2; }
-        else if (tokenAmount_ > 5100 && tokenAmount_ <= 7500)   { return _selectedCore3; }
+        else if (tokenAmount_ > 5000 && tokenAmount_ <= 7500)   { return _selectedCore3; }
         else                                                      { return _selectedCore4; }
     }
 
@@ -134,7 +134,7 @@ library EthernautFactory {
         ];
 
         // Return our selected color level
-        if (tokenAmount_ > 0 && tokenAmount_ <= 2500) { 
+        if (tokenAmount_ >= 0 && tokenAmount_ <= 2500) { 
             return abi.encodePacked(
                 _preparePackedColorStops(_colors[0][0], "0"),
                 _preparePackedColorStops(_colors[0][1], "10"),
@@ -152,7 +152,7 @@ library EthernautFactory {
                 _preparePackedColorStops(_colors[1][1], "90"),
                 _preparePackedColorStops(_colors[1][0], "100")
             ); 
-        } else if (tokenAmount_ > 5100 && tokenAmount_ <= 7500) { 
+        } else if (tokenAmount_ > 5000 && tokenAmount_ <= 7500) { 
             return abi.encodePacked(
                 _preparePackedColorStops(_colors[2][0], "0"),
                 _preparePackedColorStops(_colors[2][1], "10"),
