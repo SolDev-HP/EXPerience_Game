@@ -1,3 +1,108 @@
+# ReadMe tailored towards deploying EXPerienceNFT to Optimism 
+
+- Contracts folder structure and files details 
+```
+EXPerience/contracts/.
+|
+│   EXPerienceNFT.sol             // EXPerience NFT (ERC721) contract
+│   EXPToken.sol                  
+|   // EXP Token (ERC20) contract. 
+|   // Deployment address of this should be passed as arg while deploying EXPerience NFT contract
+│
+├───interfaces
+│   │   ISoulbound.sol            // SBT interface. Soulbound can be added to any ERC721/ERC20 contract
+│   │
+│   └───extensions                //ignore for now
+├───kb_contracts                  //ignore for now
+├───libs  
+│       BadgeFactory.sol          // Badge SVG generator factory. TokenURI generation logic (onchain)
+│       EthernautFactory.sol      // Ethernaut SVG generator factory. TokenURI generation logic (svg code from aleta in EthernauDAO)
+│
+├───qrng
+│       QRNGRequester.sol         // If planning on using randomness, API3 QRNG requester contract
+│
+├───tokens
+└───utils
+        Base64.sol                // Base64 modified to use bytes (shouldn't be used in production)
+```
+
+- Clone this repo 
+- Make sure you get dev/finalize_v01 branch 
+```
+https://github.com/SolDev-HP/EXPerience_Game.git
+```
+
+- Setup your python virtual environement (Don't want those deps spilling over to others)
+```
+python -m venv .venv
+```
+
+- Activate your virtual environment
+```
+python ./.venv/scripts/activate 
+```
+
+- Install dependencies, this will install eth-brownie, dotenv-python, cython, and other required packages
+```
+pip install -r requirements.txt
+```
+
+- Change into project directory 
+```
+cd EXPerience
+```
+
+- Prepare environment variables, create .env file from .env.example file and add required details
+```
+cp .env.example .env
+```
+
+- [For local Development]
+- If you're using local ganache-cli for deployment, make sure you update following variables inorder for deployement script to run and deploy required contracts 
+
+```
+DEV_SADMIM_PUB = ""
+DEV_SADMIM_PRIV = ""
+DEV_ADMIM2_PUB = ""
+DEV_ADMIM2_PRIV = ""
+DEV_HODLER1_PUB = ""
+DEV_HODLER1_PRIV = ""
+DEV_HODLER2_PUB = ""
+DEV_HODLER2_PRIV = ""
+```
+
+- [For Optimism Mainnet Deployment]
+
+```
+OPT_SADMIN_PUB = ""
+OPT_SADMIN_PRIV = ""
+OPT_ADMIN2_PUB = ""     // Optional, contract deployer can add admins later on using setTokenAdmins method in relevant contracts
+OPT_ADMIN2_PRIV = ""    // Optional
+```
+
+- We are using OpenZeppelin and API3 packages within brownie, hence once inside the token directory, install brownie packages using following commands 
+```
+brownie pm install OpenZeppelin/openzeppelin-contracts@4.6.0
+brownie pm install api3dao/airnode@0.6.3
+```
+- (note) all brownie does is, looks onto github by following pattern to find requested package version from repo
+```
+[ORGANIZATION]/[REPOSITORY]@[VERSION]
+```
+
+- Compile the project
+```
+brownie compile 
+OR
+brownie compile --size (to view contract sizes after compiling)
+```
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Optimism mainnet and kovan testnet deployment instructions. 
+Currently working on some tests as I update this documentation.
+
+------------------------------------------------------------------------------------------------------------------------------------------------
 # SoulBound - ERC20 + ERC721 - EXPerienceNFT 
 SoulBound ERC20 - Bounty on EthernautDAO
 SoulBound ERC721 - Bounty on EthernautDAO
@@ -30,72 +135,6 @@ Rarible = https://rinkeby.rarible.com/collection/0xef54196ac12356c17f77b6d19df44
 - Transfer capabilities must be disabled after minting (soulbound) 
 
 ### Test it
-- clone this repo 
-- Make sure you get dev/finalize_v01 branch 
-```
-https://github.com/SolDev-HP/EXPerience_Game.git
-```
-
-- Setup your python virtual environement (Don't want those deps spilling over to others)
-```
-python -m venv .venv
-```
-
-- Activate your virtual environment
-```
-python ./.venv/scripts/activate 
-```
-
-- Install dependencies, this will install eth-brownie and other required packages
-```
-pip install -r requirements.txt
-```
-
-- Change into project directory 
-```
-cd EXPerience
-```
-
-- Prepare environment variables, create .env file from .env.example file and add required details
-```
-cp .env.example .env
-```
-
-- If you're using local ganache-cli for deployment, make sure you update following variables inorder for deployement script to run and deploy required contracts 
-
-```
-DEV_SADMIM_PUB = ""
-DEV_SADMIM_PRIV = ""
-DEV_ADMIM2_PUB = ""
-DEV_ADMIM2_PRIV = ""
-DEV_HODLER1_PUB = ""
-DEV_HODLER1_PRIV = ""
-DEV_HODLER2_PUB = ""
-DEV_HODLER2_PRIV = ""
-```
-
-- We are using OpenZeppelin and API3 packages within brownie, hence once inside the token directory, install brownie packages using following commands 
-```
-brownie pm install OpenZeppelin/openzeppelin-contracts@4.6.0
-brownie pm install api3dao/airnode@0.6.3
-```
-- (note) all brownie does is, looks onto github by following pattern to find requested package version from repo
-```
-[ORGANIZATION]/[REPOSITORY]@[VERSION]
-```
-
-- Compile the project
-```
-brownie compile 
-OR
-brownie compile --size (to view contract sizes after compiling)
-```
-
-- Deploy on testnet, and perform THE MOST BASIC function (As other functionality tests are still WIP)
-- This will deploy EXPerienceNFT contract, it also expects EXPToken contract address from the env file 
-```
-brownie run .\scripts\_deploy_dev_nft.py --network development 
-```
 
 This script performs following steps:
 1. Deploys EXPerience NFT contract 
