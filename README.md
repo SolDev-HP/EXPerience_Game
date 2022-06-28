@@ -10,10 +10,10 @@ EXPerience/contracts/.
 |   // Deployment address of this should be passed as arg while deploying EXPerience NFT contract
 │
 ├───interfaces
-│   │   ISoulbound.sol            // SBT interface. Soulbound can be added to any ERC721/ERC20 contract
+│   │   ISoulbound.sol            // Ignorable (not used in EXPerienceNFT.sol) SBT interface. Soulbound can be added to any ERC721/ERC20 contract.
 │   │
-│   └───extensions                //ignore for now
-├───kb_contracts                  //ignore for now
+│   └───extensions                // ignore for now
+├───kb_contracts                  // ignore for now
 ├───libs  
 │       BadgeFactory.sol          // Badge SVG generator factory. TokenURI generation logic (onchain)
 │       EthernautFactory.sol      // Ethernaut SVG generator factory. TokenURI generation logic (svg code from aleta in EthernauDAO)

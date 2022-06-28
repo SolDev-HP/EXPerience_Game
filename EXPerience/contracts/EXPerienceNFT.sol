@@ -4,7 +4,11 @@ pragma experimental ABIEncoderV2;   // literally for string[], and struct params
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./libs/EthernautFactory.sol";
+// This should now be replaced with settable address of already deployed library
+// import "./libs/EthernautFactory.sol";
+// Instead we import an interface that allows us to call the external function
+// of the NFT factory / generator library
+import "./interfaces/INFTFactory.sol";
 
 
 /** 
@@ -37,13 +41,21 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Should start with zero anyway.
     uint256 private _totalSupply;
     // EXPToken contract address - To refer to EXP balance of the user 
+    // Just incase we ever need to change which token should be used to 
+    // grab balance when generating NFT - Add a setter 
     address private _EXPContractAddress;
+    // NFT generator library should be seperately deployed, to reduce the 
+    // overhead on the main NFT contract 
+    address private _NFTFactoryAddress;
     // Generator admins 
     mapping(address => bool) private _tokenAdmins;
 
     // Events 
     event ExperienceNFTGenerated(address indexed _experienceGainer, uint256 indexed _tokenID);
     event TokenAdminSet(address indexed aWhichAddress, bool indexed bIsAdmin);
+    // Additional events
+    event EXPTokenContractAddressChange(address indexed _changedToAddress);
+    event NFTLibraryAddressChange(address indexed _changedToAddress);
 
     /**
      * ==================================================================
@@ -64,14 +76,57 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Constructor of EXPerience NFT Contract, expects nama and symbol of the NFT Contract 
     // and address where EXP Token is deployed
     // Construction slightly changes as we incorporate library address within the deployment scripts 
-    constructor(string memory _name, string memory _symbol, address _expcontract) 
+    constructor(
+        string memory _name, 
+        string memory _symbol, 
+        address _expcontract,
+        address _nftfactory
+    ) 
         ERC721(_name, _symbol) {
         // Set EXP Contract address 
         _EXPContractAddress = _expcontract;
+        // Set the NFT Generator library address 
+        _NFTFactoryAddress = _nftfactory;
         // Set msg sender the first admin 
         _tokenAdmins[msg.sender] = true;
     }
 
+    /**
+     * ==================================================================
+     *    FUNCTIONS (Public) - Library/Token addresses updates
+     * ==================================================================
+     */
+    function getNFTLibraryAddress() public view returns (address libraryAddress) {
+        // Get current library address 
+        libraryAddress = _NFTFactoryAddress;
+    }
+
+    function getEXPTokenAddress() public view returns (address expTokenAddress) {
+        // Get current EXP Token (ERC20) contract address
+        // should've been set while deployoment
+        expTokenAddress = _EXPContractAddress;
+    }
+
+    // We make sure that following functions are behind ownerOnly wall.
+    // Only owner of the contract should be able to manipulate these state variables
+    function changeEXPTokenAddress(address changeTo) public onlyOwner {
+        // Validate incoming address 
+        if(changeTo == address(0)) { revert InvalidAddress(); }
+        // Change the address
+        _EXPContractAddress = changeTo;
+        // Emit the event that contract address has been changed 
+        emit EXPTokenContractAddressChange(_EXPContractAddress);
+    }
+
+    // Similarly, NFT generator library/factory should be manipulated by owner only
+    function changeNFTFactoryAddress(address changeTo) public onlyOwner {
+        // Validate incoming address 
+        if(changeTo == address(0)) { revert InvalidAddress(); }
+        // Change the address of the NFT factory 
+        _NFTFactoryAddress = changeTo;
+        // Emit the event that contract address has been changed
+        emit NFTLibraryAddressChange(_NFTFactoryAddress);
+    }
 
     /**
      * ==================================================================
@@ -80,7 +135,7 @@ contract EXPerienceNFT is ERC721, Ownable {
      */
 
     // Add token admins who are allowed to mint NFT for any given address 
-    function setTokenAdmin(address _admin, bool _isAdmin) external onlyOwner {
+    function setTokenAdmin(address _admin, bool _isAdmin) public onlyOwner {
         _tokenAdmins[_admin] = _isAdmin;
         emit TokenAdminSet(_admin, _isAdmin);
     }
@@ -122,7 +177,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     }
 
     // TokenURI(), this is where we will implement all our logic
-    // - We need to generate ASCII NFT art
+    // - We need to generate ~ASCII~ NFT art
     // - Art could be a trophie showing achievement/level 
     // --- Null trophie for 0 EXP tokens in the account 
     // --- Distinct 5 trophies, each trophie for certain EXP token held in the account 
@@ -138,12 +193,16 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Symbol should be written in the center of the circle. 
         // Get owner's EXP token holdings
         uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner_);
+        // Why don't we get decimals as well. Tokens can be radically different and we 
+        // dont want any hardcoded dependencies in our code 
+        // @Todo: find a simpler way to get decimals and don't worry about hardcoded logic within
+        // level calculation in the library
 
         // Now we have following details required to generate a tokenURI 
         // owner of the nft, nft token ID, owner's EXP balance 
         // We dont need to pass any hex color name or code 
         // As everything is handled by the library, specifically _prepareSVGContainer, and _prepareColors
-        return EthernautFactory._generateTokenURI(
+        return INFTFactory(_NFTFactoryAddress)._generateTokenURI(
             _tokenID, 
             ownerBal, 
             owner_

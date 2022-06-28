@@ -6,7 +6,9 @@ pragma experimental ABIEncoderV2;   // Certainly for the struct getting passed a
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "../utils/Base64.sol";
 
-// BadgeFactory that will be used by EXPerienceNFT 
+// EthernauDAO EXPerience NFT generator factory
+// For Optimism Deployment: This library needs to be deployed on it's own. so that we can reduce the load on final contract deployment
+// Later we can simply change the library to define new design for onchain nft generation
 // to generate badges that support necessary update passed in
 // by tokenURI() function call 
 library EthernautFactory {
@@ -30,6 +32,7 @@ library EthernautFactory {
     // Here's how the plan goes
     // EXP balance                  Color codings 
     // 0                            Set a special IFPS for this, we can allow having nft even if balance is 0
+    // branch: dev/for_optimism_deployment - 0 is included in levels 0 - 25
     // 1 - 25                       ['#ffffff', '#666666', '#333333']
     // 26 - 50                      ['#c5fccb', '#6cd4a1', '#027562']
     // 51 - 75                      ['#c6f7f5', '#30d5f2', '#074d87']
@@ -44,7 +47,7 @@ library EthernautFactory {
     
     function _getSVGCore(uint256 tokenAmount_) private pure returns (bytes memory) {
         // Our four cores
-        // 1 - 25       Codepen(Aleta): https://codepen.io/alebanfi/pen/OJQzMaQ
+        // 0 - 25       Codepen(Aleta): https://codepen.io/alebanfi/pen/OJQzMaQ
         // 26 - 50      https://codepen.io/alebanfi/pen/PoQEZXQ
         // 51 - 75      https://codepen.io/alebanfi/pen/vYdpLbZ
         // 76 - 100     https://codepen.io/alebanfi/pen/NWyXxoL
@@ -62,7 +65,7 @@ library EthernautFactory {
         bytes memory _selectedCore4 = abi.encodePacked(_selectedCore1, '<path fill="url(#pattern)" d="m448.2 286.4 38.2-45.8-14.5-72.4-34.1-25.5c16.1 44.9 21.3 97.1 10.4 143.7zm-374-143.8-34.1 25.5-14.5 72.4 38.2 45.8c-10.9-46.5-5.7-98.7 10.4-143.7zm32.4 214.3z"/><path fill="url(#pattern)" d="m420.6 104.6c0.8 1.4 1.6 2.9 2.4 4.4l29.9 22.4-4.7-35.5c-7 5.5-15.8 8.8-25.3 8.8-0.8 0-1.6 0-2.3-0.1zm-37.8-50c1.5-6.6 4.7-12.7 9-17.7l-35.3-5.5c9.4 7 18.2 14.8 26.3 23.2zm40 32.1c12.8 0 23-10.2 23-23s-10.2-23-23-23-23 10.2-23 23 10.2 23 23 23z"/><path fill="url(#pattern)" d="m55 66.2v68.3l18-13.5v-54.8c4.4-3 7-7.9 7-13.2 0-8.8-7.2-16-16-16s-16 7.2-16 16c0 5.3 2.6 10.2 7 13.2z"/>');
 
         // Return our selected core based on tokenAmount_
-        if (tokenAmount_ > 0 && tokenAmount_ <= 2500)           { return _selectedCore1; }
+        if (tokenAmount_ >= 0 && tokenAmount_ <= 2500)           { return _selectedCore1; }
         else if (tokenAmount_ > 2500 && tokenAmount_ <= 5000)   { return _selectedCore2; }
         else if (tokenAmount_ > 5000 && tokenAmount_ <= 7500)   { return _selectedCore3; }
         else                                                      { return _selectedCore4; }
@@ -205,7 +208,7 @@ library EthernautFactory {
     // Now the main function that will handle generating actual token url 
     /// @param _nftID - NFT token ID for which this function call is happening 
     /// @param _tokenAmount - Value of total EXP Token the owner of the NFT has 
-    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) internal pure returns (string memory tokenURI) {
+    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) external pure returns (string memory tokenURI) {
         // _tokenAmount going beyond expected values. As it's uint256, need to dial it down to 18 decimal 
         // This will always result in 0 for every player that has sub-1 EXP 
         // To solve this, we can increase our allow level. For example, just to be considered, have atleast 0.01 EXP or something
