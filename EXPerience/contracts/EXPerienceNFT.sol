@@ -140,12 +140,6 @@ contract EXPerienceNFT is ERC721, Ownable {
         emit TokenAdminSet(_admin, _isAdmin);
     }
 
-    // // A way to update EXPToken address (Keeping it for now)
-    // function setExpContractAddress(address _contract) public onlyOwner {
-    //     if(_contract == address(0)) { revert InvalidAddress(); }
-    //     _EXPContractAddress = _contract;
-    // }
-
     // This is the way token admins can mint NFTs to users/players 
     // Generate EXPerience NFT for the address given 
     function generateExperienceNFT(address _to) public {
