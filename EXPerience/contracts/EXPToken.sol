@@ -26,7 +26,7 @@ import "./interfaces/ISoulBound.sol";
  * be transferred
  */
 
-contract EXPToken is ERC20, Ownable, ISoulbound, QRNGRequester {
+contract EXPToken is ERC20, Ownable, ISoulbound { //, QRNGRequester {
 
     /**
      * ==================================================================

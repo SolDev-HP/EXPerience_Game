@@ -31,5 +31,28 @@ def main():
     expToken.setTokenAdmin(os.getenv("PUBLIC_KEY_ADMIN2"), True, {"from": admin_account})
     # Set second token admin on EXPerienceNFT
     experienceNFT.setTokenAdmin(os.getenv("PUBLIC_KEY_ADMIN2"), True, {"from": admin_account})
-    
+
+    # Send some exp tokens to the hodlers 
+    # Hodler1 = 0 - to test NFT on non EXP hodler
+    try:
+        expToken.gainExperience(os.getenv("PUBLIC_KEY_HODLER2"), 1 * 10 ** 18, {"from": admin_account})
+        expToken.gainExperience(os.getenv("PUBLIC_KEY_HODLER3"), 26 * 10 ** 18, {"from": second_admin})
+        expToken.gainExperience(os.getenv("PUBLIC_KEY_HODLER4"), 57 * 10 ** 18, {"from": second_admin})
+        expToken.gainExperience(os.getenv("PUBLIC_KEY_HODLER5"), 79 * 10 ** 18, {"from": second_admin})
+        expToken.gainExperience(os.getenv("HOLDER6_RINKBY_PUB"), 99 * 10 ** 18, {"from": second_admin})
+    except:
+        print("Some problem while generating EXP tokens")
+    # Send EXP NFT to hodlers 
+    try:
+        experienceNFT.generateExperienceNFT(os.getenv("PUBLIC_KEY_HODLER1"), {"from": admin_account})
+        experienceNFT.generateExperienceNFT(os.getenv("PUBLIC_KEY_HODLER2"), {"from": second_admin})
+        experienceNFT.generateExperienceNFT(os.getenv("PUBLIC_KEY_HODLER3"), {"from": second_admin})
+        experienceNFT.generateExperienceNFT(os.getenv("PUBLIC_KEY_HODLER4"), {"from": second_admin})
+        experienceNFT.generateExperienceNFT(os.getenv("PUBLIC_KEY_HODLER5"), {"from": second_admin})
+        experienceNFT.generateExperienceNFT(os.getenv("HOLDER6_RINKBY_PUB"), {"from": second_admin})
+    except:
+        print("Some problem while generating EXP NFT")
+
+    # Verify all deployment and NFT representation on opensea and rarible 
+
     # Deploy ethernaut factory
