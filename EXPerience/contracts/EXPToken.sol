@@ -3,7 +3,8 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./qrng/QRNGRequester.sol";
+// import "./qrng/QRNGRequester.sol";
+// For branch: dev/for_optimism_deployment - remove all QRNG ref.
 import "./interfaces/ISoulBound.sol";
 
 /** 
@@ -64,9 +65,12 @@ contract EXPToken is ERC20, Ownable, ISoulbound, QRNGRequester {
      *  the interface with AirnodeRrpV0 address given by aRrpAirnode 
      *  so that it can SetSponsorshipStatus for this requester 
      */
-    constructor(string memory sTokenName, string memory sTokenSymbol, address aRrpAirnode)
+     // For branch: dev/for_optimism_deployment
+     // Remove airnode QRNG logic from EXP token for easy testing of optimism
+     // deployment
+    constructor(string memory sTokenName, string memory sTokenSymbol) //, address aRrpAirnode)
         ERC20(sTokenName, sTokenSymbol)
-        QRNGRequester(aRrpAirnode)
+        //QRNGRequester(aRrpAirnode)
     {
         // Set deployed the first token admin 
         mTokenAdmins[_msgSender()] = true;
@@ -74,7 +78,7 @@ contract EXPToken is ERC20, Ownable, ISoulbound, QRNGRequester {
         // IERC165, supportsInterface - IERC20, ISoulbound 
         // For minting when we receive QRNG, we can set airnoderrp as token admin 
         // so that it can mint too, but how feasible is this? better way?
-        mTokenAdmins[aRrpAirnode] = true;
+        // mTokenAdmins[aRrpAirnode] = true;
     }
 
 
@@ -190,26 +194,27 @@ contract EXPToken is ERC20, Ownable, ISoulbound, QRNGRequester {
     // Testing to see if we can actually pull this off by overriding base class 
     // method, assigning new modifier, and then calling the base class method 
     // once that returns success, we can then mint expected amount of tokens 
-    function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external override onlyAirnodeRrp {
-        // A callback function only accessible by AirnodeRrp
-        // Check if we are acutally expecting a request to be fulfilled 
-        require (
-            mExpectingRequestWithIdToBeFulfilled[_requestId],
-            "Unknown request ID");
+
+    // function fulfillRandomNumberRequest(bytes32 _requestId, bytes calldata data) external override onlyAirnodeRrp {
+    //     // A callback function only accessible by AirnodeRrp
+    //     // Check if we are acutally expecting a request to be fulfilled 
+    //     require (
+    //         mExpectingRequestWithIdToBeFulfilled[_requestId],
+    //         "Unknown request ID");
         
-        // Set the expectations back low
-        mExpectingRequestWithIdToBeFulfilled[_requestId] = false;
-        // once that is done, we can call mint? 
-        uint256 qrngUint256 = abi.decode(data, (uint256));
-        // Emit the event stating we received the random number 
-        emit RandomNumberReceived(_requestId, qrngUint256); 
-        // Need qrng between 0.01 and 0.99
-        // Received -> %100 -> (0 - 99) -> /100 -> is the result EXP tokens 
-        // doubtful idea :'D
-        gainExperience(mRequestIdToWhoRequested[_requestId], ((qrngUint256 % 100) * 10 ** 16));
+    //     // Set the expectations back low
+    //     mExpectingRequestWithIdToBeFulfilled[_requestId] = false;
+    //     // once that is done, we can call mint? 
+    //     uint256 qrngUint256 = abi.decode(data, (uint256));
+    //     // Emit the event stating we received the random number 
+    //     emit RandomNumberReceived(_requestId, qrngUint256); 
+    //     // Need qrng between 0.01 and 0.99
+    //     // Received -> %100 -> (0 - 99) -> /100 -> is the result EXP tokens 
+    //     // doubtful idea :'D
+    //     gainExperience(mRequestIdToWhoRequested[_requestId], ((qrngUint256 % 100) * 10 ** 16));
 
-        // If we reach here, noooiiiccee!!!
+    //     // If we reach here, noooiiiccee!!!
 
-    }
+    // }
 
 }
