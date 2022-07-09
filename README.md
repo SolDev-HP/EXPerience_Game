@@ -101,6 +101,17 @@ Optimism
 > brownie networks add Optimism optimism-kovan host=host_url chainid=69
 ```
 
+- Then run scripts/deployall_rinkeby.py by
+```
+brownie run .\scripts\deployall_rinkeby.py --network optimism-kovan 
+```
+
+This script has been modified to do following in given order 
+- 1. Deploy exp token contract 
+- 2. Assign new admin, destribute a few exp tokens to some holders 
+- 3. Deploy EthernautFactory library 
+- 4. Deploy EXPerienceNFT contract, it uses EXPToken contract and EthernautFactory contract addresses
+- 5. Distribute some NFTs to holders (EXP token holders)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
