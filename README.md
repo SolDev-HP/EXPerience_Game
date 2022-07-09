@@ -74,9 +74,33 @@ brownie compile --size (to view contract sizes after compiling)
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
 Optimism mainnet and kovan testnet deployment instructions. 
-Currently working on some tests as I update this documentation.
 
-Still working on this 
+- Make sure you have optimism-kovan and optimism-mainnet added to the brownie's network list 
+
+```
+> brownie networks list
+Brownie v1.16.4 - Python development framework for Ethereum
+
+The following networks are declared:
+
+Ethereum
+  ├─Mainnet (Infura): mainnet
+  ├─Ropsten (Infura): ropsten
+  ├─Rinkeby...
+...
+Optimism
+  ├─optimism-kovan (Infura): optimism-kovan
+  ├─optimism-mainnet (Infura): optimism-mainnet
+```
+
+- Add it like this if missing
+```
+> $ brownie networks add [environment] [id] host=[host] [KEY=VALUE, ...]
+
+- Optimism Kovan testnet
+> brownie networks add Optimism optimism-kovan host=host_url chainid=69
+```
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
