@@ -1,31 +1,5 @@
 # ReadMe tailored towards deploying EXPerienceNFT to Optimism 
 
-- Contracts folder structure and files details 
-```
-EXPerience/contracts/.
-|
-│   EXPerienceNFT.sol             // EXPerience NFT (ERC721) contract
-│   EXPToken.sol                  
-|   // EXP Token (ERC20) contract. 
-|   // Deployment address of this should be passed as arg while deploying EXPerience NFT contract
-│
-├───interfaces
-│   │   ISoulbound.sol            // Ignorable (not used in EXPerienceNFT.sol) SBT interface. Soulbound can be added to any ERC721/ERC20 contract.
-│   │
-│   └───extensions                // ignore for now
-├───kb_contracts                  // ignore for now
-├───libs  
-│       BadgeFactory.sol          // Badge SVG generator factory. TokenURI generation logic (onchain)
-│       EthernautFactory.sol      // Ethernaut SVG generator factory. TokenURI generation logic (svg code from aleta in EthernauDAO)
-│
-├───qrng
-│       QRNGRequester.sol         // If planning on using randomness, API3 QRNG requester contract
-│
-├───tokens
-└───utils
-        Base64.sol                // Base64 modified to use bytes (shouldn't be used in production)
-```
-
 - Clone this repo 
 - Make sure you get dev/finalize_v01 branch 
 ```
@@ -102,7 +76,56 @@ brownie compile --size (to view contract sizes after compiling)
 Optimism mainnet and kovan testnet deployment instructions. 
 Currently working on some tests as I update this documentation.
 
+Still working on this 
+
 ------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Contracts folder structure and files details 
+```
+EXPerience/contracts/.
+|
+├───[ EXPerienceNFT.sol ]             // EXPerience NFT (ERC721) contract
+    ├───|  Sighash   |   Function Signature
+        |  ========================
+        |  c64b8b4d  =>  getNFTLibraryAddress()
+        |  ff736cd6  =>  getEXPTokenAddress()
+        |  de0e9957  =>  changeEXPTokenAddress(address)
+        |  c55de52e  =>  changeNFTFactoryAddress(address)
+        |  3789f8d1  =>  setTokenAdmin(address,bool)
+        |  d794e59a  =>  generateExperienceNFT(address)
+        |  18160ddd  =>  totalSupply()
+        |  c87b56dd  =>  tokenURI(uint256)
+        |  095ea7b3  =>  approve(address,uint256)
+        |  081812fc  =>  getApproved(uint256)
+        |  a22cb465  =>  setApprovalForAll(address,bool)
+        |  e985e9c5  =>  isApprovedForAll(address,address)
+        |  23b872dd  =>  transferFrom(address,address,uint256)
+        |  42842e0e  =>  safeTransferFrom(address,address,uint256)
+________|  b88d4fde  =>  safeTransferFrom(address,address,uint256,bytes)
+|
+├───[ EXPToken.sol ]                  
+|   // EXP Token (ERC20) contract. 
+|   // Deployment address of this should be passed as arg while deploying EXPerience NFT contract
+│
+├───interfaces
+│   │   ISoulbound.sol            // Ignorable (not used in EXPerienceNFT.sol) SBT interface. Soulbound can be added to any ERC721/ERC20 contract.
+│   │
+│   └───extensions                // ignore for now
+├───kb_contracts                  // ignore for now
+├───libs  
+│       BadgeFactory.sol          // Badge SVG generator factory. TokenURI generation logic (onchain)
+│       EthernautFactory.sol      // Ethernaut SVG generator factory. TokenURI generation logic (svg code from aleta in EthernauDAO)
+│
+├───qrng
+│       QRNGRequester.sol         // If planning on using randomness, API3 QRNG requester contract
+│
+├───tokens
+└───utils
+        Base64.sol                // Base64 modified to use bytes (shouldn't be used in production)
+```
+
+------------------------------------------------------------------------------------------------------------------------
+
 # SoulBound - ERC20 + ERC721 - EXPerienceNFT 
 SoulBound ERC20 - Bounty on EthernautDAO
 SoulBound ERC721 - Bounty on EthernautDAO

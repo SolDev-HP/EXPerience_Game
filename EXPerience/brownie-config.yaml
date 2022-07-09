@@ -9,6 +9,8 @@ dotenv: .env
 # enable output of development artifacts to load with react
 dev_deployment_artifacts: true
 
+# OpenZeppelin contracts are used for ERC20 and ERC721 contracts
+# api3dao contracts are used for random number generation using API3 QRNG
 # We now need API3's airnode-protocol to use within EXPToken
 # for random number generation using API3's QRNG
 compiler:
