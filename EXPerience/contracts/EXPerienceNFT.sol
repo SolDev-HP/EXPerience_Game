@@ -40,8 +40,8 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Just incase we ever need to change which token should be used to 
     // grab balance when generating NFT - Add a setter 
     address private _EXPContractAddress;
-    // Generator admins 
-    mapping(address => bool) private _tokenAdmins;
+    // Token Owners - This will help restrict NFT minting to only one per address 
+    mapping(address => bool) private _tokenOwners;
 
     // Events 
     event ExperienceNFTGenerated(address indexed _experienceGainer, uint256 indexed _tokenID);
@@ -56,7 +56,7 @@ contract EXPerienceNFT is ERC721, Ownable {
      */
 
     // Error to indicate that action can only be performed by token admins 
-    error OnlyTokenAdminsAllowed();
+    error OnlyOnePerAddress();
     // Error to indicate that referenced address is a zero address 
     error InvalidAddress();
     /** 
@@ -75,8 +75,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     ) ERC721(_name, _symbol) {
         // Set EXP Contract address 
         _EXPContractAddress = _expcontract;
-        // Set msg sender the first admin 
-        _tokenAdmins[msg.sender] = true;
+        // This contract address will be used to verify EXP token holding of an address
     }
 
     /**
@@ -108,17 +107,11 @@ contract EXPerienceNFT is ERC721, Ownable {
      * ==================================================================
      */
 
-    // Add token admins who are allowed to mint NFT for any given address 
-    function setTokenAdmin(address _admin, bool _isAdmin) public onlyOwner {
-        _tokenAdmins[_admin] = _isAdmin;
-        emit TokenAdminSet(_admin, _isAdmin);
-    }
-
-    // This is the way token admins can mint NFTs to users/players 
-    // Generate EXPerience NFT for the address given 
-    function generateExperienceNFT(address _to) public {
-        // Make sure the message sender is one of the admins 
-        if(_tokenAdmins[msg.sender] != true) { revert OnlyTokenAdminsAllowed(); }
+    // Accessible to anyone 
+    // Generate EXPerience NFT for oneself 
+    function generateExperienceNFT() public {
+        // Make sure we allow only one NFT mint per address
+        if(_tokenOwners[msg.sender] != true) { revert OnlyOnePerAddress(); }
         
         // EXPToken holding verification. Currently removed as we want to allow 
         // users to mint NFT even without having EXPTokens, it'll simply display 0
@@ -131,11 +124,13 @@ contract EXPerienceNFT is ERC721, Ownable {
         // Get TokenID 
         uint256 _tokenID = _totalSupply;
         // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
-        _safeMint(_to, _tokenID);
+        _safeMint(msg.sender, _tokenID);
         // Increment for next tokenID
         _totalSupply++;
+        // Set the token owner 
+        _tokenOwners[msg.sender] = true;
         // Emit the event 
-        emit ExperienceNFTGenerated(_to, _tokenID);
+        emit ExperienceNFTGenerated(msg.sender, _tokenID);
     }
 
 
