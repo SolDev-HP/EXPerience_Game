@@ -16,5 +16,5 @@ dev_deployment_artifacts: true
 compiler:
     solc:
         remappings:
-            - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.6.0"
+            - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.7.3"
             - '@api3=api3dao/airnode@0.6.3/packages/'
