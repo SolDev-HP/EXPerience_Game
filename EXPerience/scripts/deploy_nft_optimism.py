@@ -1,9 +1,8 @@
-# Testing this on L1 first before moving on to Optimism deployment changes 
-
 # from branch dev/for_optimism_deployment we have seperated NFT URI generator library
-# and EXPerienceNFT contract. This means we have to deploy two contracts initially
-# but later updates are easier and have functions exposed from EXPerienceNFT contract
-# to allow changes 
+# and EXPerienceNFT contract. This script expects that EXP erc20 contract has already been 
+# deployed and contract address is present in .env file @ OPT_EXP_TOKEN_CONTRACT
+# EXP NFT contract constructor expects following input 
+# EXPerience("Name", "Symbol", EXP Token contract address)
 import os 
 from brownie import EXPerienceNFT, Contract, accounts
 from dotenv import load_dotenv
