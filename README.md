@@ -56,7 +56,7 @@ OPT_ADMIN2_PRIV = ""    // Optional
 
 - We are using OpenZeppelin and API3 packages within brownie, hence once inside the token directory, install brownie packages using following commands 
 ```
-brownie pm install OpenZeppelin/openzeppelin-contracts@4.6.0
+brownie pm install OpenZeppelin/openzeppelin-contracts@4.7.3
 brownie pm install api3dao/airnode@0.6.3
 ```
 - (note) all brownie does is, looks onto github by following pattern to find requested package version from repo
@@ -347,35 +347,48 @@ Transaction sent: 0xbd336e6056db1a76413101a2134a3fdb20c86f79545898cd20add80c5e03
 
 
 ---------------------------------------------------------------------------------------------
-Deployment bytecode sizes 
+Brownie v1.16.4 - Python development framework for Ethereum
 
 New compatible solc version available: 0.8.13
 Compiling contracts...
   Solc version: 0.8.13
   Optimizer: Enabled  Runs: 200
-  EVM Version: Istanbul        
+  EVM Version: Istanbul
 Generating build data...
- - OpenZeppelin/openzeppelin-contracts@4.6.0/Ownable
- - OpenZeppelin/openzeppelin-contracts@4.6.0/IERC20
- - OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721
- - OpenZeppelin/openzeppelin-contracts@4.6.0/IERC721
- - OpenZeppelin/openzeppelin-contracts@4.6.0/IERC721Receiver
- - OpenZeppelin/openzeppelin-contracts@4.6.0/IERC721Metadata
- - OpenZeppelin/openzeppelin-contracts@4.6.0/Address        
- - OpenZeppelin/openzeppelin-contracts@4.6.0/Context
- - OpenZeppelin/openzeppelin-contracts@4.6.0/Strings
- - OpenZeppelin/openzeppelin-contracts@4.6.0/ERC165 
- - OpenZeppelin/openzeppelin-contracts@4.6.0/IERC165
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/Ownable
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/ERC20
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC20
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC20Metadata
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/ERC721
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC721
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC721Receiver
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC721Metadata
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/Address
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/Context
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/Strings
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/ERC165
+ - OpenZeppelin/openzeppelin-contracts@4.7.3/IERC165
+ - api3dao/airnode@0.6.3/IAirnodeRrpV0
+ - api3dao/airnode@0.6.3/IAuthorizationUtilsV0
+ - api3dao/airnode@0.6.3/ITemplateUtilsV0
+ - api3dao/airnode@0.6.3/IWithdrawalUtilsV0
+ - api3dao/airnode@0.6.3/RrpRequesterV0
+ - EXPToken
  - EXPerienceNFT
+ - INFTFactory
+ - ISoulbound
+ - ISoulbound
+ - BadgeFactory
  - EthernautFactory
+ - QRNGRequester
  - Base64
 
 ============ Deployment Bytecode Sizes ============
-  EXPerienceNFT     -  24,502B  (99.69%)
-  ERC721            -   4,685B  (19.06%)
-  EXPToken          -   3,746B  (15.24%)
+  EXPerienceNFT     -  24,467B  (99.55%)
+  ERC721            -   4,407B  (17.93%)
+  EXPToken          -   2,330B  (9.48%)
   ERC20             -   2,182B  (8.88%)
-  QRNGRequester     -   1,643B  (6.69%)
+  QRNGRequester     -   1,540B  (6.27%)
   RrpRequesterV0    -     165B  (0.67%)
   BadgeFactory      -      86B  (0.35%)
   Base64            -      86B  (0.35%)

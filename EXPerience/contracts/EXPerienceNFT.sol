@@ -4,11 +4,7 @@ pragma experimental ABIEncoderV2;   // literally for string[], and struct params
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-// This should now be replaced with settable address of already deployed library
-// import "./libs/EthernautFactory.sol";
-// Instead we import an interface that allows us to call the external function
-// of the NFT factory / generator library
-import "./interfaces/INFTFactory.sol";
+import "./libs/EthernautFactory.sol";
 
 
 /** 
@@ -44,9 +40,6 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Just incase we ever need to change which token should be used to 
     // grab balance when generating NFT - Add a setter 
     address private _EXPContractAddress;
-    // NFT generator library should be seperately deployed, to reduce the 
-    // overhead on the main NFT contract 
-    address private _NFTFactoryAddress;
     // Generator admins 
     mapping(address => bool) private _tokenAdmins;
 
@@ -55,7 +48,6 @@ contract EXPerienceNFT is ERC721, Ownable {
     event TokenAdminSet(address indexed aWhichAddress, bool indexed bIsAdmin);
     // Additional events
     event EXPTokenContractAddressChange(address indexed _changedToAddress);
-    event NFTLibraryAddressChange(address indexed _changedToAddress);
 
     /**
      * ==================================================================
@@ -79,27 +71,19 @@ contract EXPerienceNFT is ERC721, Ownable {
     constructor(
         string memory _name, 
         string memory _symbol, 
-        address _expcontract,
-        address _nftfactory
-    ) 
-        ERC721(_name, _symbol) {
+        address _expcontract
+    ) ERC721(_name, _symbol) {
         // Set EXP Contract address 
         _EXPContractAddress = _expcontract;
-        // Set the NFT Generator library address 
-        _NFTFactoryAddress = _nftfactory;
         // Set msg sender the first admin 
         _tokenAdmins[msg.sender] = true;
     }
 
     /**
      * ==================================================================
-     *    FUNCTIONS (Public) - Library/Token addresses updates
+     *    FUNCTIONS (Public) - Token addresses updates
      * ==================================================================
      */
-    function getNFTLibraryAddress() public view returns (address libraryAddress) {
-        // Get current library address 
-        libraryAddress = _NFTFactoryAddress;
-    }
 
     function getEXPTokenAddress() public view returns (address expTokenAddress) {
         // Get current EXP Token (ERC20) contract address
@@ -116,16 +100,6 @@ contract EXPerienceNFT is ERC721, Ownable {
         _EXPContractAddress = changeTo;
         // Emit the event that contract address has been changed 
         emit EXPTokenContractAddressChange(_EXPContractAddress);
-    }
-
-    // Similarly, NFT generator library/factory should be manipulated by owner only
-    function changeNFTFactoryAddress(address changeTo) public onlyOwner {
-        // Validate incoming address 
-        if(changeTo == address(0)) { revert InvalidAddress(); }
-        // Change the address of the NFT factory 
-        _NFTFactoryAddress = changeTo;
-        // Emit the event that contract address has been changed
-        emit NFTLibraryAddressChange(_NFTFactoryAddress);
     }
 
     /**
@@ -196,7 +170,7 @@ contract EXPerienceNFT is ERC721, Ownable {
         // owner of the nft, nft token ID, owner's EXP balance 
         // We dont need to pass any hex color name or code 
         // As everything is handled by the library, specifically _prepareSVGContainer, and _prepareColors
-        return INFTFactory(_NFTFactoryAddress)._generateTokenURI(
+        return EthernautFactory._generateTokenURI(
             _tokenID, 
             ownerBal, 
             owner_

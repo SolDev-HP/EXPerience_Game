@@ -12,17 +12,6 @@ import "../utils/Base64.sol";
 // to generate badges that support necessary update passed in
 // by tokenURI() function call 
 library EthernautFactory {
-    // We need five svg images to put in the center, each image is a representation of the user's level's category
-    // Like evolutions - certain levels at certain evolution stage 
-    // Here's what I've planned - [Levels as evolutions]
-    // Evo 1 - Wanderer - Level 1 to level 20
-    //       - 20 possible backgrounds - can we randomize this?
-    // Evo 2 - Fighter - Level 21 to Level 40
-    //       - Same 20 possible backgrounds - Somethings to differenciate from previous backgrounds 
-    // Evo 3 - Revolutionary - Level 41 to Level 60 
-    //       - Same 20 different backgrounds 
-    // Evo 4 - Legendary - Level 61 to Level 80
-    // Evo 5 - God - Level 81 to Level 100 
     // @Todo: improve this code, refactor more and more and make it concise and epic 
 
     // ======================== Start - https://codepen.io/alebanfi/pen/NWyXxoL ====================================
@@ -208,7 +197,7 @@ library EthernautFactory {
     // Now the main function that will handle generating actual token url 
     /// @param _nftID - NFT token ID for which this function call is happening 
     /// @param _tokenAmount - Value of total EXP Token the owner of the NFT has 
-    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) external pure returns (string memory tokenURI) {
+    function _generateTokenURI(uint256 _nftID, uint256 _tokenAmount, address _owner) internal pure returns (string memory tokenURI) {
         // _tokenAmount going beyond expected values. As it's uint256, need to dial it down to 18 decimal 
         // This will always result in 0 for every player that has sub-1 EXP 
         // To solve this, we can increase our allow level. For example, just to be considered, have atleast 0.01 EXP or something
@@ -237,10 +226,10 @@ library EthernautFactory {
         // This prepared the expected response format, including all the necessary data 
         // to display image after call to tokenURI
         bytes memory _metaJson_start = abi.encodePacked(
-            '{ "name": "EXPerience NFT #',
+            '{ "name": "Ethernaut EXPerience NFT #',
             Strings.toString(_nftID),
             '',
-            '", "description": "EXPerience NFT. Part of Ethernaut DAO bounties. Soulbound token/asset experience through EXP Token and EXPerience NFT.", "external_url": "https://github.com/SolDev-HP/EXPerience_Game", "attributes": [{"trait_type": "EXP Balance", "value": "',
+            '", "description": "Ethernaut EXPerience NFT.", "external_url": "https://github.com/SolDev-HP/EXPerience_Game", "attributes": [{"trait_type": "EXP Balance", "value": "',
             Strings.toString(_tokenAmount / 10 ** 2),
             '"}], "owner": "'
         );
