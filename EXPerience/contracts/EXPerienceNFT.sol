@@ -111,7 +111,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Generate EXPerience NFT for oneself 
     function generateExperienceNFT() public {
         // Make sure we allow only one NFT mint per address
-        if(_tokenOwners[msg.sender] != true) { revert OnlyOnePerAddress(); }
+        if(_tokenOwners[msg.sender] == true) { revert OnlyOnePerAddress(); }
         
         // EXPToken holding verification. Currently removed as we want to allow 
         // users to mint NFT even without having EXPTokens, it'll simply display 0
