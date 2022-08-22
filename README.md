@@ -112,6 +112,7 @@ Optimism
 > brownie networks add Optimism optimism-kovan host=host_url chainid=69
 ```
 
+- NOTE: Update scripts accordingly to suit your requirements. For example, optimism mainnet deployment script needs "__NAME__" and "__SYMBOL__" updated with proper information.
 - Then run scripts based on your requirements testnet/local/mainnet by
 ```
 brownie run [script].py --network [network_name] 
