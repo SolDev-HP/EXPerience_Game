@@ -1,12 +1,12 @@
-# ReadMe tailored towards deploying EXPerienceNFT to Optimism 
+# ReadMe tailored towards deploying EXPerienceNFT to Optimism mainnet/kovan testnet
 
 - Clone this repo 
-- Make sure you get dev/finalize_v01 branch 
+- Make sure you get dev/for_optimism_deployment branch 
 ```
 https://github.com/SolDev-HP/EXPerience_Game.git
 ```
 
-- Setup your python virtual environement (Don't want those deps spilling over to others)
+- Setup your python virtual environment
 ```
 python -m venv .venv
 ```
@@ -44,7 +44,17 @@ DEV_HODLER1_PRIV = ""
 DEV_HODLER2_PUB = ""
 DEV_HODLER2_PRIV = ""
 ```
+- [For Optimism Testnet(Kovan) Deployment]
+```
+OPT_KOVAN_SADMIN_PUB  = ""    // Deployer - Public key
+OPT_KOVAN_SADMIN_PRIV = ""    // Deployer - Priv key
+OPT_KOVAN_ADMIN2_PUB  = ""    // Second admin (optional) - pubkey
+OPT_KOVAN_ADMIN2_PRIV = ""    // Second admin (optional) - privkey
+OPT_KOVAN_HODL1_PUB = ""      // User1 - pubkey (Optional)
+OPT_KOVAN_HODL2_PUB = ""      // User2 - pubkey (Optional)
 
+OPT_EXP_TOKEN_CONTRACT = ""   // EXPToken contract address on Optimism testnet(kovan)
+```
 - [For Optimism Mainnet Deployment]
 
 ```
@@ -52,6 +62,7 @@ OPT_SADMIN_PUB = ""
 OPT_SADMIN_PRIV = ""
 OPT_ADMIN2_PUB = ""     // Optional, contract deployer can add admins later on using setTokenAdmins method in relevant contracts
 OPT_ADMIN2_PRIV = ""    // Optional
+OPT_EXP_TOKEN_CONTRACT = "" // EXPToken contract address on Optimism mainnet
 ```
 
 - We are using OpenZeppelin and API3 packages within brownie, hence once inside the token directory, install brownie packages using following commands 
@@ -101,17 +112,16 @@ Optimism
 > brownie networks add Optimism optimism-kovan host=host_url chainid=69
 ```
 
-- Then run scripts/deployall_rinkeby.py by
+- Then run scripts based on your requirements testnet/local/mainnet by
 ```
-brownie run .\scripts\deployall_rinkeby.py --network optimism-kovan 
-```
+brownie run [script].py --network [network_name] 
 
-This script has been modified to do following in given order 
-- 1. Deploy exp token contract 
-- 2. Assign new admin, destribute a few exp tokens to some holders 
-- 3. Deploy EthernautFactory library 
-- 4. Deploy EXPerienceNFT contract, it uses EXPToken contract and EthernautFactory contract addresses
-- 5. Distribute some NFTs to holders (EXP token holders)
+For example:
+- Goerli testnet deployment 
+brownie run .\scripts\deploy_goerli_all.py --network goerli
+- Optimism mainnet deployment 
+broniw run .\scripts\optimism_mainnet_deploy.py --network optimism-mainnet
+```
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
