@@ -13,9 +13,9 @@ def main():
     hodler2 = os.getenv("PUBLIC_KEY_HODLER2_GOERLI")
 
     # Deploy EXPToken ERC20 contract on Goerli
-    expContract = EXPToken.deploy("EXPToken", "EXP", {"from": deployer_account}, publish_source=True)
+    expContract = EXPToken.deploy("EXPToken", "EXP", {"from": deployer_account})
     # Set another admin for ERC20 contract EXPToken
-    expContract.setTokenAdmin(os.getenv("PUBLIC_KEY_DEPLOYER_GOERLI_ADMIN2"), True, {"from": deployer_account})
+    # expContract.setTokenAdmin(os.getenv("PUBLIC_KEY_DEPLOYER_GOERLI_ADMIN2"), True, {"from": deployer_account})
 
     # Distribute
     try: 
@@ -47,7 +47,7 @@ def main():
     # admin2_tx.wait(1)
     # Check if one per address works 
     try: 
-        holder_remint = expContract.gainExperience({"from": deployer_account})
+        holder_remint = EXPerienceCon.generateExperienceNFT({"from": deployer_account})
         holder_remint.wait(1)
         # holder2_remint = expContract.gainExperience({"from": holder2})
         # holder2_remint.wait(1)
