@@ -123,12 +123,12 @@ contract EXPerienceNFT is ERC721, Ownable {
 
         // Get TokenID 
         uint256 _tokenID = _totalSupply;
-        // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
-        _safeMint(msg.sender, _tokenID);
         // Increment for next tokenID
         _totalSupply++;
         // Set the token owner 
         _tokenOwners[msg.sender] = true;
+        // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
+        _safeMint(msg.sender, _tokenID);
         // Emit the event 
         emit ExperienceNFTGenerated(msg.sender, _tokenID);
     }
