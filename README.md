@@ -1,4 +1,8 @@
-# ReadMe tailored towards deploying EXPerienceNFT to Optimism mainnet/kovan testnet
+# ReadMe tailored towards deploying EXPerienceNFT to Optimism mainnet/kovan/goerli testnets
+
+EXP(ERC20): https://goerli-optimism.etherscan.io/address/0x1508363a85fc6e0b22ad704ce2206a8c150f492c
+EXP(NFT): https://goerli-optimism.etherscan.io/address/0x17402a30b81A99F33db5eD2a116CF2325797b72E
+Quixotic: https://testnet.qx.app/collection/0x17402a30b81A99F33db5eD2a116CF2325797b72E
 
 - Clone this repo 
 - Make sure you get dev/for_optimism_deployment branch 
@@ -67,8 +71,8 @@ OPT_EXP_TOKEN_CONTRACT = "" // EXPToken contract address on Optimism mainnet
 
 - We are using OpenZeppelin and API3 packages within brownie, hence once inside the token directory, install brownie packages using following commands 
 ```
-brownie pm install OpenZeppelin/openzeppelin-contracts@4.7.3
-brownie pm install api3dao/airnode@0.6.3
+brownie pm install OpenZeppelin/openzeppelin-contracts@4.7.3    (required)
+brownie pm install api3dao/airnode@0.6.3                        (optional)
 ```
 - (note) all brownie does is, looks onto github by following pattern to find requested package version from repo
 ```
@@ -82,11 +86,10 @@ OR
 brownie compile --size (to view contract sizes after compiling)
 ```
 
-------------------------------------------------------------------------------------------------------------------------------------------------
+### [Deploying on Optimism Kovan/Goerli testnet or mainnet]
 
-Optimism mainnet and kovan testnet deployment instructions. 
-
-- Make sure you have optimism-kovan and optimism-mainnet added to the brownie's network list 
+- Make sure you have optimism related networks added to the brownie's network list
+(Note: I am using Infura as my node provider, incase Alchemy, the network adding part in brownie remains the same) 
 
 ```
 > brownie networks list
@@ -101,6 +104,7 @@ Ethereum
 ...
 Optimism
   ├─optimism-kovan (Infura): optimism-kovan
+  ├─optimism-goerli (Infura): optimism-goerli
   ├─optimism-mainnet (Infura): optimism-mainnet
 ```
 
@@ -108,20 +112,14 @@ Optimism
 ```
 > $ brownie networks add [environment] [id] host=[host] [KEY=VALUE, ...]
 
-- Optimism Kovan testnet
+- Optimism testnets
 > brownie networks add Optimism optimism-kovan host=host_url chainid=69
+> brownie networks add Optimism optimism-goerli host=host_url chainid=420
 ```
 
-- NOTE: Update scripts accordingly to suit your requirements. For example, optimism mainnet deployment script needs "__NAME__" and "__SYMBOL__" updated with proper information.
-- Then run scripts based on your requirements testnet/local/mainnet by
+- Run following command to deploy on optimism testnet 
 ```
-brownie run [script].py --network [network_name] 
-
-For example:
-- Goerli testnet deployment 
-brownie run .\scripts\deploy_goerli_all.py --network goerli
-- Optimism mainnet deployment 
-broniw run .\scripts\optimism_mainnet_deploy.py --network optimism-mainnet
+> brownie run ./scripts/deploy_goerli_all.py --network optimism-kovan/goerli
 ```
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -172,9 +170,8 @@ ________|  b88d4fde  =>  safeTransferFrom(address,address,uint256,bytes)
 
 ------------------------------------------------------------------------------------------------------------------------
 
-# SoulBound - ERC20 + ERC721 - EXPerienceNFT 
-SoulBound ERC20 - Bounty on EthernautDAO
-SoulBound ERC721 - Bounty on EthernautDAO
+<details>
+  <summary>  SoulBound (NonTx) - ERC20 + ERC721 - EXPerienceNFT - Bounty on EthernautDAO </summary>
 
 ## Current deployments 
 EXPToken (Rinkeby) = https://rinkeby.etherscan.io/address/0xaF88F460053af481d49B4Db70Bf26a613b9c2372
@@ -202,8 +199,10 @@ Rarible = https://rinkeby.rarible.com/collection/0xef54196ac12356c17f77b6d19df44
 - All mints start with the number 0
 - The number shown by the NFT must reflect the EXP balance of the owner on the NFT
 - Transfer capabilities must be disabled after minting (soulbound) 
+</details>
 
-### Test it
+<details>
+<summary> Test and deployment information (old) </summary>
 
 This script performs following steps:
 1. Deploys EXPerience NFT contract 
@@ -225,8 +224,10 @@ brownie run .\scripts\deployall_rinkeby.py --network rinkeby
 8. Deploy EXPerienceNFT contract using EXPToken contract address 
 9. Set token admin
 10. Generate NFT for the players 
+</details>
 
-### Current Status + Deployment on rinkeby 
+<details>
+<summary> Rinkeby/Goerli deployments and logs </summary> 
 
 - Verify you have .env prepared and above steps followed.
 
@@ -433,3 +434,4 @@ View the report using the Brownie GUI
 brownie console --network [rinkeby/ropsten/development]
 
 ```
+</details>
