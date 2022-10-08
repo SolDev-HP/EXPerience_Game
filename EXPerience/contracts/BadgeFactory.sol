@@ -15,6 +15,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // import "./libs/EthernautFactory.sol";
 
 contract BadgeFactory is Ownable {
+    // Library address until I can find a better solution
+    address private _generatorLibaray;
     // Maintaining total list of all deployers and their deployments 
     // First, how many points contracts did msg.sender create
     mapping(address => uint256) private _total_points_deployed;
@@ -36,6 +38,22 @@ contract BadgeFactory is Ownable {
         // Thinking about doing anything here?
     }
 
+    /// @notice Sets the generator library address  
+    /// @dev .
+    function set_library_address(address aNewLibAddress) public {
+        // basic checks
+        require(address(0) != aNewLibAddress, "Lib address can't be DeadAdd");
+        // set
+        _generatorLibaray = aNewLibAddress;
+    }
+
+    /// @notice Gets the generator library address  
+    /// @dev .
+    function get_library_address() public returns (address) {
+        return _generatorLibaray;
+    }
+
+
     /// @notice Deploys ERC20 points contract 
     /// @dev Non-transferable erc20 points, mostly used by erc721 as base to reflect points and such.
     /// @dev Registers msg.sender as the deployer of those points
@@ -47,7 +65,7 @@ contract BadgeFactory is Ownable {
         // Deploy at current number
         _deployed_points_erc20[current_total] = new EXPToken(sName, sSymbol);
         // Increase the original reference in mapping for total deployments 
-        _total_points_deployed[msg.sender]++;
+        _total_points_deployed[msg.sender]+=1;
         // If current total is 0, this is first deployment, else - total deployments are registered anyway
         // Add the deployer to reference list 
         if(current_total == 0) {
@@ -105,7 +123,7 @@ contract BadgeFactory is Ownable {
     /// @return uint256 number of total deployments (erc20 points)
     function get_total_points_deployments_by_owner(address aDeployerAddress) public view returns (uint256) {
         // Simply return the number 
-        return _total_points_deployed[msg.sender];
+        return _total_points_deployed[aDeployerAddress];
     }
 
     /// @notice Get total badges deployment by owner
@@ -113,7 +131,7 @@ contract BadgeFactory is Ownable {
     /// @return uint256 number of total deployments (erc721 badges)
     function get_total_badges_deployments_by_owner(address aDeployerAddress) public view returns (uint256) {
         // Simply return the total number of badges by deployer 
-        return _total_badges_deployed[msg.sender];
+        return _total_badges_deployed[aDeployerAddress];
     }
 
     /// @notice Get nth points deployment
@@ -141,5 +159,17 @@ contract BadgeFactory is Ownable {
 
         // Return the badge address present at given index 
         return _deployed_badges_erc721[uContractIndex];
+    }
+
+    /// @notice Get total number of deployers currently using badgefactory and have deployed Points contracts
+    /// @return uint256 representing number of deployers
+    function get_total_points_deployers() public view returns (uint256) {
+        return _total_pointsDeployers;
+    }
+
+    /// @notice Get total number of deployers currently using badgefactory and have deployed Badges contracts
+    /// @return uint256 representing number of deployers
+    function get_total_badges_deployers() public view returns (uint256) {
+        return _total_badgesDeployers;
     }
 }
