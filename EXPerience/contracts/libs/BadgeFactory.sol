@@ -9,7 +9,7 @@ import "../utils/Base64.sol";
 // BadgeFactory that will be used by EXPerienceNFT 
 // to generate badges that support necessary update passed in
 // by tokenURI() function call 
-library BadgeFactory_Lib {
+library BadgeFactory {
     // We need five svg images to put in the center, each image is a representation of the user's level's category
     // Like evolutions - certain levels at certain evolution stage 
     // Here's what I've planned - [Levels as evolutions]
