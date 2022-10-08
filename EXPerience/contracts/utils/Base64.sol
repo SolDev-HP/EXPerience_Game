@@ -12,12 +12,15 @@ library Base64 {
     /**
      * @dev Base64 Encoding/Decoding Table
      */
-    string internal constant _TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    bytes internal constant _TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     /**
-     * @dev Converts a `bytes` to its Bytes64 `string` representation.
+     * @dev Converts a `bytes` to its Bytes64 `bytes` representation.
+     * As we require this function in the situations where expected result is 
+     * in bytes, reduce the overhead of turning string into bytes, rather convert them once
+     * and continue using them as parameters for further abi.encodePacked(arg...);
      */
-    function encode(bytes memory data) internal pure returns (string memory) {
+    function encodeBytes(bytes memory data) internal pure returns (bytes memory) {
         /**
          * Inspired by Brecht Devos (Brechtpd) implementation - MIT licence
          * https://github.com/Brechtpd/base64/blob/e78d9fd951e7b0977ddca77d92dc85183770daf4/base64.sol
@@ -25,7 +28,7 @@ library Base64 {
         if (data.length == 0) return "";
 
         // Loads the table into memory
-        string memory table = _TABLE;
+        bytes memory table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
         // Encoding takes 3 bytes chunks of binary data from `bytes` data parameter
         // and split into 4 numbers of 6 bits.
@@ -33,7 +36,7 @@ library Base64 {
         // - `data.length + 2`  -> Round up
         // - `/ 3`              -> Number of 3-bytes chunks
         // - `4 *`              -> 4 characters for each chunk
-        string memory result = new string(4 * ((data.length + 2) / 3));
+        bytes memory result = new bytes(4 * ((data.length + 2) / 3));
 
         assembly {
             // Prepare the lookup table (skip the first "length" byte)

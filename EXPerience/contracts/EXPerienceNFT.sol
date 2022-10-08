@@ -1,96 +1,132 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
-pragma experimental ABIEncoderV2;   // literally for string[], for the lack of better understanding/ideas 
-import "../interfaces/IERC20.sol";
-import "./tokens/ERC721.sol";
-import "./utils/Ownable.sol";
-import "./libs/BadgeFactory.sol";
+pragma experimental ABIEncoderV2;   // literally for string[], and struct params in functions for the lack of better understanding/ideas 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./libs/EthernautFactory.sol";
 
-// Our source of randomness will be bloshhash 
-// Block hash PRNG - the hash of a block as source of randomness
-// Potentially this can be manipulated with, but I doubt anyone would care to do that here, 
-// this is a place holder until we move to Chainlink-VRF
+
+/** 
+ * @title Soulbound ERC721 implementation - named EXPerienceNFT
+ * Requirement: 
+ *  - Mintable NFT, nontransferable capable of reading and displaying how many EXP tokens you have in your wallet
+ *  - Create a fully on-chain generative ASCII art showing numbers from 1 to 100
+ *  - All mints start with the number 0
+ *  - The number shown by the NFT must reflect the EXP balance of the owner on the NFT
+ *  - Non-transferable after minting. Indicates a badge that shows current level of reward points user has
+ * @author SolDev-HP (https://github.com/SolDev-HP)
+ * @dev Implement ERC721 in a way that limits tokens capabilities such as 
+ * transfer, approval and make it soulbound - once minted, it can not 
+ * be transfered
+ */
 contract EXPerienceNFT is ERC721, Ownable {
+    /**
+     * ==================================================================
+     *                          STATE VARIABLES
+     * ==================================================================
+     */
+
     // Total supply - Should be exposed via getter
     // Should start with zero anyway.
     uint256 private _totalSupply;
     // EXPToken contract address - To refer to EXP balance of the user 
+    // Just incase we ever need to change which token should be used to 
+    // grab balance when generating NFT - Add a setter 
     address private _EXPContractAddress;
-    // EXPToken Interface to get balanceOf
-    // Though we imported original IERC20 for this, we can potentially limit it to just balanceOf function
-    IERC20 private _expContract;
-    // Generator admins 
-    mapping(address => bool) private _tokenAdmins;
+    // Token Owners - This will help restrict NFT minting to only one per address 
+    mapping(address => bool) private _tokenOwners;
 
     // Events 
-    event ExperienceNFTGenerated(address indexed _experienceGainer);
-    event TokenAdminSet(address indexed _admin, bool indexed _isAdmin);
+    event ExperienceNFTGenerated(address indexed _experienceGainer, uint256 indexed _tokenID);
+    event TokenAdminSet(address indexed aWhichAddress, bool indexed bIsAdmin);
+    // Additional events
+    event EXPTokenContractAddressChange(address indexed _changedToAddress);
 
-    // Our ugly _colorName => _colorHex 
-    string[20] private _colorNames = [
-        'Dark Orange', 'Black', 'Magenta', 'Maroon', 'Gray',
-        'Pale Violet Red', 'Medium Slate Blue', 'Crimson', 'Blue Violet', 'Dark Turquoise',
-        'Olive', 'Midnight Blue', 'Teal', 'Navy', 'Lime Green',
-        'Lavender', 'Medium Sea Green', 'Light Sea Green', 'Chocolate', 'Aquamarine'
-    ];
-    string[20] private _colorsHex = [
-        '#FF8C00', '#000000', '#FF00FF', '#800000', '#808080',
-        '#DB7093', '#7B68EE', '#DC143C', '#8A2BE2', '#00CED1',
-        '#808000', '#191970', '#008080', '#000080', '#32CD32',
-        '#E6E6FA', '#3CB371', '#20B2AA', '#D2691E', '#7FFFD4'
-    ];
-    uint private _colorSelector;
+    /**
+     * ==================================================================
+     *                              ERRORS
+     * ==================================================================
+     */
 
-    // ================= ERRORS ======================
-    error ActionRestricted();
+    // Error to indicate that action can only be performed by token admins 
+    error OnlyOnePerAddress();
+    // Error to indicate that referenced address is a zero address 
+    error InvalidAddress();
+    /** 
+     * @dev Error to indicate that token is soulbound and action performed 
+     * is not supported (ex. transfer, approve, safeTransfer etc.)
+     */
+    error TokenIsSoulbound();
 
     // Constructor of EXPerience NFT Contract, expects nama and symbol of the NFT Contract 
     // and address where EXP Token is deployed
-    constructor(string memory _name, string memory _symbol, address _expcontract) 
-        ERC721(_name, _symbol) {
+    // Construction slightly changes as we incorporate library address within the deployment scripts 
+    constructor(
+        string memory _name, 
+        string memory _symbol, 
+        address _expcontract
+    ) ERC721(_name, _symbol) {
         // Set EXP Contract address 
         _EXPContractAddress = _expcontract;
-        // Set msg sender the first admin 
-        _tokenAdmins[msg.sender] = true;
+        // This contract address will be used to verify EXP token holding of an address
     }
 
-    // Add token admins who are allowed to mint NFT for any given address 
-    function setTokenAdmin(address _admin, bool _isAdmin) public OnlyOwner {
-        _tokenAdmins[_admin] = _isAdmin;
-        emit TokenAdminSet(_admin, _isAdmin);
+    /**
+     * ==================================================================
+     *    FUNCTIONS (Public) - Token addresses updates
+     * ==================================================================
+     */
+
+    function getEXPTokenAddress() public view returns (address expTokenAddress) {
+        // Get current EXP Token (ERC20) contract address
+        // should've been set while deployoment
+        expTokenAddress = _EXPContractAddress;
     }
 
-    // A way to update EXPToken address (Keeping it for now)
-    function setExpContractAddress(address _contract) public OnlyOwner {
-        require(_contract != address(0), "Invalid EXP Token Contract address");
-        _EXPContractAddress = _contract;
+    // We make sure that following functions are behind ownerOnly wall.
+    // Only owner of the contract should be able to manipulate these state variables
+    function changeEXPTokenAddress(address changeTo) public onlyOwner {
+        // Validate incoming address 
+        if(changeTo == address(0)) { revert InvalidAddress(); }
+        // Change the address
+        _EXPContractAddress = changeTo;
+        // Emit the event that contract address has been changed 
+        emit EXPTokenContractAddressChange(_EXPContractAddress);
     }
-    // Generate EXPerience NFT for the address given 
-    function genExperience(address _to) public {
-        // Make sure the message sender is one of the admins 
-        require(_tokenAdmins[msg.sender] == true, "EXPerience: You're not an admin");
+
+    /**
+     * ==================================================================
+     *              FUNCTIONS (Public) - ERC721 + Soulbound 
+     * ==================================================================
+     */
+
+    // Accessible to anyone 
+    // Generate EXPerience NFT for oneself 
+    function generateExperienceNFT() public {
+        // Make sure we allow only one NFT mint per address
+        if(_tokenOwners[msg.sender] == true) { revert OnlyOnePerAddress(); }
+        
+        // EXPToken holding verification. Currently removed as we want to allow 
+        // users to mint NFT even without having EXPTokens, it'll simply display 0
         // We need to make sure _to actually holds some EXP 
-        // Get the exp token contract  
-        _expContract = IERC20(_EXPContractAddress);
         // Get _to's EXP token holdings 
-        uint256 _expBalanceofTo = _expContract.balanceOf(_to);
+        // uint256 _expBalanceofTo = IERC20(_EXPContractAddress).balanceOf(_to);
         // For Testing Only: Let's limit minting to address only if they any amount of exp token
-        require(_expBalanceofTo > 0, "EXPerience: Insufficient EXP balance");
-
-        // Source of randomness Blockhash 
-        uint _aNumber = uint(blockhash(block.number - 1));
-        // We want our color selection to be within 0 and 20 (Excluding 20)
-        _colorSelector = _aNumber % 20;
+        // require(_expBalanceofTo > 0, "EXPerience: Insufficient EXP balance");
 
         // Get TokenID 
         uint256 _tokenID = _totalSupply;
         // Increment for next tokenID
-        ++_totalSupply;
+        _totalSupply++;
+        // Set the token owner 
+        _tokenOwners[msg.sender] = true;
         // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
-        _safeMint(_to, _tokenID);
+        _safeMint(msg.sender, _tokenID);
         // Emit the event 
-        emit ExperienceNFTGenerated(_to);
+        emit ExperienceNFTGenerated(msg.sender, _tokenID);
     }
+
 
     // Total supply 
     function totalSupply() public view returns (uint256) {
@@ -98,7 +134,7 @@ contract EXPerienceNFT is ERC721, Ownable {
     }
 
     // TokenURI(), this is where we will implement all our logic
-    // - We need to generate ASCII NFT art
+    // - We need to generate ~ASCII~ NFT art
     // - Art could be a trophie showing achievement/level 
     // --- Null trophie for 0 EXP tokens in the account 
     // --- Distinct 5 trophies, each trophie for certain EXP token held in the account 
@@ -106,63 +142,72 @@ contract EXPerienceNFT is ERC721, Ownable {
     // --- Tier-2 trophies for users who have 21 to 40 EXP tokens and so on...
     function tokenURI(uint256 _tokenID) public view override returns (string memory) {
         // Make sure _tokenID is valid 
-        require(_exists(_tokenID), "EXPerience NFT: Invalid TokenID");
+        require(_exists(_tokenID), "Invalid TokenID");
         // Get the owner of the _tokenID
-        address owner = ownerOf(_tokenID); 
+        address owner_ = ownerOf(_tokenID); 
         // We need owner's EXP token balance
         // Based on balance, we can prepare a variable that denotes which 
         // Symbol should be written in the center of the circle. 
         // Get owner's EXP token holdings
-        uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner);
+        uint256 ownerBal = IERC20(_EXPContractAddress).balanceOf(owner_);
+        // Why don't we get decimals as well. Tokens can be radically different and we 
+        // dont want any hardcoded dependencies in our code 
+        // @Todo: find a simpler way to get decimals and don't worry about hardcoded logic within
+        // level calculation in the library
 
         // Now we have following details required to generate a tokenURI 
         // owner of the nft, nft token ID, owner's EXP balance 
-        // Added: Pass in the color details - according to the _colorSelector set while minting 
-        return BadgeFactory._generateTokenURI(
+        // We dont need to pass any hex color name or code 
+        // As everything is handled by the library, specifically _prepareSVGContainer, and _prepareColors
+        return EthernautFactory._generateTokenURI(
             _tokenID, 
             ownerBal, 
-            owner, 
-            //BadgeFactory.ColorDetails(_cName, _cHex) - Stack too deep?
-            _colorNames[_colorSelector],   // Selected color indexed at _colorSelector 
-            _colorsHex[_colorSelector]
+            owner_
         );
     }
+
+
+    /**
+     * ==================================================================
+     *          FUNCTIONS (Public) - Making ERC721 Soulbound
+     * ==================================================================
+     */
 
     /// @dev functions that are restricted 
     /// Overridden from ERC721 and modifier to reflect 
     /// Soulbound nature of the NFT
-    function approve(address, uint256) public view override {
+    function approve(address, uint256) public override {
         this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
     function getApproved(uint256) public view override returns (address) {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
-    function setApprovalForAll(address, bool) public view override {
+    function setApprovalForAll(address, bool) public override {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
     function isApprovedForAll(address, address) public view override returns (bool) {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
-    function transferFrom(address, address, uint256) public view override {
+    function transferFrom(address, address, uint256) public override {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
-    function safeTransferFrom(address, address, uint256) public view override {
+    function safeTransferFrom(address, address, uint256) public override {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 
-    function safeTransferFrom(address, address, uint256, bytes memory) public view override {
+    function safeTransferFrom(address, address, uint256, bytes memory) public override {
         this;
-        revert ActionRestricted();
+        revert TokenIsSoulbound();
     }
 }

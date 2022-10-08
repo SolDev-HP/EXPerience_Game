@@ -9,6 +9,6 @@
 		"solidity-va.uml.actors.enable": true,
 		"files.autoSave": "afterDelay",
 		"terminal.integrated.scrollback": 6000,
-		"workbench.iconTheme": "material-icon-theme"
+		"workbench.iconTheme": "material-icon-theme",
 	}
 }
