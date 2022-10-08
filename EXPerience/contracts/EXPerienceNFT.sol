@@ -14,17 +14,11 @@ import "./libs/EthernautFactory.sol";
  *  - Create a fully on-chain generative ASCII art showing numbers from 1 to 100
  *  - All mints start with the number 0
  *  - The number shown by the NFT must reflect the EXP balance of the owner on the NFT
- *  - Transfer capabilities must be disabled after minting (soulbound) 
- * Updates:
- *  - In addition to requirements, we can now generate random numbers 
- *    using API3 QRNG implementation and Airnode on chains 
- *    See: https://api3.org/QRNG for EXPToken
- *  - Separate out functionalities. like, ISoulbound handles soulbound
- *    properties, QRNGRequester handles random numbers from API3 QRNG
+ *  - Non-transferable after minting. Indicates a badge that shows current level of reward points user has
  * @author SolDev-HP (https://github.com/SolDev-HP)
  * @dev Implement ERC721 in a way that limits tokens capabilities such as 
  * transfer, approval and make it soulbound - once minted, it can not 
- * be transferred
+ * be transfered
  */
 contract EXPerienceNFT is ERC721, Ownable {
     /**
