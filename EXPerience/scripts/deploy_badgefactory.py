@@ -1,5 +1,5 @@
 # This deployment script is to test everything related to badgefactory
-from brownie import EXPToken, EXPerienceNFT, BadgeFactory, EthernautFactory, Contract, accounts
+from brownie import EXPToken, EXPerienceNFT, BadgeFactory, EthernautFactory, Contract, accounts, interface, web3
 import os 
 from dotenv import load_dotenv
 load_dotenv()
@@ -36,6 +36,7 @@ def main():
 
     # take a test ERC20 address for ERC721 deployments
     points_address = badgefactory_contract.get_nth_points_contract_address(user1.address, 0)
+
     points2_address = badgefactory_contract.get_nth_points_contract_address(user1.address, 0)
     # Library needs to be deployed seperately
     library_contract = EthernautFactory.deploy({"from": badgefactory_deployer})
@@ -88,3 +89,31 @@ def main():
     print("[Badges] Contract 1 At " + str(badgefactory_contract.get_nth_badges_contract_address(user2.address, 1)))
     print("[Badges] Contract 2 At " + str(badgefactory_contract.get_nth_badges_contract_address(user2.address, 2)))
     print("[Badges] Contract 6872 (max-invalid) At " + str(badgefactory_contract.get_nth_badges_contract_address(user2.address, 6872)))
+
+    # Let's mint EXP Token to the user3 and allow user3 to mint NFT
+    # Grab first token address and mint some EXPTokens to user3
+    # EXPToken("TEStokn1", "TSK1", {"from": user1})
+    TEStokn1_contract = interface.IEXPToken(points_address)
+
+    # As the ownershipTransfer happened, there was no way to set the tokenadmin
+    # So add self into tokenAdmins to perform other operations
+    tx_add_self = TEStokn1_contract.setTokenAdmin(user1.address, True, {"from": user1})
+    tx_add_self.wait(1)
+
+    user3_pub = os.getenv("LOCAL_U3_PUB")
+    # mint them 15 TSK1 tokens as points
+    # user1 should have the ownership 
+    tx_mint_EXPTokens = TEStokn1_contract.gainExperience(user3_pub, 15 * 1e18, {"from": user1})
+    tx_mint_EXPTokens.wait(1)
+
+    # Allow user to mint badges now 
+    user3 = accounts.add(os.getenv("LOCAL_U3_PRIV"))
+    # Mint from first contract  
+    nft_contract_address = badgefactory_contract.get_nth_badges_contract_address(user2.address, 0)
+    experience_contract = interface.IEXPerienceNFT(nft_contract_address)
+
+    tx_mint_exp_nft = experience_contract.generateExperienceNFT({"from": user3})
+    tx_mint_exp_nft.wait(1)
+
+    # Print NFT tokenURI to verify library usage 
+    print(experience_contract.tokenURI(0))

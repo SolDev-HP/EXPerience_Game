@@ -63,7 +63,10 @@ contract BadgeFactory is Ownable {
         // And the number will be incremented to reflect total no of deployed erc20 contracts
         uint256 current_total = _total_points_deployed[msg.sender];
         // Deploy at current number
-        _deployed_points_erc20[current_total] = new EXPToken(sName, sSymbol);
+        EXPToken _exp_contract = new EXPToken(sName, sSymbol);
+        _deployed_points_erc20[current_total] = _exp_contract;
+        // Transfer ownership of deployed contract to the msg.sender
+        _exp_contract.transferOwnership(msg.sender);
         // Increase the original reference in mapping for total deployments 
         _total_points_deployed[msg.sender]+=1;
         // If current total is 0, this is first deployment, else - total deployments are registered anyway
@@ -92,7 +95,10 @@ contract BadgeFactory is Ownable {
         // Check how many badges collection are already deployed by this deployer
         uint256 currentTotal = _total_badges_deployed[msg.sender];
         // Deploy badges at current index 
-        _deployed_badges_erc721[currentTotal] = new EXPerienceNFT(sName, sSymbol, aEXPTokenAddress, aSelectedLibrary);
+        EXPerienceNFT _exp_nft_contract = new EXPerienceNFT(sName, sSymbol, aEXPTokenAddress, aSelectedLibrary);
+        _deployed_badges_erc721[currentTotal] = _exp_nft_contract;
+        // Transfer ownership
+        _exp_nft_contract.transferOwnership(msg.sender);
         // Increase the total 
         _total_badges_deployed[msg.sender]++;
 
