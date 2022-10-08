@@ -11,6 +11,8 @@ import "./EXPerienceNFT.sol";
 import "./EXPToken.sol";
 // Need ownable to maintain owner-limited certain functions
 import "@openzeppelin/contracts/access/Ownable.sol";
+// Deploy once but reuse library - svg generator responsible for tokenURI()
+// import "./libs/EthernautFactory.sol";
 
 contract BadgeFactory is Ownable {
     // Maintaining total list of all deployers and their deployments 
@@ -58,11 +60,13 @@ contract BadgeFactory is Ownable {
 
     /// @notice Deploys ERC721 badges contract that reflects erc20 points balance
     /// @dev Non-transferable erc721 badges, use given erc20 as base to show holding balance
+    /// @dev receives library address, that's responsible for generating tokenURI
     /// @dev Registers msg.sender as the deployer of those badges
     /// @dev :todo Transfer ownership of deployed contract to msg.sender
     function deploy_badges_erc721_with_erc20_attached
     (
         address aEXPTokenAddress,
+        address aSelectedLibrary,
         string memory sName,
         string memory sSymbol
     ) public {
@@ -70,7 +74,7 @@ contract BadgeFactory is Ownable {
         // Check how many badges collection are already deployed by this deployer
         uint256 currentTotal = _total_badges_deployed[msg.sender];
         // Deploy badges at current index 
-        _deployed_badges_erc721[currentTotal] = new EXPerienceNFT(sName, sSymbol, aEXPTokenAddress);
+        _deployed_badges_erc721[currentTotal] = new EXPerienceNFT(sName, sSymbol, aEXPTokenAddress, aSelectedLibrary);
         // Increase the total 
         _total_badges_deployed[msg.sender]++;
 

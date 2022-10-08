@@ -4,8 +4,9 @@ pragma experimental ABIEncoderV2;   // literally for string[], and struct params
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./libs/EthernautFactory.sol";
-
+//import "./libs/EthernautFactory.sol";
+// As we seperate out generator libraries, keep a track of the function interface that we need to use
+import "./interfaces/INFTFactory.sol";
 
 /** 
  * @title Soulbound ERC721 implementation - named EXPerienceNFT
@@ -34,6 +35,8 @@ contract EXPerienceNFT is ERC721, Ownable {
     // Just incase we ever need to change which token should be used to 
     // grab balance when generating NFT - Add a setter 
     address private _EXPContractAddress;
+    // Library address, 
+    address private _GeneratorLibraryAddress;
     // Token Owners - This will help restrict NFT minting to only one per address 
     mapping(address => bool) private _tokenOwners;
 
@@ -65,11 +68,14 @@ contract EXPerienceNFT is ERC721, Ownable {
     constructor(
         string memory _name, 
         string memory _symbol, 
-        address _expcontract
+        address _expcontract,
+        address _generatorlibrary
     ) ERC721(_name, _symbol) {
         // Set EXP Contract address 
         _EXPContractAddress = _expcontract;
         // This contract address will be used to verify EXP token holding of an address
+        // Assign generator library
+        _GeneratorLibraryAddress = _generatorlibrary;
     }
 
     /**
@@ -159,7 +165,7 @@ contract EXPerienceNFT is ERC721, Ownable {
         // owner of the nft, nft token ID, owner's EXP balance 
         // We dont need to pass any hex color name or code 
         // As everything is handled by the library, specifically _prepareSVGContainer, and _prepareColors
-        return EthernautFactory._generateTokenURI(
+        return INFTFactory(_GeneratorLibraryAddress)._generateTokenURI(
             _tokenID, 
             ownerBal, 
             owner_
