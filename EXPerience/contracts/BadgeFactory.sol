@@ -33,6 +33,14 @@ contract BadgeFactory is Ownable {
     uint256 private _total_pointsDeployers;
     address[] private _badges_deployers;
     uint256 private _total_badgesDeployers;
+    
+    // Now if we want to keep track of all points/badges deployments 
+    // We can either keep a var keeping numeric track of total badges deployments 
+    // Or
+    // get _total_badgesDeployers -> int
+    // find each badges deployed by _badges_deployers
+    // _badges_deployers[0 to _total_] -> find _total_badges_deployed(address -> no of deployments)
+    // grab all those deployments by _deployed_badges_erc721[0 to _total_badges_deployed]
 
     constructor() {
         // Thinking about doing anything here?

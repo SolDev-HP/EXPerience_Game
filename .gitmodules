@@ -1,0 +1,3 @@
+[submodule "EXPerience/badgefactory_frontend"]
+	path = EXPerience/badgefactory_frontend
+	url = https://github.com/SolDev-HP/BadgeFactory_frontend.git

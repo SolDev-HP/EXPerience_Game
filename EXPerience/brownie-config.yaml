@@ -1,6 +1,6 @@
 # Change build directory, client has our frontend angular code - it requires to reference abi and jsons easily
 project_structure:
-    build: client/EXPerienceDapp/src/artifacts
+    build: artifacts
 
 ### automatically fetch contract sources from Etherscan
 # autofetch_sources: True
