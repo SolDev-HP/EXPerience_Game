@@ -14,4 +14,6 @@ interface IBadgeFactory {
     function get_nth_badges_contract_address(address, uint256) external view returns (address);
     function get_total_points_deployers() external view returns (uint256);
     function get_total_badges_deployers() external view returns (uint256);
+    function get_all_points_deployers() external view returns (address[] memory);
+    function get_all_badges_deployers() external view returns (address[] memory);
 }

@@ -186,4 +186,16 @@ contract BadgeFactory is Ownable {
     function get_total_badges_deployers() public view returns (uint256) {
         return _total_badgesDeployers;
     }
+
+    /// @notice Get total number of deployers currently using badgefactory and have deployed Badges contracts
+    /// @return uint256 representing number of deployers
+    function get_all_points_deployers() public view returns (address[] memory) {
+        return _points_deployers;
+    }
+
+    /// @notice Get total number of deployers currently using badgefactory and have deployed Badges contracts
+    /// @return uint256 representing number of deployers
+    function get_all_badges_deployers() public view returns (address[] memory) {
+        return _badges_deployers;
+    }
 }
