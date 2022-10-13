@@ -39,6 +39,9 @@ contract EXPerienceNFT is ERC721, Ownable {
     address private _GeneratorLibraryAddress;
     // Token Owners - This will help restrict NFT minting to only one per address 
     mapping(address => bool) private _tokenOwners;
+    // [#DeleteLater]
+    // As we only allow one token per address
+    mapping(address => uint256) private _tokenOwnersMap;
 
     // Events 
     event ExperienceNFTGenerated(address indexed _experienceGainer, uint256 indexed _tokenID);
@@ -127,12 +130,21 @@ contract EXPerienceNFT is ERC721, Ownable {
         _totalSupply++;
         // Set the token owner 
         _tokenOwners[msg.sender] = true;
+        // Map token owner to token ID
+        _tokenOwnersMap[msg.sender] = _tokenID;
         // Mint the EXPerience NFT for the address (If address already holds the NFT, _mint will revert)
         _safeMint(msg.sender, _tokenID);
         // Emit the event 
         emit ExperienceNFTGenerated(msg.sender, _tokenID);
     }
 
+    // [#DeleteLater]
+    // A way to get the _tokenID assgined to owner address
+    function getTokenIdOfOwner(address _owner) public view returns (uint256) {
+        // Return _tokenOwnersMap[_owner] -> tokenID
+        return _tokenOwnersMap[_owner];
+        // Returns 0 on invalid addresses 
+    }
 
     // Total supply 
     function totalSupply() public view returns (uint256) {

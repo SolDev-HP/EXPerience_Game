@@ -23,7 +23,7 @@ interface IEXPerienceNFT {
     function totalSupply() external view returns (uint256);
     function tokenURI(uint256) external view returns (string memory);
 
-
+    function getTokenIdOfOwner(address) external view returns (uint256);
     /**
      * ==================================================================
      *          FUNCTIONS (Public) - Making ERC721 Soulbound
